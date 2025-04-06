@@ -140,6 +140,16 @@
   min-height: calc(100vh - var(--topbar-height));
 }
 
+.dashboard-header {
+  height: 99px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  background-color: white;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
+
 .border-left-primary {
   border-left: 4px solid var(--bright-cyan) !important; /* Cambiato da medium-blue a bright-cyan */
 }

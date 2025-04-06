@@ -12,7 +12,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: var(--deep-blue); /* Cambiato da medium-blue a deep-blue */
+    background-color: var(--bright-cyan); /* Cambiato da medium-blue a deep-blue */
     opacity: 0.5; /* Regola questo valore per la trasparenza desiderata */
 }
 
@@ -23,13 +23,10 @@
 
 .hero .btn-primary {
     background-color: var(--bright-cyan); /* Cambiato da bright-blue a bright-cyan */
-    border-color: var(--bright-cyan);
 }
 
 .hero .btn-primary:hover {
-    background-color: var(--medium-blue); /* Cambiato da dark-blue a medium-blue */
-    border-color: var(--medium-blue);
-    color: var(--white);
+    background-color: var(--azure-blue); /* Cambiato da dark-blue a medium-blue */
 }
 
 /* Stile per l'immagine hero */
