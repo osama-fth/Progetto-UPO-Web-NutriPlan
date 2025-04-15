@@ -125,7 +125,7 @@ body {
 }
 
 .footer h5 {
-    color: var(--light-blue); /* Cambiato */
+    color: var(--white); /* Cambiato */
     font-weight: 600;
     margin-bottom: 1.2rem;
 }
@@ -175,7 +175,7 @@ body {
 /* Icone nei link del footer */
 .footer .link-icon {
     margin-right: 8px;
-    color: var(--bright-cyan); /* Cambiato da bright-blue a bright-cyan */
+    color: var(w); /* Cambiato da bright-blue a bright-cyan */
 }
 
 /* Copyright text */
@@ -183,6 +183,7 @@ body {
     color: var(--light-blue);
     font-size: 0.9rem;
 }
+
 
 /* Typography - CORRETTA PER CONTRASTO */
 h1 {
