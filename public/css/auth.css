@@ -1,7 +1,7 @@
 /* Auth pages */
 .login-section, .register-section {
-    background-color: var(--pale-blue);  /* Cambiato da pastel-blue a pale-blue */
-    min-height: calc(100vh - 76px); /* Altezza del viewport meno la navbar */
+    background-color: var(--pale-blue);
+    min-height: calc(100vh - 76px);
     padding-top: 80px;
     padding-bottom: 80px;
     display: flex;
@@ -11,14 +11,14 @@
 .login-section h2, .register-section h2,
 .login-section label, .register-section label,
 .login-section p, .register-section p {
-    color: var(--deep-blue); /* Cambiato da dark-blue a deep-blue per maggior profondità */
+    color: var(--deep-blue);
 }
 
 .auth-card {
     width: 100%;
     max-width: 100%;
     background-color: var(--white);
-    border-top: 4px solid var(--bright-cyan); /* Cambiato da bright-blue a bright-cyan */
+    border-top: 4px solid var(--bright-cyan);
     border-radius: 8px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
 }
@@ -29,19 +29,19 @@
 }
 
 .form-control:focus {
-    border-color: var(--bright-cyan); /* Cambiato da bright-blue a bright-cyan */
+    border-color: var(--bright-cyan);
     box-shadow: 0 0 0 0.2rem rgba(0, 180, 216, 0.25);
 }
 
 .form-check-input:checked {
-    background-color: var(--bright-cyan); /* Cambiato da bright-blue a bright-cyan */
+    background-color: var(--bright-cyan);
     border-color: var(--bright-cyan);
 }
 
 .auth-link {
-    color: var(--bright-cyan); /* Cambiato da medium-blue a bright-cyan */
+    color: var(--bright-cyan);
 }
 
 .auth-link:hover {
-    color: var(--medium-blue); /* Cambiato da bright-blue a medium-blue */
+    color: var(--medium-blue);
 }

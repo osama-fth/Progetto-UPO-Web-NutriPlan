@@ -1,133 +1,45 @@
-/* Stili per recensioni */
-.testimonials {
-    background-color: var(--pale-blue); /* Cambiato da pastel-blue a pale-blue */
-    padding: 3rem 0; /* Ridotto il padding superiore per un posizionamento migliore */
+.recensioni {
+    background-color: var(--pale-blue);
+    padding: 3rem 0;
 }
 
-.testimonials h2 {
-    color: var(--deep-blue); /* Cambiato da dark-blue a deep-blue */
+.recensioni h2 {
+    color: var(--deep-blue);
     margin: 5rem 0 2rem 0;
 }
 
-.testimonial-container {
-    position: relative;
-}
-
-.testimonial {
-    display: none;
-    background-color: var(--white);
-    border-radius: 10px;
-    padding: 30px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    max-width: 700px;
-    margin: 0 auto;
-}
-
-.testimonial.active {
-    display: block;
-}
-
-.testimonial-img img {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border: 5px solid var(--azure-blue); /* Cambiato da light-accent a azure-blue */
-    margin-bottom: 20px;
-}
-
-.testimonial-text {
-    color: var(--deep-blue); /* Cambiato da dark-blue a deep-blue */
+.recensioni-text {
+    color: var(--deep-blue);
     font-style: italic;
     font-size: 16px;
     line-height: 1.6;
     margin-bottom: 20px;
 }
 
-.client-name {
-    color: var(--bright-cyan); /* Cambiato da medium-blue a bright-cyan */
-    font-weight: 600;
-    font-size: 18px;
-    margin-bottom: 0;
-    text-align: right;
-}
-
-.client-role {
-    color: var(--medium-blue); /* Cambiato da primary a medium-blue */
-    font-size: 0.9rem;
-}
-
-.rating {
-    margin-bottom: 20px;
-}
-
-.rating i {
-    color: var(--bright-cyan); /* Cambiato da secondary a bright-cyan */
-    font-size: 1.2rem;
-    margin: 0 2px;
-}
-
-/* Navigation controls */
-.testimonial-nav {
-    margin-top: 30px;
-}
-
-.testimonial-dots {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-}
-
-.dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background-color: var(--light-blue); /* Cambiato da light-accent a light-blue */
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.dot.active {
-    background-color: var(--bright-cyan); /* Cambiato da primary a bright-cyan */
-}
-
-.prev-btn, .next-btn {
+.recensioni-card {
     background-color: var(--white);
-    color: var(--bright-cyan); /* Cambiato da primary a bright-cyan */
-    border: 1px solid var(--bright-cyan); /* Cambiato da primary a bright-cyan */
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s;
-}
-
-.prev-btn:hover, .next-btn:hover {
-    background-color: var(--bright-cyan); /* Cambiato da primary a bright-cyan */
-    color: var(--white);
-}
-
-/* Card style for grid layout */
-.testimonial-card {
-    background-color: var(--white);
-    border-top: 3px solid var(--azure-blue); /* Cambiato da bright-blue a azure-blue */
+    border-top: 3px solid var(--azure-blue);
     padding: 25px;
     border-radius: 8px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
 }
 
-.testimonial-card:hover {
-    border-top-color: var(--bright-cyan); /* Cambiato da medium-blue a bright-cyan */
+.recensioni-card:hover {
+    border-top-color: var(--bright-cyan);
     transform: translateY(-5px);
 }
 
-/* Responsive adjustments */
+.client-name {
+    color: var(--bright-cyan);
+    font-weight: 600;
+    font-size: 18px;
+    margin-bottom: 0;
+    text-align: right;
+}
+
 @media (max-width: 768px) {
-    .testimonials {
+    .recensioni {
         padding: 2rem 0;
     }
 }

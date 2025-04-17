@@ -1,3 +1,11 @@
+/* Layout generale e componenti comuni */
+.divider {
+    height: 4px;
+    width: 70px;
+    background-color: var(--bright-cyan);
+    margin: 0 auto 40px;
+}
+
 /* Hero section */
 .hero {
     background: url('/assets/images/hero-image.jpeg') center/cover no-repeat;
@@ -12,8 +20,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: var(--bright-cyan); /* Cambiato da medium-blue a deep-blue */
-    opacity: 0.5; /* Regola questo valore per la trasparenza desiderata */
+    background-color: var(--bright-cyan);
+    opacity: 0.5;
 }
 
 .hero h1 {
@@ -22,28 +30,27 @@
 }
 
 .hero .btn-primary {
-    background-color: var(--bright-cyan); /* Cambiato da bright-blue a bright-cyan */
+    background-color: var(--bright-cyan);
 }
 
 .hero .btn-primary:hover {
-    background-color: var(--azure-blue); /* Cambiato da dark-blue a medium-blue */
+    background-color: var(--azure-blue);
 }
 
 /* Stile per l'immagine hero */
 .hero-image {
-  border-radius: 12px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  max-height: 450px; /* Aumentato per mostrare più contenuto */
-  max-width: 100%;
-  height: auto;
-  width: auto;
-  /* Rimosso il bordo bianco */
-  transition: all 0.3s ease;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    max-height: 450px;
+    max-width: 100%;
+    height: auto;
+    width: auto;
+    transition: all 0.3s ease;
 }
 
 .hero-image:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }
 
 /* Effetto hover più sottile per la hero card */
@@ -53,57 +60,62 @@
 }
 
 /* Chi Siamo section */
-.about {
-    background-color: var(--pale-blue); /* Cambiato da pastel-blue a pale-blue */
-    padding: 5rem 0;
+.about, .services {
+    background-color: var(--pale-blue);
+    padding: 4rem 0;
+}
+
+/* Aggiungiamo solo la proprietà extra specifica per .services */
+.services {
+    border-radius: 0;
 }
 
 .feature-card {
     background-color: var(--white);
-    border-top: 3px solid var(--azure-blue); /* Cambiato da bright-blue a azure-blue */
+    border-top: 3px solid var(--azure-blue);
 }
 
 .feature-card:hover {
-    border-top-color: var(--bright-cyan); /* Cambiato da medium-blue a bright-cyan */
+    border-top-color: var(--bright-cyan);
 }
 
 .feature-card i {
-    color: var(--azure-blue); /* Cambiato da bright-blue a azure-blue */
+    color: var(--azure-blue);
 }
 
 /* Stile per le feature alternate nella sezione Chi Siamo */
 .feature-row {
-  padding: 2rem;
-  margin-bottom: 1.5rem;
-  border-radius: 10px;
-  background-color: var(--white);
-  transition: all 0.3s ease;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    border-radius: 10px;
+    background-color: var(--white);
+    transition: all 0.3s ease;
 }
 
 .feature-row:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
 }
 
 .feature-icon-wrapper {
-  background-color: var(--white);
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  margin: 1rem auto;
-  transition: all 0.3s ease;
+    background-color: var(--white);
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    margin: 1rem auto;
+    transition: all 0.3s ease;
 }
 
 .feature-row:hover .feature-icon-wrapper {
-  background-color: var(--azure-blue); /* Cambiato da bright-blue a azure-blue */
+    background-color: var(--azure-blue);
 }
 
 .feature-row:hover .feature-icon-wrapper i {
-  color: var(--white) !important;
+    color: var(--white) !important;
 }
 
 @media (max-width: 767px) {
@@ -119,68 +131,59 @@
 
 /* Chi Siamo section con sfondo pastel blue */
 .services {
-  background-color: var(--pale-blue); /* Cambiato da pastel-blue a pale-blue */
+  background-color: var(--pale-blue);
   padding: 4rem 0;
   border-radius: 0;
 }
 
 /* Contatti section */
 .contact {
-    background-color: var(--azure-blue); /* Cambiato da light-blue a azure-blue */
+    background-color: var(--azure-blue);
     padding: 5rem 0;
 }
 
 .contact h2, .contact h3, .contact p, .contact label {
-    color: var(--deep-blue); /* Cambiato da dark-blue a deep-blue */
+    color: var(--deep-blue);
 }
 
 /* Contact info box */
-.contact-info {
-    background-color: var(--white);
-    padding: 2rem;
-    border-radius: 8px;
-}
-
-/* Aggiungo esplicitamente lo sfondo al form */
-.contact-form {
+.contact-info, .contact-form {
     background-color: var(--white);
     padding: 2rem;
     border-radius: 8px;
 }
 
 .contact-form .form-control:focus {
-    border-color: var(--azure-blue); /* Cambiato da bright-blue a azure-blue */
+    border-color: var(--azure-blue);
     box-shadow: 0 0 0 0.2rem rgba(0, 180, 216, 0.25);
 }
 
 /* Textarea con dimensioni fisse */
 .contact-form textarea {
-    resize: none; /* Impedisce il ridimensionamento da parte dell'utente */
-    height: 150px; /* Altezza fissa */
-    width: 100%; /* Larghezza al 100% del contenitore */
+    resize: none;
+    height: 150px;
+    width: 100%;
 }
 
+/* Stile per la mappa responsive */
 .map-container {
-    border: 2px solid var(--azure-blue); /* Cambiato da bright-blue a azure-blue */
-    border-radius: 8px;
-    overflow: hidden;
-    height: 100%;
-    min-height: 300px;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin-bottom: 1rem; 
+  border: 0.5px solid var(--deep-blue);
 }
 
-/* Section dividers */
-.divider {
-    height: 4px;
-    width: 70px;
-    background-color: var(--bright-cyan); /* Cambiato da secondary a bright-cyan */
-    margin: 0 auto 40px;
+.map-iframe {
+  width: 100%;
+  height: 100%;
+ 
 }
 
-/* Headings and text */
-h1, h2, h3, h4, h5, h6 {
-    color: var(--deep-blue); /* Cambiato da primary-dark a deep-blue */
-}
-
-p {
-    color: var(--black);
+@media (max-width: 576px) {
+  .map-container {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
 }

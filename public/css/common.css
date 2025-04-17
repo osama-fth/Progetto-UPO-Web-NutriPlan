@@ -1,41 +1,49 @@
-/* Definizione palette colori */
+/*Palette colori */
 :root {
-    /* Colori per testo */
-    --dark-blue: #03045E;      /* Per testo principale su sfondo chiaro */
-    --deep-blue: #023e8a;      /* Alternativa per testo, leggermente più profondo */
-    
-    /* Colori per pulsanti e CTA */
-    --medium-blue: #0077B6;    /* Per pulsanti principali */
-    --bright-cyan: #0096c7;    /* Alternativa per CTA più brillante */
-    
-    /* Colori per hover ed elementi interattivi */
-    --bright-blue: #00B4D8;    /* Per elementi interattivi/evidenziati */
-    
-    /* Colori per sezioni e blocchi */
-    --light-blue: #90E0EF;     /* Per sfondi secondari */
-    --azure-blue: #48cae4;     /* Alternativa per sezioni più vivace */
-    
-    /* Colori per sfondi */
-    --pastel-blue: #CAF0F8;    /* Per sfondo principale */
-    --pale-blue: #ADE8F4;      /* Alternativa per sfondo con più contrasto */
-    
-    /* Colori base */
+    --dark-blue: #03045E;      
+    --deep-blue: #023e8a;      
+    --medium-blue: #0077B6;   
+    --bright-cyan: #0096c7;   
+    --bright-blue: #00B4D8;  
+    --light-blue: #90E0EF; 
+    --azure-blue: #48cae4;
+    --pastel-blue: #CAF0F8;    
+    --pale-blue: #ADE8F4;   
     --white: #ffffff;
     --black: #000000;
 }
 
-/* Stili base del body */
+/* ----------Stili base----------*/
 body {
     margin: 0;
     padding: 0;
     font-family: 'Roboto', sans-serif;
     color: var(--dark-blue);
-    background-color: var(--pastel-blue); /* Cambiato da white a pastel-blue */
+    background-color: var(--pastel-blue); 
 }
 
-/* Navbar */
+h1 {
+    color: var(--dark-blue);
+    font-weight: 700;
+}
+
+h2, h3 {
+    color: var(--deep-blue);
+    font-weight: 600;
+}
+
+h4, h5, h6 {
+    color: var(--medium-blue);
+    font-weight: 600;
+}
+
+section {
+    scroll-margin-top: 58px;
+}
+
+/* ----------Navbar----------*/
 .navbar {
-    background-color: var(--deep-blue); /* Cambiato da dark-blue a deep-blue */
+    background-color: var(--deep-blue);
     position: fixed;
     top: 0;
     left: 0;
@@ -45,22 +53,22 @@ body {
 }
 
 .navbar-brand {
-    color: var(--pale-blue) !important; /* Cambiato da white a pale-blue */
+    color: var(--pale-blue);
     font-weight: 700;
 }
 
 .navbar-dark .navbar-nav .nav-link {
-    color: var(--pale-blue) !important; /* Cambiato da white a pale-blue */
+    color: var(--pale-blue);
 }
 
 .navbar-dark .navbar-nav .nav-link:hover,
 .navbar-dark .navbar-nav .nav-link.active {
-    color: var(--azure-blue) !important; /* Cambiato da pastel-blue a azure-blue */
+    color: var(--azure-blue);
 }
 
-/* Bottoni */
+/* ----------Bottoni----------*/
 .btn-primary {
-    background-color: var(--bright-cyan); /* Cambiato da medium-blue a bright-cyan */
+    background-color: var(--bright-cyan);
     border-color: var(--bright-cyan);
     color: var(--white);
 }
@@ -82,170 +90,18 @@ body {
 }
 
 .btn-outline-light {
-    color: var(--deep-blue); /* Cambiato */
-    border-color: var(--light-blue); /* Cambiato */
+    color: var(--deep-blue);
+    border-color: var(--light-blue);
 }
 
 .btn-outline-light:hover {
-    background-color: var(--light-blue); /* Aggiunto */
+    background-color: var(--light-blue);
     color: var(--medium-blue);
 }
 
-/* Card base */
-.card {
-    border: none;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    transition: transform 0.3s, box-shadow 0.3s;
-    background-color: var(--white); /* Mantenuto per contrasto */
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    border-top: 3px solid var(--bright-blue); /* Aggiunto bordo superiore */
-}
-
-/* Sezioni alternative */
-.section-alt {
-    background-color: var(--pale-blue); /* Nuova classe per sezioni alternate */
-    padding: 3rem 0;
-}
-
-/* Footer - colore leggermente diverso dalla navbar */
-.footer {
-    background-color: var(--deep-blue); /* Cambiato da dark-blue a deep-blue */
-    color: var(--pale-blue); /* Cambiato da white a pale-blue */
-    padding: 1.5rem 0 1.5rem;
-}
-
-/* Tutti i testi nel footer */
-.footer p, .footer h4 {
-    color: var(--pale-blue); /* Cambiato da white a pale-blue */
-}
-
-.footer h5 {
-    color: var(--white); /* Cambiato */
-    font-weight: 600;
-    margin-bottom: 1.2rem;
-}
-
-/* Link nel footer */
-.footer a {
-    color: var(--azure-blue) !important; /* Cambiato da light-blue a azure-blue */
-    transition: color 0.3s ease;
-}
-
-.footer a:hover {
-    color: var(--bright-blue) !important; /* Cambiato da pastel-blue a bright-blue */
-    text-decoration: none;
-}
-
-/* Icone nel footer */
-.footer .social-icons a {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background-color: rgba(144, 224, 239, 0.2); /* Cambiato l'alpha */
-    color: var(--pale-blue) !important; /* Cambiato */
-    margin-right: 10px;
-    transition: all 0.3s ease;
-}
-
-.footer .social-icons a:hover {
-    background-color: var(--bright-cyan); /* Cambiato da bright-blue a bright-cyan */
-    color: var(--white) !important;
-    transform: translateY(-3px);
-}
-
-/* Icone */
-.footer i {
-    color: var(--azure-blue); /* Cambiato da light-blue a azure-blue */
-}
-
-/* Linea divisoria nel footer */
-.footer hr {
-    border-color: rgba(144, 224, 239, 0.3); /* Cambiato alpha */
-    margin: 2rem 0;
-}
-
-/* Icone nei link del footer */
-.footer .link-icon {
-    margin-right: 8px;
-    color: var(w); /* Cambiato da bright-blue a bright-cyan */
-}
-
-/* Copyright text */
-.footer .copyright {
-    color: var(--light-blue);
-    font-size: 0.9rem;
-}
-
-
-/* Typography - CORRETTA PER CONTRASTO */
-h1 {
-    color: var(--dark-blue);
-    font-weight: 700;
-}
-
-h2, h3 {
-    color: var(--deep-blue); /* Cambiato da dark-blue a deep-blue */
-    font-weight: 600;
-}
-
-h4, h5, h6 {
-    color: var(--medium-blue); /* Cambiato da dark-blue a medium-blue */
-    font-weight: 600;
-}
-
-/* Fix for navbar overlapping anchors */
-section {
-    scroll-margin-top: 58px; /* Aumentato leggermente per coprire la navbar più alta */
-}
-
-/* Highlight di testo */
-.text-highlight {
-    color: var(--bright-cyan); /* Nuova classe per evidenziare testo importante */
-    font-weight: 500;
-}
-
-/* Nuovi elementi */
-.feature-card {
-    background-color: var(--pale-blue);
-    border-radius: 10px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
-    height: 100%;
-}
-
-.feature-icon {
-    width: 60px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--azure-blue);
-    color: var(--white);
-    border-radius: 50%;
-    margin-bottom: 1rem;
-}
-
-/* Badge personalizzati */
-.badge-primary {
-    background-color: var(--bright-cyan);
-}
-
-.badge-secondary {
-    background-color: var(--light-blue);
-    color: var(--deep-blue);
-}
-
-/* Fix per i pulsanti nella navbar scura */
+/* Bottoni nella navbar */
 .navbar-dark .btn-outline-primary {
-    color: var(--pale-blue);  /* Testo chiaro per contrasto con navbar scura */
+    color: var(--pale-blue);  
     border-color: var(--pale-blue);
 }
 
@@ -255,7 +111,6 @@ section {
     border-color: var(--pale-blue);
 }
 
-/* Assicura che il pulsante primario sia visibile nella navbar */
 .navbar-dark .btn-primary {
     background-color: var(--bright-cyan);
     border-color: var(--bright-cyan);
@@ -266,3 +121,64 @@ section {
     background-color: var(--azure-blue);
     border-color: var(--azure-blue);
 }
+
+/* ----------Cards----------*/
+.card {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s, box-shadow 0.3s;
+    background-color: var(--white);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border-top: 3px solid var(--bright-blue);
+}
+
+/* ----------Footer----------*/
+.footer {
+    background-color: var(--deep-blue);
+    color: var(--pale-blue);
+    padding: 1.5rem 0 1.5rem;
+}
+
+.footer p, .footer h4 {
+    color: var(--pale-blue); 
+}
+
+.footer h5 {
+    color: var(--white);
+    font-weight: 600;
+    margin-bottom: 1.2rem;
+}
+
+.footer a {
+    color: var(--azure-blue); 
+    transition: color 0.3s ease;
+}
+
+.footer a:hover {
+    color: var(--bright-blue);
+    text-decoration: none;
+}
+
+.footer i {
+    color: var(--azure-blue);
+}
+
+.footer i:hover {
+    color: var(--bright-blue);
+}
+
+.footer hr {
+    border-color: rgba(144, 224, 239, 0.3); 
+    margin: 2rem 0;
+}
+
+.footer .copyright {
+    color: var(--light-blue);
+    font-size: 0.9rem;
+}
+
