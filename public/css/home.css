@@ -1,4 +1,3 @@
-/* Layout generale e componenti comuni */
 .divider {
     height: 4px;
     width: 70px;
@@ -6,9 +5,8 @@
     margin: 0 auto 40px;
 }
 
-/* Hero section */
 .hero {
-    background: url('/assets/images/hero-image.jpeg') center/cover no-repeat;
+    background: url('../../assets/images/hero-image.jpeg') center/cover no-repeat;
     position: relative;
     height: 100vh;
     color: white;
@@ -37,7 +35,6 @@
     background-color: var(--azure-blue);
 }
 
-/* Stile per l'immagine hero */
 .hero-image {
     border-radius: 12px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
@@ -53,19 +50,16 @@
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }
 
-/* Effetto hover più sottile per la hero card */
 .hero-card:hover {
     transform: translateY(-3px);
     transition: transform 0.3s ease;
 }
 
-/* Chi Siamo section */
 .about, .services {
     background-color: var(--pale-blue);
     padding: 4rem 0;
 }
 
-/* Aggiungiamo solo la proprietà extra specifica per .services */
 .services {
     border-radius: 0;
 }
@@ -83,7 +77,6 @@
     color: var(--azure-blue);
 }
 
-/* Stile per le feature alternate nella sezione Chi Siamo */
 .feature-row {
     padding: 2rem;
     margin-bottom: 1.5rem;
@@ -93,7 +86,7 @@
 }
 
 .feature-row:hover {
-    transform: translateY(-5px);
+    transform: translateY(5px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
 }
 
@@ -118,25 +111,13 @@
     color: var(--white) !important;
 }
 
-@media (max-width: 767px) {
-  .feature-row .order-md-1,
-  .feature-row .order-md-2 {
-    order: unset;
-  }
-  
-  .feature-row div[class*="text-md-"] {
-    text-align: center !important;
-  }
-}
 
-/* Chi Siamo section con sfondo pastel blue */
 .services {
   background-color: var(--pale-blue);
   padding: 4rem 0;
   border-radius: 0;
 }
 
-/* Contatti section */
 .contact {
     background-color: var(--azure-blue);
     padding: 5rem 0;
@@ -146,7 +127,20 @@
     color: var(--deep-blue);
 }
 
-/* Contact info box */
+.contact-heading {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--deep-blue);
+}
+
+.contact-heading i {
+    color: var(--bright-cyan);
+}
+
+.contact-heading span {
+    font-size: 1.25rem;
+}
+
 .contact-info, .contact-form {
     background-color: var(--white);
     padding: 2rem;
@@ -158,14 +152,12 @@
     box-shadow: 0 0 0 0.2rem rgba(0, 180, 216, 0.25);
 }
 
-/* Textarea con dimensioni fisse */
 .contact-form textarea {
     resize: none;
     height: 150px;
     width: 100%;
 }
 
-/* Stile per la mappa responsive */
 .map-container {
   width: 100%;
   overflow: hidden;
@@ -180,6 +172,18 @@
   height: 100%;
  
 }
+
+@media (max-width: 767px) {
+  .feature-row .order-md-1,
+  .feature-row .order-md-2 {
+    order: unset;
+  }
+  
+  .feature-row div[class*="text-md-"] {
+    text-align: center !important;
+  }
+}
+
 
 @media (max-width: 576px) {
   .map-container {
