@@ -6,10 +6,9 @@
 }
 
 .hero {
-    background: url('../../assets/images/hero-image.jpeg') center/cover no-repeat;
+    background: url('../assets/images/hero-image.jpeg') center/cover no-repeat;
     position: relative;
     height: 100vh;
-    /* Ripristinato a height: 100vh */
     color: white;
 }
 
@@ -21,7 +20,6 @@
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    /* Overlay nero semi-trasparente */
     z-index: 1;
 }
 
