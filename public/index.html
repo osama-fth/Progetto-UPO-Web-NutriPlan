@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,6 +10,7 @@
   <link rel="stylesheet" href="css/common.css">
   <link rel="stylesheet" href="css/home.css">
 </head>
+
 <body>
   <header>
     <nav class="navbar navbar-expand-lg navbar-dark">
@@ -33,14 +35,14 @@
             <li class="nav-item">
               <a class="nav-link" href="#contatti">Contatti</a>
             </li>
-            <!-- Collegamenti temporanei --> 
+            <!-- Collegamenti temporanei -->
             <li class="nav-item">
-              <a class="nav-link" href="user_dashboard.html">User_dashboard</a>
+              <a class="nav-link" href="user_dashboard.html">User Dashboard</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="admin_dashboard.html">Admin_dashboard</a>
+              <a class="nav-link" href="admin_dashboard.html">Admin Dashboard</a>
             </li>
-            <!-- Fine Collegamenti temporanei --> 
+            <!-- Fine Collegamenti temporanei -->
           </ul>
           <div class="d-flex">
             <a href="login.html" class="btn btn-outline-primary me-2">Accedi</a>
@@ -52,7 +54,6 @@
   </header>
   <main>
     <section id="home" class="hero d-flex align-items-center py-5">
-      <div class="overlay"></div>
       <div class="container position-relative text-center">
         <h1 class="display-4 fw-bold">Benvenuto su NutriPlan</h1>
         <h3 class="mb-3">Il tuo percorso verso il benessere inizia qui</h3>
@@ -80,7 +81,7 @@
           </div>
           <div class="col-md-6 order-md-2 text-center">
             <div class="feature-icon-wrapper">
-              <i class="fas fa-user-md fa-4x text-primary"></i>
+              <i class="fas fa-user-md fa-4x text-info"></i>
             </div>
           </div>
         </div>
@@ -95,7 +96,7 @@
           </div>
           <div class="col-md-6 order-md-1 text-center">
             <div class="feature-icon-wrapper">
-              <i class="fas fa-chart-line fa-4x text-primary"></i>
+              <i class="fas fa-chart-line fa-4x text-info"></i>
             </div>
           </div>
         </div>
@@ -110,7 +111,7 @@
           </div>
           <div class="col-md-6 order-md-2 text-center">
             <div class="feature-icon-wrapper">
-              <i class="fas fa-utensils fa-4x text-primary"></i>
+              <i class="fas fa-utensils fa-4x text-info"></i>
             </div>
           </div>
         </div>
@@ -127,7 +128,7 @@
           </div>
           <div class="col-md-6 order-md-1 text-center">
             <div class="feature-icon-wrapper">
-              <i class="fas fa-comments fa-4x text-primary"></i>
+              <i class="fas fa-comments fa-4x text-info"></i>
             </div>
           </div>
         </div>
@@ -135,61 +136,65 @@
     </section>
     <section class="contact py-5" id="contatti">
       <div class="container">
-        <div class="text-center mb-5">
-          <p class="contact-heading lead mb-0">
-            <i class="fas fa-comments me-2"></i>
-            Il primo passo verso il cambiamento inizia con una semplice conversazione.
-            <span class="d-block mt-2">Scrivici e scopri come possiamo aiutarti.</span>
-          </p>
-        </div>
-        <div class="row g-4">
-          <div class="col-md-6">
-            <div class="contact-info p-4 h-100">
-              <h3>Informazioni di Contatto</h3>
-              <ul class="list-unstyled mt-4">
-                <li class="mb-3">
-                  <i class="fas fa-phone me-2"></i> +39 0321231234
-                </li>
-                <li class="mb-3">
-                  <i class="fas fa-clock me-2"></i> Lun-Ven: 9-12, 14-18
-                </li>
-                <li class="mb-3">
-                  <i class="fas fa-map-marker-alt me-2"></i> P.za Martiri della Libertà 4, Novara
-                </li>
-                <li class="mt-4">
-                  <div class="map-container">
-                    <div class="ratio ratio-16x9">
-                      <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2798.236723477737!2d8.613941!3d45.445805!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4786536dd06bf74b%3A0xe28d1df22ab760ea!2sPiazza%20Martiri%20della%20Libert%C3%A0%2C%2028100%20Novara%20NO!5e0!3m2!1sen!2sit!4v1649284273992!5m2!1sen!2sit"
-                        class="map-iframe" allowfullscreen="" loading="lazy"
-                        referrerpolicy="no-referrer-when-downgrade"></iframe>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
+        <div class="contact-wrapper">
+          <div class="text-center mb-5">
+            <h2 class="section-title">Contattaci</h2>
+            <p class="lead">
+              Il primo passo verso il cambiamento inizia con una semplice conversazione.<br>
+              Scrivici e scopri come possiamo aiutarti.
+            </p>
           </div>
-          <div class="col-md-6">
-            <div class="contact-form p-4 h-100">
-              <h3>Inviaci un Messaggio</h3>
-              <form class="mt-4">
-                <div class="mb-3">
-                  <label for="contactName" class="form-label">Nome</label>
-                  <input type="text" class="form-control" id="contactName" placeholder="Inserisci il tuo nome" required>
-                </div>
-                <div class="mb-3">
-                  <label for="contactEmail" class="form-label">Email</label>
-                  <input type="email" class="form-control" id="contactEmail" placeholder="Inserisci la tua email"
-                    required>
-                </div>
-                <div class="mb-3">
-                  <label for="contactMessage" class="form-label">Messaggio</label>
-                  <textarea class="form-control" id="contactMessage" placeholder="Scrivi il tuo messaggio" rows="5"
-                    required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Invia Messaggio</button>
-              </form>
-              <div id="formResponse" class="mt-3"></div>
+
+          <div class="row g-4">
+            <div class="col-md-6">
+              <div class="contact-info p-4 h-100">
+                <h3>Informazioni di Contatto</h3>
+                <ul class="list-unstyled mt-4">
+                  <li class="mb-3">
+                    <i class="fas fa-phone me-2"></i> +39 0321231234
+                  </li>
+                  <li class="mb-3">
+                    <i class="fas fa-clock me-2"></i> Lun-Ven: 9-12, 14-18
+                  </li>
+                  <li class="mb-3">
+                    <i class="fas fa-map-marker-alt me-2"></i> P.za Martiri della Libertà 4, Novara
+                  </li>
+                  <li class="mt-4">
+                    <div class="map-container">
+                      <div class="ratio ratio-16x9">
+                        <iframe
+                          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2798.236723477737!2d8.613941!3d45.445805!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4786536dd06bf74b%3A0xe28d1df22ab760ea!2sPiazza%20Martiri%20della%20Libert%C3%A0%2C%2028100%20Novara%20NO!5e0!3m2!1sen!2sit!4v1649284273992!5m2!1sen!2sit"
+                          class="map-iframe" allowfullscreen="" loading="lazy"
+                          referrerpolicy="no-referrer-when-downgrade"></iframe>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="contact-form p-4 h-100">
+                <h3>Inviaci un Messaggio</h3>
+                <form class="mt-4">
+                  <div class="mb-3">
+                    <label for="contactName" class="form-label">Nome</label>
+                    <input type="text" class="form-control" id="contactName" placeholder="Inserisci il tuo nome"
+                      required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="contactEmail" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="contactEmail" placeholder="Inserisci la tua email"
+                      required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="contactMessage" class="form-label">Messaggio</label>
+                    <textarea class="form-control" id="contactMessage" placeholder="Scrivi il tuo messaggio" rows="6"
+                      required></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Invia Messaggio</button>
+                </form>
+                <div id="formResponse" class="mt-3"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -240,4 +245,5 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

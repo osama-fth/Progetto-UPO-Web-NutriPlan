@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,7 @@
   <link rel="stylesheet" href="css/common.css">
   <link rel="stylesheet" href="css/auth.css">
 </head>
+
 <body>
   <header>
     <nav class="navbar navbar-expand-lg navbar-dark">
@@ -44,34 +46,37 @@
   </header>
   <main>
     <section class="login-section">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-md-6 col-lg-5">
-        <div class="card shadow auth-card mx-auto">
-          <div class="card-body p-5">
-            <h2 class="text-center mb-4">Accedi a FitPlan</h2>
-            <form id="loginForm">
-              <div class="mb-3">
-                <label class="form-label">Email</label>
-                <input type="email" class="form-control" required>
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-6 col-lg-5">
+            <div class="card shadow auth-card mx-auto">
+              <div class="card-body p-5">
+                <div class="text-center mb-3">
+                  <img src="../assets/images/logo-blu.png" alt="NutriPlan Logo" class="img-fluid" style="height: 55px;">
+                </div>
+                <h2 class="text-center mb-4">Accedi a FitPlan</h2>
+                <form id="loginForm">
+                  <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" required>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-control" required>
+                  </div>
+                  <div class="mb-3">
+                    <button type="submit" class="btn btn-primary w-100">Accedi</button>
+                  </div>
+                  <div class="text-center">
+                    <p>Non hai un account? <a href="register.html">Registrati</a></p>
+                  </div>
+                </form>
               </div>
-              <div class="mb-3">
-                <label class="form-label">Password</label>
-                <input type="password" class="form-control" required>
-              </div>
-              <div class="mb-3">
-                <button type="submit" class="btn btn-primary w-100">Accedi</button>
-              </div>
-              <div class="text-center">
-                <p>Non hai un account? <a href="register.html">Registrati</a></p>
-              </div>
-            </form>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
   </main>
   <footer class="footer">
     <div class="container-fluid">

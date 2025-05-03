@@ -9,17 +9,33 @@
     background: url('../../assets/images/hero-image.jpeg') center/cover no-repeat;
     position: relative;
     height: 100vh;
+    /* Ripristinato a height: 100vh */
     color: white;
 }
 
-.hero .overlay {
+.hero::before {
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: var(--bright-cyan);
-    opacity: 0.5;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Overlay nero semi-trasparente */
+    z-index: 1;
+}
+
+.hero .container {
+    position: relative;
+    z-index: 2;
+    padding: 2rem;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(5px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    max-width: 95%;
+    /* Limita la larghezza su schermi piccoli */
+    margin: 0 auto;
 }
 
 .hero h1 {
@@ -27,12 +43,24 @@
     font-weight: 800;
 }
 
+.hero h3 {
+    color: var(--azure-blue);
+}
+
+.hero p {
+    text-shadow: 0 2px 3px rgba(0, 0, 0, 0.5);
+}
+
 .hero .btn-primary {
     background-color: var(--bright-cyan);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
 }
 
 .hero .btn-primary:hover {
     background-color: var(--azure-blue);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
 
 .hero-image {
@@ -55,7 +83,8 @@
     transition: transform 0.3s ease;
 }
 
-.about, .services {
+.about,
+.services {
     background-color: var(--pale-blue);
     padding: 4rem 0;
 }
@@ -113,81 +142,103 @@
 
 
 .services {
-  background-color: var(--pale-blue);
-  padding: 4rem 0;
-  border-radius: 0;
+    background-color: var(--pale-blue);
+    padding: 4rem 0;
+    border-radius: 0;
 }
 
 .contact {
-    background-color: var(--azure-blue);
+    background: linear-gradient(135deg, var(--pale-blue) 0%, var(--azure-blue) 100%);
     padding: 5rem 0;
+    position: relative;
 }
 
-.contact h2, .contact h3, .contact p, .contact label {
+.contact-wrapper {
+    background-color: white;
+    border-radius: 12px;
+    padding: 3rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.contact .section-title {
     color: var(--deep-blue);
+    font-weight: 700;
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
 }
 
-.contact-heading {
-    font-size: 1.5rem;
-    font-weight: 500;
-    color: var(--deep-blue);
-}
-
-.contact-heading i {
-    color: var(--bright-cyan);
-}
-
-.contact-heading span {
-    font-size: 1.25rem;
-}
-
-.contact-info, .contact-form {
+.contact-info,
+.contact-form {
     background-color: var(--white);
-    padding: 2rem;
+    border: solid 1px var(--dark-blue);
     border-radius: 8px;
+    height: 100%;
 }
 
-.contact-form .form-control:focus {
-    border-color: var(--azure-blue);
-    box-shadow: 0 0 0 0.2rem rgba(0, 180, 216, 0.25);
+.contact h3 {
+    color: var(--deep-blue);
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding-bottom: 0.5rem;
 }
 
-.contact-form textarea {
+.contact-info ul li {
+    font-size: 1.1rem;
+    color: var(--deep-blue);
+}
+
+.contact-form .form-control {
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid #e0e0e0;
+}
+
+.contact-form .btn-primary {
+    background-color: var(--bright-cyan);
+    border: none;
+    padding: 0.6rem 1.5rem;
+    transition: all 0.3s ease;
+}
+
+#contactMessage {
     resize: none;
-    height: 150px;
-    width: 100%;
+}
+
+.contact-form .btn-primary:hover {
+    background-color: var(--azure-blue);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .map-container {
-  width: 100%;
-  overflow: hidden;
-  border-radius: 4px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  margin-bottom: 1rem; 
-  border: 0.5px solid var(--deep-blue);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border: solid 1px var(--dark-blue);
 }
 
 .map-iframe {
-  width: 100%;
-  height: 100%;
- 
+    width: 100%;
+    height: 100%;
 }
 
 @media (max-width: 767px) {
-  .feature-row .order-md-1,
-  .feature-row .order-md-2 {
-    order: unset;
-  }
-  
-  .feature-row div[class*="text-md-"] {
-    text-align: center !important;
-  }
+
+    .feature-row .order-md-1,
+    .feature-row .order-md-2 {
+        order: unset;
+    }
+
+    .feature-row div[class*="text-md-"] {
+        text-align: center !important;
+    }
+
+    /* Informazioni di contatto su mobile */
+    .contact-wrapper {
+        padding: 1.5rem;
+    }
 }
 
-
 @media (max-width: 576px) {
-  .map-container {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-  }
+    /* Regolazioni minime per schermi molto piccoli */
 }

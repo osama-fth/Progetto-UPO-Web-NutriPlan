@@ -1,14 +1,13 @@
-/*Palette colori */
 :root {
-    --dark-blue: #03045E;      
-    --deep-blue: #023e8a;      
-    --medium-blue: #0077B6;   
-    --bright-cyan: #0096c7;   
-    --bright-blue: #00B4D8;  
-    --light-blue: #90E0EF; 
+    --dark-blue: #03045E;
+    --deep-blue: #023e8a;
+    --medium-blue: #0077B6;
+    --bright-cyan: #0096c7;
+    --bright-blue: #00B4D8;
+    --light-blue: #90E0EF;
     --azure-blue: #48cae4;
-    --pastel-blue: #CAF0F8;    
-    --pale-blue: #ADE8F4;   
+    --pastel-blue: #CAF0F8;
+    --pale-blue: #ADE8F4;
     --white: #ffffff;
     --black: #000000;
 }
@@ -19,7 +18,7 @@ body {
     padding: 0;
     font-family: 'Roboto', sans-serif;
     color: var(--dark-blue);
-    background-color: var(--pastel-blue); 
+    background-color: var(--pastel-blue);
 }
 
 h1 {
@@ -27,12 +26,15 @@ h1 {
     font-weight: 700;
 }
 
-h2, h3 {
+h2,
+h3 {
     color: var(--deep-blue);
     font-weight: 600;
 }
 
-h4, h5, h6 {
+h4,
+h5,
+h6 {
     color: var(--medium-blue);
     font-weight: 600;
 }
@@ -101,7 +103,7 @@ section {
 
 /* Bottoni nella navbar */
 .navbar-dark .btn-outline-primary {
-    color: var(--pale-blue);  
+    color: var(--pale-blue);
     border-color: var(--pale-blue);
 }
 
@@ -144,8 +146,9 @@ section {
     padding: 1.5rem 0 1.5rem;
 }
 
-.footer p, .footer h4 {
-    color: var(--pale-blue); 
+.footer p,
+.footer h4 {
+    color: var(--pale-blue);
 }
 
 .footer h5 {
@@ -155,7 +158,7 @@ section {
 }
 
 .footer a {
-    color: var(--azure-blue); 
+    color: var(--azure-blue);
     transition: color 0.3s ease;
 }
 
@@ -173,7 +176,7 @@ section {
 }
 
 .footer hr {
-    border-color: rgba(144, 224, 239, 0.3); 
+    border-color: rgba(144, 224, 239, 0.3);
     margin: 2rem 0;
 }
 
@@ -181,4 +184,3 @@ section {
     color: var(--light-blue);
     font-size: 0.9rem;
 }
-
