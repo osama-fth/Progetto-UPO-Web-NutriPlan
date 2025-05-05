@@ -6,7 +6,7 @@
 }
 
 .hero {
-    background: url('../assets/images/hero-image.jpeg') center/cover no-repeat;
+    background: url('../assets/images/hero-image.webp') center/cover no-repeat;
     position: relative;
     height: 100vh;
     color: white;
@@ -41,7 +41,7 @@
     font-weight: 800;
 }
 
-.hero h3 {
+.hero h2 {
     color: var(--azure-blue);
 }
 
