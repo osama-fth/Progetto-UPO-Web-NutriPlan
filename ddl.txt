@@ -1,0 +1,53 @@
+-- utenti definition
+
+CREATE TABLE utenti (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL,
+    cognome TEXT NOT NULL,
+    data_di_nascita DATE NOT NULL,
+    email TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL,
+    ruolo TEXT NOT NULL CHECK(ruolo IN ('admin', 'paziente'))
+);
+
+-- piano_alimentare definition
+
+CREATE TABLE piano_alimentare (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    utente_id INTEGER NOT NULL,
+    titolo TEXT NOT NULL,
+    descrizione TEXT,
+    contenuto TEXT NOT NULL,
+    data_creazione DATE NOT NULL, nome TEXT NOT NULL,  -- Include la data e l'ora
+    FOREIGN KEY(utente_id) REFERENCES utenti(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- misurazioni definition
+
+CREATE TABLE misurazioni (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    utente_id INTEGER NOT NULL,
+    misura REAL,             
+    data DATE NOT NULL,      -- Solo la data (senza ora)
+    FOREIGN KEY(utente_id) REFERENCES utenti(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- recensioni definition
+
+CREATE TABLE recensioni (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    utente_id INTEGER NOT NULL,
+    commento TEXT NOT NULL,
+    data_creazione DATETIME DEFAULT CURRENT_TIMESTAMP,  -- Include la data e l'ora
+    FOREIGN KEY(utente_id) REFERENCES utenti(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- richieste_contatto definition
+
+CREATE TABLE richieste_contatto (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL,
+    email TEXT NOT NULL,
+    messaggio TEXT NOT NULL,
+    data_creazione DATETIME DEFAULT CURRENT_TIMESTAMP  -- Include la data e l'ora
+);

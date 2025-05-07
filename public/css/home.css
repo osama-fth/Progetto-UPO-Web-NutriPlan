@@ -81,14 +81,15 @@
     transition: transform 0.3s ease;
 }
 
-.about,
-.services {
+.about{
     background-color: var(--pale-blue);
     padding: 4rem 0;
 }
 
 .services {
     border-radius: 0;
+    background-color: var(--pale-blue);
+    padding: 4rem 0;
 }
 
 .feature-card {
@@ -113,7 +114,6 @@
 }
 
 .feature-row:hover {
-    transform: translateY(5px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
 }
 

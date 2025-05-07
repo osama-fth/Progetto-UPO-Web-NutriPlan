@@ -30,21 +30,3 @@
     color: var(--dark-blue);
     font-weight: 500;
 }
-
-.form-control:focus {
-    border-color: var(--bright-cyan);
-    box-shadow: 0 0 0 0.2rem rgba(0, 180, 216, 0.25);
-}
-
-.form-check-input:checked {
-    background-color: var(--bright-cyan);
-    border-color: var(--bright-cyan);
-}
-
-.auth-link {
-    color: var(--bright-cyan);
-}
-
-.auth-link:hover {
-    color: var(--medium-blue);
-}

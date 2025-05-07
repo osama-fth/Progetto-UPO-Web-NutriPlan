@@ -29,12 +29,6 @@
         </li>
         <li class="sidebar-item">
           <a href="#" class="sidebar-link">
-            <i class="fas fa-users"></i>
-            <span>Pazienti</span>
-          </a>
-        </li>
-        <li class="sidebar-item">
-          <a href="#" class="sidebar-link">
             <i class="fas fa-star"></i>
             <span>Recensioni</span>
           </a>
@@ -58,7 +52,7 @@
     <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar-mobile" aria-labelledby="sidebarMobileLabel">
       <div class="offcanvas-header">
         <div class="sidebar-header">
-          <img src="../assets/images/logo.png" alt="NutriPlan Logo" height="50">
+          <img src="assets/images/logo.webp" alt="NutriPlan Logo" height="50">
         </div>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
@@ -68,12 +62,6 @@
             <a href="#" class="sidebar-link">
               <i class="fas fa-home"></i>
               <span>Home</span>
-            </a>
-          </li>
-          <li class="sidebar-item">
-            <a href="#" class="sidebar-link">
-              <i class="fas fa-users"></i>
-              <span>Pazienti</span>
             </a>
           </li>
           <li class="sidebar-item">
@@ -113,7 +101,50 @@
           <span class="d-none d-md-inline-block ms-2">Logout</span>
         </a>
       </div>
-      <!-- Resto del contenuto verrà aggiunto in futuro -->
+
+      <div class="row mt-4">
+        <div class="col-lg-10 mx-auto">
+          <div class="card shadow">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+              <h5 class="mb-0">I tuoi pazienti</h5>
+              <button class="btn btn-success btn-sm">
+                <i class="fas fa-plus me-1"></i> Nuovo paziente
+              </button>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                  <thead>
+                    <tr>
+                      <th scope="col" class="text-center">Nome</th>
+                      <th scope="col" class="text-center">Azioni</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="text-center">Marco Rossi</td>
+                      <td class="text-center">
+                        <div class="d-flex justify-content-center">
+                          <button type="button" class="btn btn-sm btn-outline-primary me-2"
+                            data-bs-toggle="modal" data-bs-target="#patientModal">
+                            <i class="fas fa-eye me-1"></i> Dettagli
+                          </button>
+                          <button type="button" class="btn btn-sm btn-outline-success me-2">
+                            <i class="fas fa-utensils me-1"></i> Piani
+                          </button>
+                          <button type="button" class="btn btn-sm btn-outline-danger">
+                            <i class="fas fa-trash me-1"></i> Elimina
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
