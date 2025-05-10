@@ -15,48 +15,12 @@
 <body>
   <div class="dashboard-container">
     <!-- Sidebar per desktop (visibile solo su schermi md e superiori) -->
-    <div class="sidebar d-none d-md-block" id="sidebar-desktop">
+    <aside class="sidebar d-none d-md-block" id="sidebar-desktop">
       <div class="sidebar-header">
         <img src="assets/images/logo.webp" alt="NutriPlan Logo" height="50">
       </div>
 
-      <ul class="sidebar-nav">
-        <li class="sidebar-item active">
-          <a href="#" class="sidebar-link">
-            <i class="fas fa-home"></i>
-            <span>Home</span>
-          </a>
-        </li>
-        <li class="sidebar-item">
-          <a href="#" class="sidebar-link">
-            <i class="fas fa-star"></i>
-            <span>Recensioni</span>
-          </a>
-        </li>
-        <li class="sidebar-item">
-          <a href="#" class="sidebar-link">
-            <i class="fas fa-envelope"></i>
-            <span>Richieste di contatto</span>
-          </a>
-        </li>
-        <li class="sidebar-item">
-          <a href="#" class="sidebar-link">
-            <i class="fas fa-cog"></i>
-            <span>Impostazioni</span>
-          </a>
-        </li>
-      </ul>
-    </div>
-
-    <!-- Sidebar mobile con Offcanvas (visibile solo su dispositivi mobili) -->
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar-mobile" aria-labelledby="sidebarMobileLabel">
-      <div class="offcanvas-header">
-        <div class="sidebar-header">
-          <img src="assets/images/logo.webp" alt="NutriPlan Logo" height="50">
-        </div>
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-      </div>
-      <div class="offcanvas-body">
+      <nav>
         <ul class="sidebar-nav">
           <li class="sidebar-item active">
             <a href="#" class="sidebar-link">
@@ -83,12 +47,52 @@
             </a>
           </li>
         </ul>
+      </nav>
+    </aside>
+
+    <!-- Sidebar mobile con Offcanvas (visibile solo su dispositivi mobili) -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar-mobile" aria-labelledby="sidebarMobileLabel">
+      <div class="offcanvas-header">
+        <div class="sidebar-header">
+          <img src="assets/images/logo.webp" alt="NutriPlan Logo" height="50">
+        </div>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <nav>
+          <ul class="sidebar-nav">
+            <li class="sidebar-item active">
+              <a href="#" class="sidebar-link">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="#" class="sidebar-link">
+                <i class="fas fa-star"></i>
+                <span>Recensioni</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="#" class="sidebar-link">
+                <i class="fas fa-envelope"></i>
+                <span>Richieste di contatto</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="#" class="sidebar-link">
+                <i class="fas fa-cog"></i>
+                <span>Impostazioni</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
       </div>
     </div>
 
-    <!-- Placeholder per il contenuto principale -->
-    <div class="main-content">
-      <div class="dashboard-header">
+    <!-- Contenuto principale -->
+    <main class="main-content">
+      <header class="dashboard-header">
         <div class="d-flex align-items-center">
           <button class="btn d-md-none me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar-mobile"
             aria-controls="sidebar-mobile">
@@ -100,33 +104,36 @@
           <i class="fas fa-sign-out-alt"></i>
           <span class="d-none d-md-inline-block ms-2">Logout</span>
         </a>
-      </div>
+      </header>
 
-      <div class="row mt-4">
+      <section class="row mt-4">
         <div class="col-lg-10 mx-auto">
-          <div class="card shadow">
-            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <div class="card mx-2">
+            <header class="card-header bg-white d-flex justify-content-between align-items-center">
               <h5 class="mb-0">I tuoi pazienti</h5>
               <button class="btn btn-success btn-sm">
                 <i class="fas fa-plus me-1"></i> Nuovo paziente
               </button>
-            </div>
+            </header>
             <div class="card-body">
               <div class="table-responsive">
                 <table class="table table-hover align-middle">
                   <thead>
                     <tr>
+                      <th scope="col" class="text-center">Cognome</th>
                       <th scope="col" class="text-center">Nome</th>
+                      <th scope="col" class="text-center">Data di Nascita</th>
                       <th scope="col" class="text-center">Azioni</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td class="text-center">Marco Rossi</td>
+                      <td class="text-center">Rossi</td>
+                      <td class="text-center">Marco</td>
+                      <td class="text-center">01/01/1970</td>
                       <td class="text-center">
                         <div class="d-flex justify-content-center">
-                          <button type="button" class="btn btn-sm btn-outline-primary me-2"
-                            data-bs-toggle="modal" data-bs-target="#patientModal">
+                          <button type="button" class="btn btn-sm btn-outline-primary me-2">
                             <i class="fas fa-eye me-1"></i> Dettagli
                           </button>
                           <button type="button" class="btn btn-sm btn-outline-success me-2">
@@ -144,11 +151,10 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
   </div>
 
-  <!-- Script -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

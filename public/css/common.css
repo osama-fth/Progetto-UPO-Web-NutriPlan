@@ -40,7 +40,11 @@ h6 {
 }
 
 section {
-    scroll-margin-top: 58px;
+    scroll-margin-top: 50px;
+}
+
+.form-control:focus {
+    box-shadow: none;
 }
 
 /* ----------Navbar----------*/
@@ -124,14 +128,6 @@ section {
     border-color: var(--azure-blue);
 }
 
-/* ----------Cards----------*/
-.card {
-    border: none;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    background-color: var(--white);
-}
-
 /* ----------Footer----------*/
 .footer {
     background-color: var(--deep-blue);
@@ -178,6 +174,4 @@ section {
     font-size: 0.9rem;
 }
 
-.form-control:focus{
-    box-shadow: none;
-}
+

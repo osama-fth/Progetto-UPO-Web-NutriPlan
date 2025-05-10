@@ -32,7 +32,6 @@
     backdrop-filter: blur(5px);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     max-width: 95%;
-    /* Limita la larghezza su schermi piccoli */
     margin: 0 auto;
 }
 
@@ -81,7 +80,7 @@
     transition: transform 0.3s ease;
 }
 
-.about{
+.about {
     background-color: var(--pale-blue);
     padding: 4rem 0;
 }
@@ -231,12 +230,8 @@
         text-align: center !important;
     }
 
-    /* Informazioni di contatto su mobile */
     .contact-wrapper {
         padding: 1.5rem;
     }
 }
 
-@media (max-width: 576px) {
-    /* Regolazioni minime per schermi molto piccoli */
-}
