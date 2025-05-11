@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const dao = require('../models/dao');
+const authMiddleware = require("../middleware/auth");
 
 /* GET pagina recensioni */
 router.get('/', async (req, res) => {
@@ -18,27 +19,15 @@ router.get('/', async (req, res) => {
   }
 });
 
-/* POST aggiungi recensione */
-router.post('/nuova', async (req, res) => {
-  if (!req.isAuthenticated()) {
-    return res.status(401).redirect('/login?alert=errore&errorType=non_autorizzato');
-  }
-
+// POST aggiungi recensione
+router.post('/nuova', authMiddleware.isAuthenticated, async (req, res) => {
   try {
     const { commento } = req.body;
     
-    // Validazione
     if (!commento || commento.trim() === '') {
       return res.status(400).redirect('/utenteDashboard?alert=errore&errorType=recensione_vuota');
     }
 
-    // Verifica se l'utente ha già una recensione
-    const recensioneEsistente = await dao.getRecensioneByUserId(req.user.id);
-    if (recensioneEsistente) {
-      return res.status(400).redirect('/utenteDashboard?alert=errore&errorType=recensione_esistente');
-    }
-
-    // Inserimento della recensione
     await dao.insertRecensione(req.user.id, commento.trim());
     
     res.redirect('/utenteDashboard?alert=successo&successType=recensione_aggiunta');
@@ -48,24 +37,14 @@ router.post('/nuova', async (req, res) => {
   }
 });
 
-/* POST modifica recensione */
-router.post('/modifica', async (req, res) => {
-  if (!req.isAuthenticated()) {
-    return res.status(401).redirect('/login?alert=errore&errorType=non_autorizzato');
-  }
-
+// POST modifica recensione
+router.post('/modifica', authMiddleware.isAuthenticated, async (req, res) => {
   try {
     const { recensioneId, commento } = req.body;
     
     // Validazione
     if (!commento || commento.trim() === '') {
       return res.status(400).redirect('/utenteDashboard?alert=errore&errorType=recensione_vuota');
-    }
-
-    // Verifica se la recensione esiste e appartiene all'utente loggato
-    const recensione = await dao.getRecensioneById(recensioneId);
-    if (!recensione || recensione.utente_id !== req.user.id) {
-      return res.status(403).redirect('/utenteDashboard?alert=errore&errorType=non_autorizzato');
     }
 
     // Aggiornamento della recensione
@@ -78,20 +57,9 @@ router.post('/modifica', async (req, res) => {
   }
 });
 
-/* GET cancella recensione */
-router.get('/cancella', async (req, res) => {
-  if (!req.isAuthenticated()) {
-    return res.status(401).redirect('/login?alert=errore&errorType=non_autorizzato');
-  }
-
+// Cancella recensione
+router.get('/cancella', authMiddleware.isAuthenticated, async (req, res) => {
   try {
-    // Verifica se l'utente ha una recensione
-    const recensione = await dao.getRecensioneByUserId(req.user.id);
-    if (!recensione) {
-      return res.redirect('/utenteDashboard?alert=errore&errorType=recensione_non_trovata');
-    }
-
-    // Eliminazione della recensione
     await dao.deleteRecensione(recensione.id);
     
     res.redirect('/utenteDashboard?alert=successo&successType=recensione_eliminata');

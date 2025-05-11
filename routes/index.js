@@ -3,7 +3,6 @@ const express = require("express")
 const router = express.Router()
 
 router.get('/', async (req, res) => {
-  // Passa eventuali parametri di query alla vista
   res.render('pages/home', {
     title: 'NutriPlan - Home',
     user: req.user || null,
