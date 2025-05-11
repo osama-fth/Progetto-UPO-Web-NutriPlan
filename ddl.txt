@@ -18,7 +18,7 @@ CREATE TABLE piano_alimentare (
     titolo TEXT NOT NULL,
     descrizione TEXT,
     contenuto TEXT NOT NULL,
-    data_creazione DATE NOT NULL, nome TEXT NOT NULL,  -- Include la data e l'ora
+    data_creazione DATE NOT NULL, nome TEXT NOT NULL, 
     FOREIGN KEY(utente_id) REFERENCES utenti(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -28,7 +28,7 @@ CREATE TABLE misurazioni (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     utente_id INTEGER NOT NULL,
     misura REAL,             
-    data DATE NOT NULL,      -- Solo la data (senza ora)
+    data DATE NOT NULL,      
     FOREIGN KEY(utente_id) REFERENCES utenti(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -38,7 +38,7 @@ CREATE TABLE recensioni (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     utente_id INTEGER NOT NULL,
     commento TEXT NOT NULL,
-    data_creazione DATETIME DEFAULT CURRENT_TIMESTAMP,  -- Include la data e l'ora
+    data_creazione DATETIME DEFAULT CURRENT_TIMESTAMP, 
     FOREIGN KEY(utente_id) REFERENCES utenti(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -49,5 +49,5 @@ CREATE TABLE richieste_contatto (
     nome TEXT NOT NULL,
     email TEXT NOT NULL,
     messaggio TEXT NOT NULL,
-    data_creazione DATETIME DEFAULT CURRENT_TIMESTAMP  -- Include la data e l'ora
+    data_creazione DATETIME DEFAULT CURRENT_TIMESTAMP  
 );

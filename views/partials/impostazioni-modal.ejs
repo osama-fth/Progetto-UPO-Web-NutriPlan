@@ -1,0 +1,83 @@
+<div class="modal fade" id="impostazioniModal" tabindex="-1" aria-labelledby="impostazioniModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="impostazioniModalLabel">Le tue informazioni</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label class="form-label text-muted">Nome</label>
+            <p class="fs-5"><%= user.nome %></p>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label text-muted">Cognome</label>
+            <p class="fs-5"><%= user.cognome %></p>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label class="form-label text-muted">Data di nascita</label>
+            <% 
+              const dataNascita = new Date(user.data_di_nascita);
+              const formattedDate = `${dataNascita.getDate().toString().padStart(2, '0')}/${(dataNascita.getMonth() + 1).toString().padStart(2, '0')}/${dataNascita.getFullYear()}`;
+            %>
+            <p class="fs-5"><%= formattedDate %></p>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label text-muted">Email</label>
+            <p class="fs-5"><%= user.email %></p>
+          </div>
+        </div>
+        <hr class="my-4">
+        <div class="text-center">
+          <p class="text-muted mb-2">Vuoi eliminare il tuo account?</p>
+          <button type="button" id="btnEliminaAccount" class="btn btn-outline-danger">
+            <i class="fas fa-user-times me-1"></i> Elimina account
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="eliminaAccountModal" tabindex="-1" aria-labelledby="eliminaAccountModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="eliminaAccountModalLabel">Conferma eliminazione account</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center mb-3">
+          <i class="fas fa-exclamation-triangle text-warning" style="font-size: 3rem;"></i>
+        </div>
+        <p class="fw-bold text-center">Questa azione è irreversibile!</p>
+        <p>Eliminando il tuo account:</p>
+        <ul>
+          <li>Perderai tutti i dati e le misurazioni salvate</li>
+          <li>Non potrai più accedere ai tuoi piani alimentari</li>
+          <li>La tua recensione verrà rimossa</li>
+        </ul>
+        <p>Sei sicuro di voler procedere?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+        <a href="/account/elimina" class="btn btn-danger">Elimina definitivamente</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const btnEliminaAccount = document.getElementById('btnEliminaAccount');
+    if (btnEliminaAccount) {
+      btnEliminaAccount.addEventListener('click', function() {
+        const eliminaAccountModal = new bootstrap.Modal(document.getElementById('eliminaAccountModal'));
+        eliminaAccountModal.show();
+      });
+    }
+  });
+</script>

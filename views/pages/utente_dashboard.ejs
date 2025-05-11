@@ -1,23 +1,14 @@
 <!DOCTYPE html>
 <html lang="it">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard Utente - NutriPlan</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <link rel="stylesheet" href="css/common.css">
-  <link rel="stylesheet" href="css/dashboard.css">
-</head>
+<%- include('../partials/header') %>
 
 <body>
   <div class="dashboard-container">
     <!-- Sidebar per desktop (visibile solo su schermi md e superiori) -->
     <aside class="sidebar d-none d-md-block" id="sidebar-desktop">
       <div class="sidebar-header">
-        <img src="assets/images/logo.webp" alt="NutriPlan Logo" height="50">
+        <img src="images/logo.webp" alt="NutriPlan Logo" height="50">
       </div>
 
       <nav>
@@ -25,7 +16,7 @@
           <li class="sidebar-item active">
             <a href="#" class="sidebar-link">
               <i class="fas fa-home"></i>
-              <span>Home</span>
+              <span>Misurazioni</span>
             </a>
           </li>
           <li class="sidebar-item">
@@ -35,13 +26,13 @@
             </a>
           </li>
           <li class="sidebar-item">
-            <a href="#" class="sidebar-link">
+            <a href="#" class="sidebar-link" data-bs-toggle="modal" data-bs-target="#recensioneModal">
               <i class="fas fa-star"></i>
               <span>Recensioni</span>
             </a>
           </li>
           <li class="sidebar-item">
-            <a href="#" class="sidebar-link">
+            <a href="#" class="sidebar-link" data-bs-toggle="modal" data-bs-target="#impostazioniModal">
               <i class="fas fa-cog"></i>
               <span>Impostazioni</span>
             </a>
@@ -54,7 +45,7 @@
     <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar-mobile" aria-labelledby="sidebarMobileLabel">
       <div class="offcanvas-header">
         <div class="sidebar-header">
-          <img src="assets/images/logo.webp" alt="NutriPlan Logo" height="50">
+          <img src="images/logo.webp" alt="NutriPlan Logo" height="50">
         </div>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
@@ -64,7 +55,7 @@
             <li class="sidebar-item active">
               <a href="#" class="sidebar-link">
                 <i class="fas fa-home"></i>
-                <span>Home</span>
+                <span>Misurazioni</span>
               </a>
             </li>
             <li class="sidebar-item">
@@ -74,13 +65,13 @@
               </a>
             </li>
             <li class="sidebar-item">
-              <a href="#" class="sidebar-link">
+              <a href="#" class="sidebar-link" data-bs-toggle="modal" data-bs-target="#recensioneModal">
                 <i class="fas fa-star"></i>
                 <span>Recensioni</span>
               </a>
             </li>
             <li class="sidebar-item">
-              <a href="#" class="sidebar-link">
+              <a href="#" class="sidebar-link" data-bs-toggle="modal" data-bs-target="#impostazioniModal">
                 <i class="fas fa-cog"></i>
                 <span>Impostazioni</span>
               </a>
@@ -98,12 +89,12 @@
             aria-controls="sidebar-mobile">
             <i class="fas fa-bars"></i>
           </button>
-          <h3 class="m-0">Benvenuto</h3>
+          <h3 class="m-0">Benvenuto <%= user.nome %></h3>
         </div>
-        <a href="index.html" class="btn btn-outline-danger">
+        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#logoutModal">
           <i class="fas fa-sign-out-alt"></i>
           <span class="d-none d-md-inline-block ms-2">Logout</span>
-        </a>
+        </button>
       </header>
 
       <!-- Grafico misurazioni -->
@@ -111,7 +102,7 @@
         <div class="col-md-10 mx-auto mb-4">
           <div class="card mx-2">
             <header class="card-header bg-white border-0">
-              <h5 class="mb-0">Grafico misurazioni (con chart.js)</h5>
+              <h5 class="mb-0">Grafico misurazioni</h5>
             </header>
             <div class="card-body">
               <canvas id="myChart" height="300"></canvas>
@@ -126,7 +117,7 @@
           <div class="card mx-2">
             <header class="card-header bg-white d-flex justify-content-between align-items-center">
               <h5 class="mb-0">Le mie misurazioni</h5>
-              <button class="btn btn-success btn-sm">
+              <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#nuovaMisurazioneModal">
                 <i class="fas fa-plus me-1"></i> Nuova misurazione
               </button>
             </header>
@@ -136,25 +127,37 @@
                   <thead>
                     <tr>
                       <th scope="col" class="text-center">Data</th>
-                      <th scope="col" class="text-center">Peso</th>
+                      <th scope="col" class="text-center">Peso (kg)</th>
                       <th scope="col" class="text-center">Azioni</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td class="text-center">01/05/2025</td>
-                      <td class="text-center">76.5</td>
-                      <td class="text-center">
-                        <div class="d-flex justify-content-center">
-                          <button type="button" class="btn btn-sm btn-outline-primary me-2">
-                            <i class="fas fa-pencil-alt me-1"></i> Modifica
-                          </button>
-                          <button type="button" class="btn btn-sm btn-outline-danger">
-                            <i class="fas fa-trash me-1"></i> Elimina
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
+                    <% if (typeof misurazioni !== 'undefined' && misurazioni.length > 0) { %>
+                      <% misurazioni.forEach(misurazione => { %>
+                        <tr>
+                          <td class="text-center"><%= misurazione.dataFormattata %></td>
+                          <td class="text-center"><%= misurazione.misura %></td>
+                          <td class="text-center">
+                            <div class="d-flex justify-content-center">
+                              <button type="button" class="btn btn-sm btn-outline-primary me-2 btn-modifica-misurazione"
+                                     data-misurazione-id="<%= misurazione.id %>"
+                                     data-peso="<%= misurazione.misura %>"
+                                     data-data="<%= misurazione.data_iso %>">
+                                <i class="fas fa-pencil-alt me-1"></i> Modifica
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      <% }); %>
+                    <% } else { %>
+                      <tr>
+                        <td colspan="3" class="text-center py-4">
+                          <i class="fas fa-weight text-muted mb-3" style="font-size: 3rem;"></i>
+                          <p class="text-muted mb-0">Nessuna misurazione disponibile</p>
+                          <p class="text-muted">Inizia aggiungendo una nuova misurazione</p>
+                        </td>
+                      </tr>
+                    <% } %>
                   </tbody>
                 </table>
               </div>
@@ -165,8 +168,34 @@
     </main>
   </div>
 
+  <!-- Modal per conferma logout -->
+  <%- include('../partials/logout-modal') %>
+
+  <!-- Includo il modal per inserire nuove misurazioni -->
+  <%- include('../partials/misurazione-form-modal') %>
+
+  <!-- Includo il modal per gestire le misurazioni esistenti -->
+  <%- include('../partials/misurazione-azioni-modal') %>
+
+  <!-- Includo il modal per le recensioni -->
+  <%- include('../partials/recensione-modal') %>
+
+  <!-- Includo il modal per le impostazioni -->
+  <%- include('../partials/impostazioni-modal') %>
+
   <!-- Script -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Dati per il grafico (nascosti) -->
+  <script id="chart-data" type="application/json">
+    <%- JSON.stringify({
+      labels: misurazioni ? misurazioni.map(m => m.dataFormattata) : [],
+      values: misurazioni ? misurazioni.map(m => m.misura) : []
+    }) %>
+  </script>
+
+  <!-- Script del grafico -->
+  <script src="/javascripts/peso-chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

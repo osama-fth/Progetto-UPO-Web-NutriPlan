@@ -1,0 +1,27 @@
+<!-- Modal per inserimento nuova misurazione -->
+<div class="modal fade" id="nuovaMisurazioneModal" tabindex="-1" aria-labelledby="nuovaMisurazioneModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="nuovaMisurazioneModalLabel">Inserisci nuova misurazione</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="nuovaMisurazioneForm" action="/utenteDashboard/nuovaMisurazione" method="POST">
+          <div class="mb-3">
+            <label for="misura" class="form-label">Peso (kg)</label>
+            <input type="number" class="form-control" id="peso" name="peso" step="0.1" min="0" max="300" required>
+          </div>
+          <div class="mb-3">
+            <label for="data" class="form-label">Data</label>
+            <input type="date" class="form-control" id="data" name="data" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+        <button type="submit" form="nuovaMisurazioneForm" class="btn btn-primary">Salva</button>
+      </div>
+    </div>
+  </div>
+</div>

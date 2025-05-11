@@ -1,18 +1,21 @@
 {
   "name": "nutriplan",
   "version": "1.0.0",
+  "private": true,
   "main": "server.js",
+  "author": "Osama",
   "scripts": {
-    "start": "node server.js",
+    "start": "node ./bin/www",
     "dev": "nodemon server.js"
   },
-  "author": "Osama",
-  "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
     "bcrypt": "^5.1.1",
-    "express": "^5.1.0",
+    "cookie-parser": "~1.4.4",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-flash": "^0.0.2",
     "express-session": "^1.18.1",
+    "express-validator": "^7.2.1",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "pdfkit": "^0.17.1",
