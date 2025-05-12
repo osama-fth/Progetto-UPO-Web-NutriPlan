@@ -31,9 +31,12 @@
       <div class="modal-footer">
         <% if (typeof recensione !== 'undefined' && recensione) { %>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-          <a href="/recensioni/cancella" class="btn btn-danger">
-            <i class="fas fa-trash me-1"></i> Elimina recensione
-          </a>
+          <form action="/recensioni/cancella" method="POST" class="d-inline">
+            <input type="hidden" name="recensioneId" value="<%= recensione.id %>">
+            <button type="submit" class="btn btn-danger">
+              <i class="fas fa-trash me-1"></i> Elimina recensione
+            </button>
+          </form>
         <% } else { %>
           <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Annulla</button>
           <button type="submit" form="recensioneForm" class="btn btn-primary">Pubblica recensione</button>

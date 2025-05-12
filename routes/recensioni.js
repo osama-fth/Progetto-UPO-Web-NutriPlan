@@ -11,7 +11,8 @@ router.get('/', async (req, res) => {
     res.render('pages/recensioni', {
       title: 'Recensioni - NutriPlan',
       recensioni,
-      user: req.user || null
+      user: req.user || null,
+      isAuth: req.isAuthenticated()
     });
   } catch (error) {
     console.error('Errore durante il recupero delle recensioni:', error);
@@ -37,30 +38,32 @@ router.post('/nuova', authMiddleware.isAuthenticated, async (req, res) => {
   }
 });
 
-// POST modifica recensione
-router.post('/modifica', authMiddleware.isAuthenticated, async (req, res) => {
-  try {
-    const { recensioneId, commento } = req.body;
+// POST modifica recensione {-----DA ELEIMINARE------}
+// router.post('/modifica', authMiddleware.isAuthenticated, async (req, res) => {
+//   try {
+//     const { recensioneId, commento } = req.body;
     
-    // Validazione
-    if (!commento || commento.trim() === '') {
-      return res.status(400).redirect('/utenteDashboard?alert=errore&errorType=recensione_vuota');
-    }
+//     // Validazione
+//     if (!commento || commento.trim() === '') {
+//       return res.status(400).redirect('/utenteDashboard?alert=errore&errorType=recensione_vuota');
+//     }
 
-    // Aggiornamento della recensione
-    await dao.updateRecensione(recensioneId, commento.trim());
+//     // Aggiornamento della recensione
+//     await dao.updateRecensione(recensioneId, commento.trim());
     
-    res.redirect('/utenteDashboard?alert=successo&successType=recensione_modificata');
-  } catch (error) {
-    console.error('Errore durante la modifica della recensione:', error);
-    res.redirect('/utenteDashboard?alert=errore&errorType=recensione_errore');
-  }
-});
+//     res.redirect('/utenteDashboard?alert=successo&successType=recensione_modificata');
+//   } catch (error) {
+//     console.error('Errore durante la modifica della recensione:', error);
+//     res.redirect('/utenteDashboard?alert=errore&errorType=recensione_errore');
+//   }
+// });
 
 // Cancella recensione
-router.get('/cancella', authMiddleware.isAuthenticated, async (req, res) => {
+router.post('/cancella', authMiddleware.isAuthenticated, async (req, res) => {
   try {
-    await dao.deleteRecensione(recensione.id);
+    const { recensioneId } = req.body;
+    
+    await dao.deleteRecensione(recensioneId);
     
     res.redirect('/utenteDashboard?alert=successo&successType=recensione_eliminata');
   } catch (error) {
