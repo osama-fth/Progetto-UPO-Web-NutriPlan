@@ -4,7 +4,8 @@ const router = express.Router();
 const dao = require("../models/dao");
 const authMiddleware = require("../middleware/auth");
 
-router.use(authMiddleware.isAuthenticated);
+// Applicazione del middleware per accesso solo a pazienti
+router.use(authMiddleware.isPaziente);
 
 router.get('/', async (req, res) => {
     try {

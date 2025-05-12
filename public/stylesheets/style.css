@@ -22,18 +22,15 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+  color: var(--dark-blue);
+  background-color: var(--pastel-blue);
 }
 
 main {
   flex: 1;
-}
-
-body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Roboto', sans-serif;
-    color: var(--dark-blue);
-    background-color: var(--pastel-blue);
 }
 
 h1 {
@@ -282,6 +279,7 @@ footer {
     padding: 4rem 0;
 }
 
+/* Sezione servizi - rimossa duplicazione */
 .services {
     border-radius: 0;
     background-color: var(--pale-blue);
@@ -332,13 +330,6 @@ footer {
 
 .feature-row:hover .feature-icon-wrapper i {
     color: var(--white) !important;
-}
-
-
-.services {
-    background-color: var(--pale-blue);
-    padding: 4rem 0;
-    border-radius: 0;
 }
 
 .contact {
@@ -417,7 +408,6 @@ footer {
 }
 
 @media (max-width: 767px) {
-
     .feature-row .order-md-1,
     .feature-row .order-md-2 {
         order: unset;

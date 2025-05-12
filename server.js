@@ -18,6 +18,7 @@ const adminDashboardRouter = require("./routes/admin_dashboard")
 const logoutRouter = require("./routes/logout");
 const accountRouter = require('./routes/account');
 const contattiRouter = require('./routes/contatti');
+const errorRouter = require('./routes/error')
 
 // Configurazione del server
 app.set("view engine", "ejs")
@@ -50,6 +51,7 @@ app.use("/adminDashboard", adminDashboardRouter);
 app.use('/account', accountRouter);
 app.use("/misurazioni", misurazioniRouter);
 app.use('/contatti', contattiRouter);
+app.use("/error", errorRouter)
 
 // Avvia il server
 app.listen(PORT, () => {

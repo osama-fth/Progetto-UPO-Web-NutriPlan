@@ -23,8 +23,13 @@
             </li>
           </ul>
           <div class="d-flex">
-            <a href="/login" class="btn btn-outline-primary me-2">Accedi</a>
-            <a href="/register" class="btn btn-primary">Registrati</a>
+            <% if (typeof isAuth !== 'undefined' && isAuth) { %>
+              <% const dashboardUrl = (typeof user !== 'undefined' && user && user.ruolo === 'admin') ? '/adminDashboard' : '/utenteDashboard'; %>
+              <a href="<%= dashboardUrl %>" class="btn btn-primary">Dashboard</a>
+            <% } else { %>
+              <a href="/login" class="btn btn-outline-primary me-2">Accedi</a>
+              <a href="/register" class="btn btn-primary">Registrati</a>
+            <% } %>
           </div>
         </div>
       </div>

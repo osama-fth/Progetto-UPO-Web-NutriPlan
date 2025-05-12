@@ -5,6 +5,14 @@ const passport = require("../models/passport")
 
 // GET pagina login
 router.get("/", (req, res) => {
+    if (req.isAuthenticated()) {
+        if (req.user.ruolo === 'admin') {
+            return res.redirect('/adminDashboard');
+        } else {
+            return res.redirect('/utenteDashboard');
+        }
+    }
+    
     res.render("pages/login", { query: req.query });
 });
 
