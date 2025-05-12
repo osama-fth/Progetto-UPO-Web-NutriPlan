@@ -38,26 +38,6 @@ router.post('/nuova', authMiddleware.isAuthenticated, async (req, res) => {
   }
 });
 
-// POST modifica recensione {-----DA ELEIMINARE------}
-// router.post('/modifica', authMiddleware.isAuthenticated, async (req, res) => {
-//   try {
-//     const { recensioneId, commento } = req.body;
-    
-//     // Validazione
-//     if (!commento || commento.trim() === '') {
-//       return res.status(400).redirect('/utenteDashboard?alert=errore&errorType=recensione_vuota');
-//     }
-
-//     // Aggiornamento della recensione
-//     await dao.updateRecensione(recensioneId, commento.trim());
-    
-//     res.redirect('/utenteDashboard?alert=successo&successType=recensione_modificata');
-//   } catch (error) {
-//     console.error('Errore durante la modifica della recensione:', error);
-//     res.redirect('/utenteDashboard?alert=errore&errorType=recensione_errore');
-//   }
-// });
-
 // Cancella recensione
 router.post('/cancella', authMiddleware.isAuthenticated, async (req, res) => {
   try {

@@ -8,19 +8,24 @@ const authMiddleware = require("../middleware/auth");
 router.use(authMiddleware.isPaziente);
 
 router.get('/', async (req, res) => {
+    // Imposto i valori predefiniti
+    let misurazioniFormattate = [];
+    let recensione = null;
+    let pianiAlimentariFormattati = [];
+    
     try {
         // Recupera le misurazioni dell'utente
         const misurazioni = await dao.getMisurazioniByUserId(req.user.id);
         
         // Formatta le date per la visualizzazione
-        const misurazioniFormattate = misurazioni.map(m => {
+        misurazioniFormattate = misurazioni.map(m => {
             const data = new Date(m.data);
             m.dataFormattata = `${data.getDate().toString().padStart(2, '0')}/${(data.getMonth() + 1).toString().padStart(2, '0')}/${data.getFullYear()}`;
             m.data_iso = m.data.split('T')[0];
             return m;
         });
         
-        let recensione = null;
+        // Recupera la recensione dell'utente
         try {
             recensione = await dao.getRecensioneByUserId(req.user.id);
             if (recensione) {
@@ -28,22 +33,49 @@ router.get('/', async (req, res) => {
                 recensione.dataFormattata = `${data.getDate().toString().padStart(2, '0')}/${(data.getMonth() + 1).toString().padStart(2, '0')}/${data.getFullYear()}`;
             }
         } catch (recErr) {
-            console.error("Errore nel recupero della recensione:", recErr);
+            console.error("Errore nel recupero delle recensioni:", recErr);
+            // Continua con recensione = null
         }
-        
+
+        // Recupera i piani alimentari dell'utente
+        try {
+            const risultatoPiani = await dao.getPianiAlimentariByUserId(req.user.id);
+            
+            if (risultatoPiani) {
+                // Assicura che pianiAlimentari sia sempre un array
+                const pianiArray = Array.isArray(risultatoPiani) ? risultatoPiani : [risultatoPiani];
+                
+                // Formatta le date per la visualizzazione
+                pianiAlimentariFormattati = pianiArray.map(p => {
+                    const data = new Date(p.data_creazione);
+                    p.dataFormattata = `${data.getDate().toString().padStart(2, '0')}/${(data.getMonth() + 1).toString().padStart(2, '0')}/${data.getFullYear()}`;
+                    if (p.data) {
+                        p.data_iso = p.data.split('T')[0];
+                    }
+                    return p;
+                });
+            }
+        } catch (pianiErr) {
+            console.error("Errore nel recupero dei piani alimentari:", pianiErr);
+            // Continua con pianiAlimentariFormattati = []
+        }
+
+        // Renderizza la pagina con tutti i dati raccolti
         res.render('pages/utente_dashboard', {
             user: req.user,
             isAuth: req.isAuthenticated(),
             misurazioni: misurazioniFormattate,
-            recensione: recensione
+            recensione: recensione,
+            pianiAlimentari: pianiAlimentariFormattati
         });
     } catch (err) {
-        console.error("Errore nel recupero delle misurazioni:", err);
+        console.error("Errore nel recupero dei dati:", err);
         res.render('pages/utente_dashboard', {
             user: req.user,
             isAuth: req.isAuthenticated(),
             misurazioni: [],
-            error: "Errore nel recupero delle misurazioni"
+            recensione: null,
+            pianiAlimentari: []
         });
     }
 });
