@@ -10,8 +10,8 @@ router.get("/", (req, res) => {
 })
 
 router.post("/", [
-    check('nome').notEmpty().matches(/^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/).withMessage('Il nome è obbligatorio e deve contenere solo lettere'),
-    check('cognome').notEmpty().matches(/^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/).withMessage('Il nome è obbligatorio e deve contenere solo lettere'),
+    check('nome').notEmpty().withMessage("Il nome è obbligatorio").matches(/^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/).withMessage('Il nome deve contenere solo lettere'),
+    check('cognome').notEmpty().withMessage("Il cognome è obbligatorio").matches(/^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/).withMessage('Il cognome deve contenere solo lettere'),
     check('email').isEmail().withMessage('Inserisci un indirizzo email valido').notEmpty().withMessage('L\'email è obbligatoria'),
     check('password').isLength({ min: 8 }).withMessage('La password deve essere lunga almeno 8 caratteri'),
     check('data_di_nascita').isDate().withMessage('Inserisci una data di nascita valida'),

@@ -26,15 +26,26 @@ router.post('/nuova', authMiddleware.isAuthenticated, async (req, res) => {
     const { commento } = req.body;
     
     if (!commento || commento.trim() === '') {
-      return res.status(400).redirect('/utenteDashboard?alert=errore&errorType=recensione_vuota');
+      // Mostra errore nella pagina utente_dashboard
+      return res.render('pages/utente_dashboard', { 
+        user: req.user,
+        isAuth: req.isAuthenticated(),
+        misurazioni: await dao.getMisurazioniByUserId(req.user.id),
+        recensione: await dao.getRecensioneByUserId(req.user.id),
+        pianiAlimentari: await dao.getPianiAlimentariByUserId(req.user.id),
+        error: 'Il testo della recensione non può essere vuoto.'
+      });
     }
 
     await dao.insertRecensione(req.user.id, commento.trim());
     
-    res.redirect('/utenteDashboard?alert=successo&successType=recensione_aggiunta');
+    // Reindirizza alla pagina utente_dashboard con messaggio di successo
+    req.session.success = 'Recensione pubblicata con successo.';
+    res.redirect('/utenteDashboard');
   } catch (error) {
     console.error('Errore durante l\'aggiunta della recensione:', error);
-    res.redirect('/utenteDashboard?alert=errore&errorType=recensione_errore');
+    req.session.error = 'Errore durante la gestione della recensione.';
+    res.redirect('/utenteDashboard');
   }
 });
 
@@ -45,10 +56,12 @@ router.post('/cancella', authMiddleware.isAuthenticated, async (req, res) => {
     
     await dao.deleteRecensione(recensioneId);
     
-    res.redirect('/utenteDashboard?alert=successo&successType=recensione_eliminata');
+    req.session.success = 'Recensione eliminata con successo.';
+    res.redirect('/utenteDashboard');
   } catch (error) {
     console.error('Errore durante l\'eliminazione della recensione:', error);
-    res.redirect('/utenteDashboard?alert=errore&errorType=recensione_errore');
+    req.session.error = 'Errore durante la gestione della recensione.';
+    res.redirect('/utenteDashboard');
   }
 });
 

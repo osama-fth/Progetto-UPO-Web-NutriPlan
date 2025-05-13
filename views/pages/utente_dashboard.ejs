@@ -83,6 +83,7 @@
 
     <!-- Contenuto principale -->
     <main class="main-content">
+      <!-- Header della dashboard -->
       <header class="dashboard-header">
         <div class="d-flex align-items-center">
           <button class="btn d-md-none me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar-mobile"
@@ -96,6 +97,22 @@
           <span class="d-none d-md-inline-block ms-2">Logout</span>
         </button>
       </header>
+
+      <!-- Alert di successo -->
+      <% if (locals.success) { %>
+        <div class="alert alert-success alert-dismissible fade show mt-3 mx-2" role="alert">
+          <%= success %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% } %>
+
+      <!-- Alert di errore -->
+      <% if (locals.error) { %>
+        <div class="alert alert-danger alert-dismissible fade show mt-3 mx-2" role="alert">
+          <%= error %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% } %>
 
       <!-- Sezione Misurazioni -->
       <div id="sezione-misurazioni" class="sezione-contenuto">

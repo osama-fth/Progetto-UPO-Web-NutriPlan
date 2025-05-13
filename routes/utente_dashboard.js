@@ -60,13 +60,21 @@ router.get('/', async (req, res) => {
             // Continua con pianiAlimentariFormattati = []
         }
 
+        // Recupera messaggi dalla sessione e poi cancellali
+        const success = req.session.success;
+        const error = req.session.error;
+        delete req.session.success;
+        delete req.session.error;
+
         // Renderizza la pagina con tutti i dati raccolti
         res.render('pages/utente_dashboard', {
             user: req.user,
             isAuth: req.isAuthenticated(),
             misurazioni: misurazioniFormattate,
             recensione: recensione,
-            pianiAlimentari: pianiAlimentariFormattati
+            pianiAlimentari: pianiAlimentariFormattati,
+            success: success,
+            error: error
         });
     } catch (err) {
         console.error("Errore nel recupero dei dati:", err);
@@ -75,7 +83,8 @@ router.get('/', async (req, res) => {
             isAuth: req.isAuthenticated(),
             misurazioni: [],
             recensione: null,
-            pianiAlimentari: []
+            pianiAlimentari: [],
+            error: "Errore nel recupero dei dati"
         });
     }
 });
@@ -86,15 +95,18 @@ router.post('/nuovaMisurazione', async (req, res) => {
         const { peso, data } = req.body;
         
         if (!peso || !data || isNaN(parseFloat(peso)) || parseFloat(peso) <= 0) {
-            return res.status(400).send("Dati non validi");
+            req.session.error = 'I dati inseriti non sono validi.';
+            return res.redirect('/utenteDashboard');
         }
         
         await dao.insertMisurazione(req.user.id, parseFloat(peso), data);
         
+        req.session.success = 'Misurazione aggiunta con successo.';
         res.redirect('/utenteDashboard');
     } catch (err) {
         console.error("Errore nell'inserimento della misurazione:", err);
-        res.status(500).send("Errore nell'inserimento della misurazione");
+        req.session.error = 'Impossibile modificare la misurazione.';
+        res.redirect('/utenteDashboard');
     }
 });
 

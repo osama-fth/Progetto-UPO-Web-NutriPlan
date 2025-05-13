@@ -14,12 +14,15 @@ router.get('/elimina', authMiddleware.isAuthenticated, async (req, res) => {
             if (err) { 
                 console.error("Errore durante il logout:", err);
             }
-
-            res.redirect('/?alert=successo&successType=account_eliminato');
+            
+            // Messaggio nella sessione temporanea
+            req.session.success = 'Account eliminato con successo.';
+            res.redirect('/');
         });
     } catch (error) {
         console.error("Errore durante l'eliminazione dell'account:", error);
-        res.redirect('/utenteDashboard?alert=errore&errorType=eliminazione_fallita');
+        req.session.error = 'Impossibile eliminare l\'elemento selezionato.';
+        res.redirect('/utenteDashboard');
     }
 });
 

@@ -8,15 +8,18 @@ router.post('/modifica', async (req, res) => {
         const { misurazioneId, peso, data } = req.body;
         
         if (!misurazioneId || !peso || !data || isNaN(parseFloat(peso)) || parseFloat(peso) <= 0) {
-            return res.status(400).redirect('/utenteDashboard?alert=errore&errorType=dati_non_validi');
+            req.session.error = 'I dati inseriti non sono validi.';
+            return res.redirect('/utenteDashboard');
         }
             
         await dao.updateMisurazione(misurazioneId, parseFloat(peso), data);
         
-        res.redirect('/utenteDashboard?alert=successo&successType=misurazione_modificata');
+        req.session.success = 'Misurazione modificata con successo.';
+        res.redirect('/utenteDashboard');
     } catch (error) {
         console.error('Errore durante la modifica della misurazione:', error);
-        res.redirect('/utenteDashboard?alert=errore&errorType=modifica_fallita');
+        req.session.error = 'Impossibile modificare la misurazione.';
+        res.redirect('/utenteDashboard');
     }
 });
 
@@ -26,10 +29,12 @@ router.get('/cancella/:id', async (req, res) => {
         const misurazioneId = req.params.id;
         await dao.deleteMisurazione(misurazioneId);
         
-        res.redirect('/utenteDashboard?alert=successo&successType=misurazione_eliminata');
+        req.session.success = 'Misurazione eliminata con successo.';
+        res.redirect('/utenteDashboard');
     } catch (error) {
         console.error('Errore durante l\'eliminazione della misurazione:', error);
-        res.redirect('/utenteDashboard?alert=errore&errorType=eliminazione_fallita');
+        req.session.error = 'Impossibile eliminare l\'elemento selezionato.';
+        res.redirect('/utenteDashboard');
     }
 });
 
