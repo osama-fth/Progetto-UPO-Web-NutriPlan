@@ -16,7 +16,8 @@ router.get('/', async (req, res) => {
     });
   } catch (error) {
     console.error('Errore durante il recupero delle recensioni:', error);
-    res.redirect('/error?message=Errore+durante+il+recupero+delle+recensioni');
+    req.session.error = "Errore durante il recupero dei dati";
+    res.redirect("/error");
   }
 });
 

@@ -78,16 +78,9 @@ router.get('/', async (req, res) => {
             error: error
         });
     } catch (err) {
-        console.error("Errore nel recupero dei dati:", err);
-        res.render('pages/utente_dashboard', {
-            title: 'Dashboard Utente - NutriPlan', // Aggiungi questa riga
-            user: req.user,
-            isAuth: req.isAuthenticated(),
-            misurazioni: [],
-            recensione: null,
-            pianiAlimentari: [],
-            error: "Errore nel recupero dei dati"
-        });
+        console.error("Errore nel recupero dei dati:", error);
+        req.session.error = "Errore durante il recupero dei dati";
+        res.redirect("/error");
     }
 });
 

@@ -10,13 +10,15 @@ router.get('/visualizza/:id', isLoggedIn, async (req, res) => {
         
         // Verifica che il piano appartenga all'utente corrente
         if (!piano || piano.utente_id !== req.user.id) {
-            return res.status(403).redirect('/utenteDashboard?alert=errore&errorType=accesso_negato');
+            req.session.error = 'Non hai accesso a questo piano alimentare.';
+            return res.status(403).redirect('/utenteDashboard');
         }
         
         res.render('pages/piano-dettaglio', { piano });
     } catch (error) {
         console.error('Errore durante il recupero del piano alimentare:', error);
-        res.redirect('/utenteDashboard?alert=errore&errorType=errore_caricamento');
+        req.session.error = 'Errore durante il caricamento del piano alimentare.';
+        res.redirect('/utenteDashboard');
     }
 });
 
@@ -46,7 +48,8 @@ router.get('/scarica/:id', isLoggedIn, async (req, res) => {
         res.send(contenuto);
     } catch (error) {
         console.error('Errore durante il download del piano alimentare:', error);
-        res.redirect('/utenteDashboard?alert=errore&errorType=errore_download');
+        req.session.error = 'Errore durante il download del piano alimentare.';
+        res.redirect('/utenteDashboard');
     }
 });
 

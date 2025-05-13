@@ -12,9 +12,9 @@ router.get('/', async (req, res) => {
     title: 'NutriPlan - Home',
     user: req.user || null,
     isAuth: req.isAuthenticated(),
-    messaggioInviato: req.query.messaggioInviato === 'true',
     alert: req.query.alert,         
-    errorType: req.query.errorType, 
+    errorType: req.query.errorType,
+    message: req.query.message,
     success: success,
     error: error
   });

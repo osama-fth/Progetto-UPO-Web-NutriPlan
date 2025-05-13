@@ -6,11 +6,12 @@ router.get('/', (req, res) => {
     req.logout((err) => {
         if (err) {
             console.error('Errore durante il logout:', err);
-            return next(err);
+            req.session.error = 'Si è verificato un errore durante il logout.';
+            return res.redirect('/login');
         }
-        res.redirect('/login?alert=success&successType=logut-success')
+        req.session.success = 'Logout effettuato con successo.';
+        res.redirect('/login');
     });
-}
-)
+})
 
 module.exports = router;

@@ -132,21 +132,7 @@
                   <div class="contact-form p-4 h-100">
                     <h3>Inviaci un Messaggio</h3>
 
-                    <!-- Mostra messaggio di successo -->
-                    <% if (locals.alert === 'success' && locals.message === 'messaggio_inviato') { %>
-                      <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
-                        <strong>Grazie!</strong> Il tuo messaggio è stato inviato correttamente.
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                      </div>
-                    <% } %>
-
-                    <!-- Mostra messaggio di errore -->
-                    <% if (locals.alert === 'errore' && locals.errorType === 'campi_mancanti') { %>
-                      <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
-                          <strong>Errore!</strong> Si è verificato un problema con la richiesta.
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                      </div>
-                    <% } %>
+                    <%- include('../partials/alerts') %>
 
                     <form class="mt-4" action="/contatti/invia" method="POST">
                       <div class="mb-3">

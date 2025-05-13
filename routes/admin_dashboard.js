@@ -4,7 +4,7 @@ const router = express.Router()
 const dao = require("../models/dao");
 const authMiddleware = require("../middleware/auth");
 
-// Applico il middleware per verificare che l'utente sia un admin
+
 router.use(authMiddleware.isAdmin);
 
 router.get('/', async (req, res) => {
@@ -51,14 +51,8 @@ router.get('/', async (req, res) => {
         });
     } catch (error) {
         console.error("Errore nel recupero dei dati:", error);
-        res.render("pages/admin_dashboard", { 
-            title: 'Dashboard Admin - NutriPlan',
-            user: req.user, 
-            pazienti: [],
-            recensioni: [],
-            richieste: [],
-            error: "Errore nel recupero dei dati"
-        });
+        req.session.error = "Errore durante il recupero dei dati";
+        res.redirect("/error");
     }
 });
 

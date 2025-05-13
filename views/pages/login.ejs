@@ -17,19 +17,9 @@
                   <img src="/images/logo-blu.webp" alt="NutriPlan Logo" class="img-fluid" style="height: 55px;">
                 </div>
                 <h2 class="text-center mb-4">Accedi a NutriPlan</h2>
-                
-                <% if (typeof query !== 'undefined' && query.alert === 'errore') { %>
-                  <div class="alert alert-danger" role="alert">
-                    <% if (query.errorType === 'non_trovato') { %>
-                      <i class="fas fa-exclamation-circle me-2"></i> Nessun utente trovato con questa email.
-                    <% } else if (query.errorType === 'password_errata') { %>
-                      <i class="fas fa-exclamation-circle me-2"></i> Password non corretta. Riprova.
-                    <% } else { %>
-                      <i class="fas fa-exclamation-circle me-2"></i> Si è verificato un errore durante l'accesso.
-                    <% } %>
-                  </div>
-                <% } %>
-                
+
+                <%- include('../partials/alerts') %>
+
                 <form id="loginForm" action="/login" method="POST">
                   <div class="mb-3">
                     <label class="form-label">Email</label>

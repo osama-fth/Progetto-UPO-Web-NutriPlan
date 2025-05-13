@@ -98,21 +98,9 @@
         </button>
       </header>
 
-      <!-- Alert di successo -->
-      <% if (locals.success) { %>
-        <div class="alert alert-success alert-dismissible fade show mt-3 mx-2" role="alert">
-          <%= success %>
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-      <% } %>
-
-      <!-- Alert di errore -->
-      <% if (locals.error) { %>
-        <div class="alert alert-danger alert-dismissible fade show mt-3 mx-2" role="alert">
-          <%= error %>
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-      <% } %>
+      <div class="container-fluid mt-3">
+        <%- include('../partials/alerts') %>
+      </div>
 
       <!-- Sezione Misurazioni -->
       <div id="sezione-misurazioni" class="sezione-contenuto">

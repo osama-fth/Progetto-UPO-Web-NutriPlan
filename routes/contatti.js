@@ -13,16 +13,19 @@ router.post('/invia', [
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.redirect(`/?alert=errore&errorType=campi_mancanti#contatti`);
+      req.session.error = 'Si prega di completare tutti i campi correttamente.';
+      return res.redirect('/#contatti');
     }
     
     const { nome, email, messaggio } = req.body;
     await dao.inserisciRichiestaContatto(nome, email, messaggio);
 
-    res.redirect('/?alert=success&message=messaggio_inviato#contatti');
+    req.session.success = 'Il tuo messaggio è stato inviato correttamente.';
+    res.redirect('/#contatti');
   } catch (error) {
     console.error('Errore durante l\'invio del messaggio di contatto:', error);
-    res.redirect('/?alert=errore&errorType=errore_generico#contatti');
+    req.session.error = 'Si è verificato un errore durante l\'invio del messaggio.';
+    res.redirect('/#contatti');
   }
 });
 

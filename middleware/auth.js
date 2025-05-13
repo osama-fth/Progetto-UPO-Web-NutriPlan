@@ -5,7 +5,8 @@ exports.isAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
   }
-  res.redirect('/error?message=EffettuareLogin');
+  req.session.error = 'Effettuare il login per accedere a questa pagina.';
+  res.redirect('/login');
 };
 
 // Middleware per verificare se l'utente è un admin
@@ -14,9 +15,11 @@ exports.isAdmin = (req, res, next) => {
     return next();
   }
   if (!req.isAuthenticated()) {
-    return res.redirect('/error?message=EffettuareLogin');
+    req.session.error = 'Effettuare il login per accedere a questa pagina.';
+    return res.redirect('/login');
   }
-  res.redirect('/error?message=AutorizzazioneNegata');
+  req.session.error = 'Non hai i permessi necessari per accedere a questa pagina.';
+  res.redirect('/error');
 };
 
 // Middleware per verificare se l'utente è un paziente
@@ -25,7 +28,9 @@ exports.isPaziente = (req, res, next) => {
     return next();
   }
   if (!req.isAuthenticated()) {
-    return res.redirect('/error?message=EffettuareLogin');
+    req.session.error = 'Effettuare il login per accedere a questa pagina.';
+    return res.redirect('/login');
   }
-  res.redirect('/error?message=AutorizzazioneNegata');
+  req.session.error = 'Non hai i permessi necessari per accedere a questa pagina.';
+  res.redirect('/error');
 };

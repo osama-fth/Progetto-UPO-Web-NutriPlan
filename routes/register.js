@@ -41,7 +41,8 @@ router.post("/", [
             req.body, 
             cryptoPwd
         );
-        return res.redirect("/login?alert=success&succesType=registrazioneEffettuata");
+        req.session.success = 'Registrazione completata con successo.';
+        return res.redirect("/login");
     } catch (error) {
         console.log("Errore durante la registrazione: ", error);
         res.render("pages/register?alert=errore&errorType=registrazioneFallita", { 

@@ -18,12 +18,9 @@
                 </div>
                 <h2 class="text-center mb-4">Registrati a NutriPlan</h2>
 
-                <% if (typeof error !== 'undefined') { %>
-                  <div class="alert alert-danger" role="alert">
-                    <i class="fas fa-exclamation-circle me-2"></i> <%= error %>
-                  </div>
-                <% } %>
+                <%- include('../partials/alerts') %>
 
+                <!-- Mantieni la visualizzazione degli errori di validazione -->
                 <% if (typeof errors !== 'undefined' && errors.length > 0) { %>
                   <div class="alert alert-danger" role="alert">
                     <i class="fas fa-exclamation-circle me-2"></i> Si sono verificati i seguenti errori:
