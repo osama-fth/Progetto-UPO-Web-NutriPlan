@@ -10,11 +10,17 @@ exports.getPianiAlimentariByUserId = async (utenteId) => {
                 ORDER BY data_creazione DESC`;
 
     return new Promise((resolve, reject) => {
-        db.get(sql, [utenteId], (err, row) => {
+        db.all(sql, [utenteId], (err, rows) => {
             if (err) {
                 reject(err);
             } else {
-                resolve(row || null);
+                if (rows) {
+                    rows.forEach(row => {
+                        const data = new Date(row.data_creazione);
+                        row.dataFormattata = `${data.getDate().toString().padStart(2, '0')}/${(data.getMonth() + 1).toString().padStart(2, '0')}/${data.getFullYear()}`;
+                    });
+                }
+                resolve(rows || []);
             }
         });
     });
@@ -45,7 +51,7 @@ exports.getPianoAlimentareById = async (pianoId) => {
 exports.scaricaPianoAlimentare = async (pianoId, utenteId) => {
     const sql = `SELECT p.id, p.titolo, p.contenuto, p.data_creazione,
                        u.nome, u.cognome
-                FROM piani_alimentari p
+                FROM piano_alimentare p
                 JOIN utenti u ON p.utente_id = u.id
                 WHERE p.id = ? AND p.utente_id = ?`;
 

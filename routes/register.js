@@ -6,7 +6,10 @@ const bcrypt = require("bcrypt")
 const dao = require("../models/dao")
 
 router.get("/", (req, res) => {
-    res.render("pages/register", { user: req.user });
+    res.render("pages/register", { 
+        title: 'NutriPlan - Registrazione',
+        user: req.user 
+    });
 })
 
 router.post("/", [

@@ -68,6 +68,7 @@ router.get('/', async (req, res) => {
 
         // Renderizza la pagina con tutti i dati raccolti
         res.render('pages/utente_dashboard', {
+            title: 'NutriPlan - Dashboard',
             user: req.user,
             isAuth: req.isAuthenticated(),
             misurazioni: misurazioniFormattate,
@@ -79,6 +80,7 @@ router.get('/', async (req, res) => {
     } catch (err) {
         console.error("Errore nel recupero dei dati:", err);
         res.render('pages/utente_dashboard', {
+            title: 'Dashboard Utente - NutriPlan', // Aggiungi questa riga
             user: req.user,
             isAuth: req.isAuthenticated(),
             misurazioni: [],

@@ -1,0 +1,21 @@
+<!-- filepath: /Users/osamafoutih/Desktop/uni/web/progetto/NutriPlan/views/partials/admin-conferma-elimina-recensione-modal.ejs -->
+<div class="modal fade" id="confermaEliminaRecensioneModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Conferma eliminazione</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <p>Sei sicuro di voler eliminare questa recensione?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+        <form action="/recensioni/elimina-admin" method="POST" class="d-inline">
+          <input type="hidden" id="elimina-recensione-id" name="recensioneId">
+          <button type="submit" class="btn btn-danger">Elimina</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

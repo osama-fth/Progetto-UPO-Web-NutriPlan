@@ -13,7 +13,10 @@ router.get("/", (req, res) => {
         }
     }
     
-    res.render("pages/login", { query: req.query });
+    res.render("pages/login", { 
+        title: 'NutriPlan - Login',
+        query: req.query 
+    });
 });
 
 // POST login

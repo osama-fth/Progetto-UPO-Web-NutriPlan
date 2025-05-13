@@ -13,6 +13,8 @@ router.get('/', async (req, res) => {
     user: req.user || null,
     isAuth: req.isAuthenticated(),
     messaggioInviato: req.query.messaggioInviato === 'true',
+    alert: req.query.alert,         
+    errorType: req.query.errorType, 
     success: success,
     error: error
   });

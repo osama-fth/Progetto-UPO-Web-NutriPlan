@@ -14,27 +14,21 @@
       <nav>
         <ul class="sidebar-nav">
           <li class="sidebar-item active">
-            <a href="#" class="sidebar-link">
+            <a href="#" class="sidebar-link" data-section="pazienti">
               <i class="fas fa-user"></i>
               <span>Pazienti</span>
             </a>
           </li>
           <li class="sidebar-item">
-            <a href="#" class="sidebar-link">
+            <a href="#" class="sidebar-link" data-section="recensioni">
               <i class="fas fa-star"></i>
               <span>Recensioni</span>
             </a>
           </li>
           <li class="sidebar-item">
-            <a href="#" class="sidebar-link">
+            <a href="#" class="sidebar-link" data-section="richieste-contatto">
               <i class="fas fa-envelope"></i>
               <span>Richieste di contatto</span>
-            </a>
-          </li>
-          <li class="sidebar-item">
-            <a href="#" class="sidebar-link">
-              <i class="fas fa-cog"></i>
-              <span>Impostazioni</span>
             </a>
           </li>
         </ul>
@@ -53,27 +47,21 @@
         <nav>
           <ul class="sidebar-nav">
             <li class="sidebar-item active">
-              <a href="#" class="sidebar-link">
+              <a href="#" class="sidebar-link" data-section="pazienti">
                 <i class="fas fa-user"></i>
                 <span>Pazienti</span>
               </a>
             </li>
             <li class="sidebar-item">
-              <a href="#" class="sidebar-link">
+              <a href="#" class="sidebar-link" data-section="recensioni">
                 <i class="fas fa-star"></i>
                 <span>Recensioni</span>
               </a>
             </li>
             <li class="sidebar-item">
-              <a href="#" class="sidebar-link">
+              <a href="#" class="sidebar-link" data-section="richieste-contatto">
                 <i class="fas fa-envelope"></i>
                 <span>Richieste di contatto</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a href="#" class="sidebar-link">
-                <i class="fas fa-cog"></i>
-                <span>Impostazioni</span>
               </a>
             </li>
           </ul>
@@ -97,70 +85,203 @@
         </button>
       </header>
 
-      <section class="row mt-4">
-        <div class="col-lg-10 mx-auto">
-          <div class="card mx-2">
-            <header class="card-header bg-white d-flex justify-content-between align-items-center">
-              <h4 class="py-1 mb-0">I tuoi pazienti</h4>
-            </header>
-            <div class="card-body">
-              <div class="table-responsive">
-                <table class="table table-hover align-middle">
-                  <thead>
-                    <tr>
-                      <th scope="col" class="text-center">Cognome</th>
-                      <th scope="col" class="text-center">Nome</th>
-                      <th scope="col" class="text-center">Data di Nascita</th>
-                      <th scope="col" class="text-center">Azioni</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <% if (typeof pazienti !== 'undefined' && pazienti.length > 0) { %>
-                      <% pazienti.forEach(paziente => { %>
+      <!-- Sezione Pazienti -->
+      <div id="sezione-pazienti" class="sezione-contenuto">
+        <section class="row mt-4">
+          <div class="col-lg-10 mx-auto">
+            <div class="card mx-2">
+              <header class="card-header bg-white d-flex justify-content-between align-items-center">
+                <h4 class="py-1 mb-0">I tuoi pazienti</h4>
+              </header>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-hover align-middle">
+                    <thead>
+                      <tr>
+                        <th scope="col" class="text-center">Cognome</th>
+                        <th scope="col" class="text-center">Nome</th>
+                        <th scope="col" class="text-center">Data di Nascita</th>
+                        <th scope="col" class="text-center">Azioni</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% if (typeof pazienti !== 'undefined' && pazienti.length > 0) { %>
+                        <% pazienti.forEach(paziente => { %>
+                          <tr>
+                            <td class="text-center"><%= paziente.cognome %></td>
+                            <td class="text-center"><%= paziente.nome %></td>
+                            <td class="text-center"><%= paziente.data_formattata %></td>
+                            <td class="text-center">
+                              <div class="d-flex justify-content-center">
+                                <button type="button" class="btn btn-sm btn-outline-primary me-2"
+                                        data-paziente-id="<%= paziente.id %>">
+                                  <i class="fas fa-eye me-1"></i> Dettagli
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-success me-2"
+                                        data-paziente-id="<%= paziente.id %>">
+                                  <i class="fas fa-utensils me-1"></i> Piani
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-danger"
+                                        data-paziente-id="<%= paziente.id %>">
+                                  <i class="fas fa-trash me-1"></i> Elimina
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        <% }) %>
+                      <% } else { %>
                         <tr>
-                          <td class="text-center"><%= paziente.cognome %></td>
-                          <td class="text-center"><%= paziente.nome %></td>
-                          <td class="text-center"><%= paziente.data_formattata %></td>
-                          <td class="text-center">
-                            <div class="d-flex justify-content-center">
-                              <button type="button" class="btn btn-sm btn-outline-primary me-2"
-                                      data-paziente-id="<%= paziente.id %>">
-                                <i class="fas fa-eye me-1"></i> Dettagli
-                              </button>
-                              <button type="button" class="btn btn-sm btn-outline-success me-2"
-                                      data-paziente-id="<%= paziente.id %>">
-                                <i class="fas fa-utensils me-1"></i> Piani
-                              </button>
-                              <button type="button" class="btn btn-sm btn-outline-danger"
-                                      data-paziente-id="<%= paziente.id %>">
-                                <i class="fas fa-trash me-1"></i> Elimina
-                              </button>
-                            </div>
+                          <td colspan="4" class="text-center py-4">
+                            <i class="fas fa-user-slash text-muted mb-3" style="font-size: 3rem;"></i>
+                            <p class="text-muted mb-0">Nessun paziente trovato</p>
                           </td>
                         </tr>
-                      <% }) %>
-                    <% } else { %>
-                      <tr>
-                        <td colspan="4" class="text-center py-4">
-                          <i class="fas fa-user-slash text-muted mb-3" style="font-size: 3rem;"></i>
-                          <p class="text-muted mb-0">Nessun paziente trovato</p>
-                        </td>
-                      </tr>
-                    <% } %>
-                  </tbody>
-                </table>
+                      <% } %>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
+
+      <!-- Sezione Recensioni -->
+      <div id="sezione-recensioni" class="sezione-contenuto d-none">
+        <section class="row mt-4">
+          <div class="col-lg-10 mx-auto">
+            <div class="card mx-2">
+              <header class="card-header bg-white d-flex justify-content-between align-items-center">
+                <h4 class="py-1 mb-0">Recensioni dei pazienti</h4>
+              </header>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-hover align-middle">
+                    <thead>
+                      <tr>
+                        <th scope="col" class="text-center">Cognome</th>
+                        <th scope="col" class="text-center">Nome</th>
+                        <th scope="col" class="text-center">Data</th>
+                        <th scope="col" class="text-center">Azioni</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% if (typeof recensioni !== 'undefined' && recensioni.length > 0) { %>
+                        <% recensioni.forEach(recensione => { %>
+                          <tr>
+                            <td class="text-center"><%= recensione.cognome %></td>
+                            <td class="text-center"><%= recensione.nome %></td>
+                            <td class="text-center"><%= recensione.dataFormattata %></td>
+                            <td class="text-center">
+                              <div class="d-flex justify-content-center">
+                                <button type="button" class="btn btn-sm btn-outline-primary me-2 btn-dettagli-recensione"
+                                        data-recensione-id="<%= recensione.id %>"
+                                        data-recensione-commento="<%= recensione.commento %>"
+                                        data-recensione-nome="<%= recensione.nome %> <%= recensione.cognome %>"
+                                        data-recensione-data="<%= recensione.dataFormattata %>">
+                                  <i class="fas fa-eye me-1"></i> Dettagli
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-danger btn-elimina-recensione"
+                                        data-recensione-id="<%= recensione.id %>">
+                                  <i class="fas fa-trash me-1"></i> Elimina
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        <% }) %>
+                      <% } else { %>
+                        <tr>
+                          <td colspan="4" class="text-center py-4">
+                            <i class="fas fa-star text-muted mb-3" style="font-size: 3rem;"></i>
+                            <p class="text-muted mb-0">Nessuna recensione trovata</p>
+                          </td>
+                        </tr>
+                      <% } %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Sezione Richieste di Contatto -->
+      <div id="sezione-richieste-contatto" class="sezione-contenuto d-none">
+        <section class="row mt-4">
+          <div class="col-lg-10 mx-auto">
+            <div class="card mx-2">
+              <header class="card-header bg-white d-flex justify-content-between align-items-center">
+                <h4 class="py-1 mb-0">Richieste di contatto</h4>
+              </header>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-hover align-middle">
+                    <thead>
+                      <tr>
+                        <th scope="col" class="text-center">Nome</th>
+                        <th scope="col" class="text-center">Email</th>
+                        <th scope="col" class="text-center">Data</th>
+                        <th scope="col" class="text-center">Azioni</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% if (typeof richieste !== 'undefined' && richieste.length > 0) { %>
+                        <% richieste.forEach(richiesta => { %>
+                          <tr>
+                            <td class="text-center"><%= richiesta.nome %></td>
+                            <td class="text-center"><%= richiesta.email %></td>
+                            <td class="text-center"><%= richiesta.dataFormattata %></td>
+                            <td class="text-center">
+                              <div class="d-flex justify-content-center">
+                                <button type="button" class="btn btn-sm btn-outline-primary me-2 btn-dettagli-richiesta"
+                                        data-richiesta-id="<%= richiesta.id %>"
+                                        data-richiesta-nome="<%= richiesta.nome %>"
+                                        data-richiesta-email="<%= richiesta.email %>"
+                                        data-richiesta-messaggio="<%= richiesta.messaggio %>"
+                                        data-richiesta-data="<%= richiesta.dataFormattata %>">
+                                  <i class="fas fa-eye me-1"></i> Dettagli
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-danger btn-elimina-richiesta"
+                                        data-richiesta-id="<%= richiesta.id %>">
+                                  <i class="fas fa-trash me-1"></i> Elimina
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        <% }) %>
+                      <% } else { %>
+                        <tr>
+                          <td colspan="4" class="text-center py-4">
+                            <i class="fas fa-envelope text-muted mb-3" style="font-size: 3rem;"></i>
+                            <p class="text-muted mb-0">Nessuna richiesta di contatto trovata</p>
+                          </td>
+                        </tr>
+                      <% } %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
     </main>
   </div>
 
+  <!-- Inclusione dei modal partials -->
+  <%- include('../partials/admin-recensione-details-modal') %>
+  <%- include('../partials/admin-richiesta-details-modal') %>
+  <%- include('../partials/admin-conferma-elimina-recensione-modal') %>
+  <%- include('../partials/admin-conferma-elimina-richiesta-modal') %>
+  
   <!-- Modal per conferma logout -->
   <%- include('../partials/logout-modal') %>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Inclusione del file JavaScript esterno -->
+  <script src="/javascripts/admin_dashboard.js"></script>
 </body>
 
 </html>

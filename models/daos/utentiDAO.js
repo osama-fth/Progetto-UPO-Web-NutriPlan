@@ -45,7 +45,6 @@ exports.getAllPazienti = async () => {
 }
 
 // Elimina un account utente
-
 exports.deleteAccount = async (utenteId) => {
     const sql = `DELETE FROM utenti WHERE id = ?`;
     

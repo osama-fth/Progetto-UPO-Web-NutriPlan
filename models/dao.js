@@ -21,6 +21,7 @@ module.exports = {
 
     // Recensioni
     getAllRecensioni: recensioniDAO.getAllRecensioni,
+    getAllRecensioniWithUserInfo: recensioniDAO.getAllRecensioniWithUserInfo,
     getRecensioneById: recensioniDAO.getRecensioneById,
     getRecensioneByUserId: recensioniDAO.getRecensioneByUserId,
     insertRecensione: recensioniDAO.insertRecensione,
@@ -33,5 +34,8 @@ module.exports = {
     scaricaPianoAlimentare: pianiAlimentariDAO.scaricaPianoAlimentare,
 
     // Contatti
-    inserisciRichiestaContatto: contattiDAO.inserisciRichiestaContatto
+    inserisciRichiestaContatto: contattiDAO.inserisciRichiestaContatto,
+    getAllRichiesteContatto: contattiDAO.getAllRichiesteContatto,
+    getRichiestaContattoById: contattiDAO.getRichiestaContattoById,
+    deleteRichiestaContatto: contattiDAO.deleteRichiestaContatto
 };
