@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const dao = require('../models/dao');
+const utentiDAO = require('../models/daos/utentiDAO');
 const authMiddleware = require("../middleware/auth");
 
 // Richiesta di eliminazione account
@@ -8,7 +8,7 @@ router.get('/elimina', authMiddleware.isAuthenticated, async (req, res) => {
     try {
         
         const utenteId = req.user.id;
-        await dao.deleteAccount(utenteId);
+        await utentiDAO.deleteAccount(utenteId);
         
         req.logout(function(err) {
             if (err) { 

@@ -3,7 +3,7 @@ const express = require("express")
 const router = express.Router()
 const { check, validationResult} = require("express-validator")
 const bcrypt = require("bcrypt")
-const dao = require("../models/dao")
+const utentiDAO = require("../models/daos/utentiDAO")
 
 router.get("/", (req, res) => {
     res.render("pages/register", { 
@@ -37,7 +37,7 @@ router.post("/", [
 
     try {
         const cryptoPwd = await bcrypt.hash(req.body.password, 10);
-        await dao.newUser(
+        await utentiDAO.newUser(
             req.body, 
             cryptoPwd
         );

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const dao = require('../models/dao');
+const contattiDAO = require('../models/daos/contattiDAO');
 const { check, validationResult } = require('express-validator');
 const authMiddleware = require('../middleware/auth');
 
@@ -18,7 +18,7 @@ router.post('/invia', [
     }
     
     const { nome, email, messaggio } = req.body;
-    await dao.inserisciRichiestaContatto(nome, email, messaggio);
+    await contattiDAO.inserisciRichiestaContatto(nome, email, messaggio);
 
     req.session.success = 'Il tuo messaggio è stato inviato correttamente.';
     res.redirect('/#contatti');
@@ -34,7 +34,7 @@ router.post('/elimina-richiesta', authMiddleware.isAdmin, async (req, res) => {
   try {
     const { richiestaId } = req.body;
     
-    await dao.deleteRichiestaContatto(richiestaId);
+    await contattiDAO.deleteRichiestaContatto(richiestaId);
     
     req.session.success = 'Richiesta di contatto eliminata con successo.';
     res.redirect('/adminDashboard#richieste-contatto');

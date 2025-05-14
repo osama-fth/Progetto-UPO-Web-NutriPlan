@@ -1,7 +1,9 @@
 'use strict'
 const express = require("express");
 const router = express.Router();
-const dao = require("../models/dao");
+const misurazioniDAO = require("../models/daos/misurazioniDAO");
+const recensioniDAO = require("../models/daos/recensioniDAO");
+const pianiAlimentariDAO = require("../models/daos/pianiAlimentariDAO");
 const authMiddleware = require("../middleware/auth");
 
 // Applicazione del middleware per accesso solo a pazienti
@@ -15,7 +17,7 @@ router.get('/', async (req, res) => {
     
     try {
         // Recupera le misurazioni dell'utente
-        const misurazioni = await dao.getMisurazioniByUserId(req.user.id);
+        const misurazioni = await misurazioniDAO.getMisurazioniByUserId(req.user.id);
         
         // Formatta le date per la visualizzazione
         misurazioniFormattate = misurazioni.map(m => {
@@ -27,7 +29,7 @@ router.get('/', async (req, res) => {
         
         // Recupera la recensione dell'utente
         try {
-            recensione = await dao.getRecensioneByUserId(req.user.id);
+            recensione = await recensioniDAO.getRecensioneByUserId(req.user.id);
             if (recensione) {
                 const data = new Date(recensione.data_creazione);
                 recensione.dataFormattata = `${data.getDate().toString().padStart(2, '0')}/${(data.getMonth() + 1).toString().padStart(2, '0')}/${data.getFullYear()}`;
@@ -39,7 +41,7 @@ router.get('/', async (req, res) => {
 
         // Recupera i piani alimentari dell'utente
         try {
-            const risultatoPiani = await dao.getPianiAlimentariByUserId(req.user.id);
+            const risultatoPiani = await pianiAlimentariDAO.getPianiAlimentariByUserId(req.user.id);
             
             if (risultatoPiani) {
                 // Assicura che pianiAlimentari sia sempre un array
@@ -78,7 +80,7 @@ router.get('/', async (req, res) => {
             error: error
         });
     } catch (err) {
-        console.error("Errore nel recupero dei dati:", error);
+        console.error("Errore nel recupero dei dati:", err);
         req.session.error = "Errore durante il recupero dei dati";
         res.redirect("/error");
     }
@@ -94,7 +96,7 @@ router.post('/nuovaMisurazione', async (req, res) => {
             return res.redirect('/utenteDashboard');
         }
         
-        await dao.insertMisurazione(req.user.id, parseFloat(peso), data);
+        await misurazioniDAO.insertMisurazione(req.user.id, parseFloat(peso), data);
         
         req.session.success = 'Misurazione aggiunta con successo.';
         res.redirect('/utenteDashboard');

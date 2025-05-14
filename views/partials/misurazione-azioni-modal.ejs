@@ -49,39 +49,3 @@
     </div>
   </div>
 </div>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Gestione del click sui pulsanti di modifica
-    document.querySelectorAll('.btn-modifica-misurazione').forEach(button => {
-      button.addEventListener('click', function() {
-        const misurazioneId = this.getAttribute('data-misurazione-id');
-        const peso = this.getAttribute('data-peso');
-        const data = this.getAttribute('data-data');
-        
-        // Compila il form di modifica
-        document.getElementById('misurazioneId').value = misurazioneId;
-        document.getElementById('pesoModifica').value = peso;
-        document.getElementById('dataModifica').value = data;
-        
-        // Apri il modal
-        const modal = new bootstrap.Modal(document.getElementById('misurazioneAzioniModal'));
-        modal.show();
-      });
-    });
-    
-    // Gestione del pulsante elimina nel modal principale
-    document.getElementById('btnEliminaMisurazione').addEventListener('click', function() {
-      const misurazioneId = document.getElementById('misurazioneId').value;
-      const confermaMisurazioneCancella = document.getElementById('confermaCancellazioneMisurazione');
-      confermaMisurazioneCancella.href = `/misurazioni/cancella/${misurazioneId}`;
-      
-      // Nascondi il modal principale
-      bootstrap.Modal.getInstance(document.getElementById('misurazioneAzioniModal')).hide();
-      
-      // Mostra il modal di conferma
-      const modalConferma = new bootstrap.Modal(document.getElementById('confermaCancellazioneMisurazioneModal'));
-      modalConferma.show();
-    });
-  });
-</script>

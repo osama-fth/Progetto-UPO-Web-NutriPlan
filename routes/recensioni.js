@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const dao = require('../models/dao');
+const recensioniDAO = require('../models/daos/recensioniDAO');
 const authMiddleware = require("../middleware/auth");
 
 /* GET pagina recensioni */
 router.get('/', async (req, res) => {
   try {
-    const recensioni = await dao.getAllRecensioni();
+    const recensioni = await recensioniDAO.getAllRecensioni();
   
     res.render('pages/recensioni', {
       title: ' NutriPlan - Recensioni',
@@ -32,7 +32,7 @@ router.post('/nuova', authMiddleware.isAuthenticated, async (req, res) => {
       return res.redirect('/utenteDashboard#recensione'); // Aggiunto anchor per portare l'utente alla sezione recensioni
     }
 
-    await dao.insertRecensione(req.user.id, commento.trim());
+    await recensioniDAO.insertRecensione(req.user.id, commento.trim());
     
     // Reindirizza alla pagina utente_dashboard con messaggio di successo
     req.session.success = 'Recensione pubblicata con successo.';
@@ -49,7 +49,7 @@ router.post('/cancella', authMiddleware.isAuthenticated, async (req, res) => {
   try {
     const { recensioneId } = req.body;
     
-    await dao.deleteRecensione(recensioneId);
+    await recensioniDAO.deleteRecensione(recensioneId);
     
     req.session.success = 'Recensione eliminata con successo.';
     res.redirect('/utenteDashboard#recensione');
@@ -65,7 +65,7 @@ router.post('/elimina-admin', authMiddleware.isAdmin, async (req, res) => {
   try {
     const { recensioneId } = req.body;
     
-    await dao.deleteRecensione(recensioneId);
+    await recensioniDAO.deleteRecensione(recensioneId);
     
     req.session.success = 'Recensione eliminata con successo.';
     res.redirect('/adminDashboard#recensioni');
