@@ -18,7 +18,7 @@ CREATE TABLE piano_alimentare (
     titolo TEXT NOT NULL,
     descrizione TEXT,
     contenuto TEXT NOT NULL,
-    data_creazione DATE NOT NULL, nome TEXT NOT NULL, 
+    data_creazione DATE NOT NULL,
     FOREIGN KEY(utente_id) REFERENCES utenti(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 

@@ -27,6 +27,23 @@ body {
   font-family: 'Roboto', sans-serif;
   color: var(--dark-blue);
   background-color: var(--pastel-blue);
+  overflow-x: hidden;
+}
+
+.error-section{
+    height: 90vh;
+}
+
+.chart-scroll-container {
+  position: relative;
+  height: 300px;
+  overflow-x: auto;
+  margin-bottom: 15px;
+}
+
+.chart-inner-container {
+  min-width: 800px;
+  height: 100%;
 }
 
 main {

@@ -56,4 +56,41 @@ router.get('/', async (req, res) => {
     }
 });
 
+// Route per eliminare un utente
+router.post('/elimina-utente', authMiddleware.isAdmin, async (req, res) => {
+  try {
+    const { utenteId } = req.body;
+    
+    // Elimina l'utente dal database
+    await dao.deleteAccount(utenteId);
+    
+    req.session.success = 'Utente eliminato con successo';
+    res.redirect('/admin_dashboard');
+  } catch (error) {
+    console.error("Errore durante l'eliminazione dell'utente:", error);
+    req.session.error = 'Impossibile eliminare l\'utente';
+    res.redirect('/admin_dashboard');
+  }
+});
+
+// Route per ottenere le misurazioni di un paziente
+router.get('/paziente/:id/misurazioni', authMiddleware.isAdmin, async (req, res) => {
+  try {
+    const pazienteId = req.params.id;
+    const misurazioni = await dao.getMisurazioniByUtente(pazienteId);
+    
+    // Formato richiesto per il frontend
+    const misurazioniFormattate = misurazioni.map(m => ({
+      id: m.id,
+      misura: m.misura,
+      dataFormattata: new Date(m.data).toLocaleDateString('it-IT')
+    }));
+    
+    res.json(misurazioniFormattate);
+  } catch (error) {
+    console.error('Errore nel recupero delle misurazioni:', error);
+    res.status(500).json({ error: 'Errore nel recupero delle misurazioni' });
+  }
+});
+
 module.exports = router

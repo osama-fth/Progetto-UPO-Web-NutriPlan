@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         x: {
           grid: {
-            display: false
+            display: true
           },
           title: {
             display: true,
@@ -86,7 +86,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
           },
           ticks: {
-            color: mediumBlue
+            color: mediumBlue,
+            autoSkip: false
           }
         }
       },

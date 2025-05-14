@@ -118,14 +118,18 @@
                             <td class="text-center">
                               <div class="d-flex justify-content-center">
                                 <button type="button" class="btn btn-sm btn-outline-primary me-2"
-                                        data-paziente-id="<%= paziente.id %>">
+                                        data-paziente-id="<%= paziente.id %>"
+                                        data-paziente-nome="<%= paziente.nome %>"
+                                        data-paziente-cognome="<%= paziente.cognome %>"
+                                        data-paziente-data-nascita="<%= paziente.data_formattata %>"
+                                        data-paziente-email="<%= paziente.email %>">
                                   <i class="fas fa-eye me-1"></i> Dettagli
                                 </button>
                                 <button type="button" class="btn btn-sm btn-outline-success me-2"
                                         data-paziente-id="<%= paziente.id %>">
                                   <i class="fas fa-utensils me-1"></i> Piani
                                 </button>
-                                <button type="button" class="btn btn-sm btn-outline-danger"
+                                <button type="button" class="btn btn-sm btn-outline-danger btn-elimina-paziente"
                                         data-paziente-id="<%= paziente.id %>">
                                   <i class="fas fa-trash me-1"></i> Elimina
                                 </button>
@@ -278,7 +282,7 @@
   <%- include('../partials/admin-richiesta-details-modal') %>
   <%- include('../partials/admin-conferma-elimina-recensione-modal') %>
   <%- include('../partials/admin-conferma-elimina-richiesta-modal') %>
-  
+  <%- include('../partials/admin-conferma-elimina-utente-modal') %>
   <!-- Modal per conferma logout -->
   <%- include('../partials/logout-modal') %>
 

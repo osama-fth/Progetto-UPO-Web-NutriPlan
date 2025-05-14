@@ -18,6 +18,7 @@ module.exports = {
     getMisurazioneById: misurazioniDAO.getMisurazioneById,
     updateMisurazione: misurazioniDAO.updateMisurazione,
     deleteMisurazione: misurazioniDAO.deleteMisurazione,
+    getMisurazioniByUtente : misurazioniDAO.getMisurazioniByUtente,
 
     // Recensioni
     getAllRecensioni: recensioniDAO.getAllRecensioni,

@@ -7,16 +7,16 @@ const authMiddleware = require("../middleware/auth");
 router.get('/', async (req, res) => {
   try {
     const recensioni = await dao.getAllRecensioni();
-    
+  
     res.render('pages/recensioni', {
       title: ' NutriPlan - Recensioni',
       recensioni,
       user: req.user || null,
-      isAuth: req.isAuthenticated()
+      isAuth: req.isAuthenticated(),
     });
   } catch (error) {
     console.error('Errore durante il recupero delle recensioni:', error);
-    req.session.error = "Errore durante il recupero dei dati";
+    req.session.error = "Errore durante il recupero delle recensioni";
     res.redirect("/error");
   }
 });

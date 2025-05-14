@@ -85,4 +85,20 @@ document.addEventListener('DOMContentLoaded', function() {
       modal.show();
     });
   });
+  
+  // Gestione pulsanti eliminazione pazienti
+  document.querySelectorAll('.btn-elimina-paziente').forEach(button => {
+    button.addEventListener('click', function() {
+      const pazienteId = this.getAttribute('data-paziente-id');
+      
+      // Imposta l'ID utente nel form di eliminazione
+      document.getElementById('elimina-utente-id').value = pazienteId;
+      
+      // Mostra il modal di conferma
+      const modal = new bootstrap.Modal(document.getElementById('confermaEliminaUtenteModal'));
+      modal.show();
+    });
+  });
+
+  
 });
