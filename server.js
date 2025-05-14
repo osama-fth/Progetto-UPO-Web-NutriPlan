@@ -24,7 +24,7 @@ const errorRouter = require('./routes/error')
 app.set("view engine", "ejs")
 
 // Middleware
-app.use(morgan("tiny"))
+app.use(morgan("dev"))
 app.use(express.static('public'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
