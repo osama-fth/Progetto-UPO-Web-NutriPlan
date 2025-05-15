@@ -2,7 +2,7 @@
   "name": "nutriplan",
   "version": "1.0.0",
   "private": true,
-  "main": "app.js",
+  "main": "server.js",
   "author": "Osama",
   "scripts": {
     "start": "node server.js",
@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "dayjs": "^1.11.13",
     "ejs": "^3.1.10",
     "express": "^4.21.2",
     "express-session": "^1.18.1",
