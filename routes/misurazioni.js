@@ -14,18 +14,11 @@ router.post('/modifica', authMiddleware.isPaziente, async (req, res) => {
     try {
         const { misurazioneId, peso, data } = req.body;
         
-        if (!misurazioneId || !peso || !data || isNaN(parseFloat(peso)) || parseFloat(peso) <= 0) {
+        if (!parseFloat(peso) || !data) {
             req.session.error = 'I dati inseriti non sono validi.';
             return res.redirect('/utenteDashboard#misurazioni');
         }
-        
-        // Verifica che la misurazione appartenga all'utente
-        const misurazione = await misurazioniDAO.getMisurazioneById(misurazioneId);
-        if (!misurazione || misurazione.utente_id !== req.user.id) {
-            req.session.error = 'Non hai il permesso di modificare questa misurazione.';
-            return res.redirect('/utenteDashboard#misurazioni');
-        }
-        
+                
         await misurazioniDAO.updateMisurazione(misurazioneId, parseFloat(peso), data);
         
         req.session.success = 'Misurazione aggiornata con successo.';
@@ -41,13 +34,6 @@ router.post('/modifica', authMiddleware.isPaziente, async (req, res) => {
 router.get('/cancella/:id', authMiddleware.isPaziente, async (req, res) => {
     try {
         const misurazioneId = req.params.id;
-        
-        // Verifica che la misurazione appartenga all'utente
-        const misurazione = await misurazioniDAO.getMisurazioneById(misurazioneId);
-        if (!misurazione || misurazione.utente_id !== req.user.id) {
-            req.session.error = 'Non hai il permesso di eliminare questa misurazione.';
-            return res.redirect('/utenteDashboard#misurazioni');
-        }
         
         await misurazioniDAO.deleteMisurazione(misurazioneId);
         
@@ -71,8 +57,7 @@ router.get('/paziente/:id', authMiddleware.isAdmin, async (req, res) => {
             return {
                 id: m.id,
                 misura: m.misura,
-                data_iso: dayjs(m.data).format('YYYY-MM-DD'),
-                dataFormattata: dayjs(m.data).format('DD/MM/YYYY'),
+                dataFormattata: dayjs(m.data).format('DD/MM/YYYY')
             };
         });
         

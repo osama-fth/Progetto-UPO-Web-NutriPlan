@@ -5,14 +5,21 @@ const authMiddleware = require("../middleware/auth");
 
 /* GET pagina recensioni */
 router.get('/', async (req, res) => {
+
+  const success = req.session.success;
+  const error = req.session.error;
+  delete req.session.success;
+  delete req.session.error;
   try {
     const recensioni = await recensioniDAO.getAllRecensioni();
-  
+    
     res.render('pages/recensioni', {
       title: ' NutriPlan - Recensioni',
       recensioni,
       user: req.user || null,
       isAuth: req.isAuthenticated(),
+      success: success, 
+      error: error      
     });
   } catch (error) {
     console.error('Errore durante il recupero delle recensioni:', error);
@@ -46,13 +53,6 @@ router.post('/nuova', authMiddleware.isAuthenticated, async (req, res) => {
 router.post('/cancella', authMiddleware.isAuthenticated, async (req, res) => {
   try {
     const { recensioneId } = req.body;
-    
-    // Verifica che la recensione appartenga all'utente
-    const recensione = await recensioniDAO.getRecensioneById(recensioneId);
-    if (!recensione || recensione.utente_id !== req.user.id) {
-      req.session.error = 'Non hai il permesso di eliminare questa recensione.';
-      return res.redirect('/utenteDashboard#recensioni');
-    }
     
     await recensioniDAO.deleteRecensione(recensioneId);
     

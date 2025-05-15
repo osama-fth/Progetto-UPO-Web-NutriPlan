@@ -6,9 +6,26 @@ const bcrypt = require("bcrypt")
 const utentiDAO = require("../models/daos/utentiDAO")
 
 router.get("/", (req, res) => {
+
+    if (req.isAuthenticated()) {
+        if (req.user.ruolo === 'admin') {
+            return res.redirect('/adminDashboard');
+        } else {
+            return res.redirect('/utenteDashboard');
+        }
+    }
+    
+    const success = req.session.success;
+    const error = req.session.error;
+    delete req.session.success;
+    delete req.session.error;
+    
     res.render("pages/register", { 
         title: 'NutriPlan - Registrazione',
-        user: req.user 
+        user: req.user,
+        isAuth: req.isAuthenticated(),
+        success: success,
+        error: error
     });
 })
 
@@ -29,6 +46,7 @@ router.post("/", [
     if (!errors.isEmpty()) {
         console.log("Errori di validazione:", errors.array());
         return res.render("pages/register", { 
+            title: 'NutriPlan - Registrazione',
             user: req.user,
             errors: errors.array(),
             formData: req.body 
@@ -45,11 +63,8 @@ router.post("/", [
         return res.redirect("/login");
     } catch (error) {
         console.log("Errore durante la registrazione: ", error);
-        res.render("pages/register?alert=errore&errorType=registrazioneFallita", { 
-            user: req.user,
-            error: "Errore durante la registrazione. Potrebbe essere che l'email sia già in uso.",
-            formData: req.body
-        });
+        req.session.error = "Errore durante la registrazione. Potrebbe essere che l'email sia già in uso.";
+        return res.redirect("/register");
     }
 });
 
