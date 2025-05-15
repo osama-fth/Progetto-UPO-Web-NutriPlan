@@ -277,20 +277,213 @@
     </main>
   </div>
 
-  <!-- Inclusione dei modal partials -->
-  <%- include('../partials/admin-paziente-details-modal') %>
-  <%- include('../partials/admin-recensione-details-modal') %>
-  <%- include('../partials/admin-richiesta-details-modal') %>
-  <%- include('../partials/admin-conferma-elimina-recensione-modal') %>
-  <%- include('../partials/admin-conferma-elimina-richiesta-modal') %>
-  <%- include('../partials/admin-conferma-elimina-utente-modal') %>
+  <!-- Modal dettagli paziente-->
+  <div class="modal fade" id="pazienteDetailsModal" tabindex="-1" aria-labelledby="pazienteDetailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="pazienteDetailsModalLabel">Dettagli Paziente</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Informazioni paziente -->
+        <div class="card mb-4">
+          <div class="card-header bg-white">
+            <h6 class="mb-0">Informazioni personali</h6>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-3 mb-2">
+                <label class="form-label text-muted">Nome</label>
+                <p class="fs-5" id="paziente-nome"></p>
+              </div>
+              <div class="col-md-3 mb-2">
+                <label class="form-label text-muted">Cognome</label>
+                <p class="fs-5" id="paziente-cognome"></p>
+              </div>
+              <div class="col-md-3 mb-2">
+                <label class="form-label text-muted">Data di nascita</label>
+                <p class="fs-5" id="paziente-data-nascita"></p>
+              </div>
+              <div class="col-md-3 mb-2">
+                <label class="form-label text-muted">Email</label>
+                <p class="fs-5" id="paziente-email"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Grafico misurazioni -->
+        <div class="card mb-4">
+          <div class="card-header bg-white">
+            <h6 class="mb-0">Andamento peso</h6>
+          </div>
+          <div class="card-body">
+            <div class="chart-container" style="position: relative; height: 300px;">
+              <canvas id="pazienteChart"></canvas>
+            </div>
+            <div class="text-center mt-2" id="no-chart-data" style="display: none;">
+              <p class="text-muted">Nessuna misurazione disponibile per questo paziente</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabella misurazioni -->
+        <div class="card">
+          <div class="card-header bg-white">
+            <h6 class="mb-0">Storico misurazioni</h6>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th scope="col" class="text-center">Data</th>
+                    <th scope="col" class="text-center">Peso (kg)</th>
+                  </tr>
+                </thead>
+                <tbody id="tabella-misurazioni">
+                  <!-- Le misurazioni verranno inserite qui dinamicamente -->
+                  <tr id="no-misurazioni-row" style="display: none;">
+                    <td colspan="2" class="text-center py-4">
+                      <i class="fas fa-weight text-muted mb-3" style="font-size: 3rem;"></i>
+                      <p class="text-muted mb-0">Nessuna misurazione disponibile</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal dettagli recensione -->
+  <div class="modal fade" id="recensioneDetailsModal" tabindex="-1" aria-labelledby="recensioneDetailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="recensioneDetailsModalLabel">Dettagli Recensione</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Paziente:</strong> <span id="recensione-paziente"></span></p>
+        <p><strong>Data:</strong> <span id="recensione-data"></span></p>
+        <div class="mb-3">
+          <label class="form-label">Commento:</label>
+          <div class="border p-3 rounded bg-light" id="recensione-commento"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Model dettagli richiesta di contatto -->
+  <div class="modal fade" id="richiestaDetailsModal" tabindex="-1" aria-labelledby="richiestaDetailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="richiestaDetailsModalLabel">Dettagli Richiesta</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Nome:</strong> <span id="richiesta-nome"></span></p>
+        <p><strong>Email:</strong> <span id="richiesta-email"></span></p>
+        <p><strong>Data:</strong> <span id="richiesta-data"></span></p>
+        <div class="mb-3">
+          <label class="form-label">Messaggio:</label>
+          <div class="border p-3 rounded bg-light" id="richiesta-messaggio"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Conferma eliminazione recensione -->
+  <div class="modal fade" id="confermaEliminaRecensioneModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Conferma eliminazione</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <p>Sei sicuro di voler eliminare questa recensione?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+        <form action="/recensioni/elimina-admin" method="POST" class="d-inline">
+          <input type="hidden" id="elimina-recensione-id" name="recensioneId">
+          <button type="submit" class="btn btn-danger">Elimina</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal conferma eliminazione richiesta-->
+  <div class="modal fade" id="confermaEliminaRichiestaModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Conferma eliminazione</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <p>Sei sicuro di voler eliminare questa richiesta di contatto?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+        <form action="/contatti/elimina-richiesta" method="POST" class="d-inline">
+          <input type="hidden" id="elimina-richiesta-id" name="richiestaId">
+          <button type="submit" class="btn btn-danger">Elimina</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+  
+<!-- Modal conferma eliminazione utente-->
+<div class="modal fade" id="confermaEliminaUtenteModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Conferma eliminazione</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <p>Sei sicuro di voler eliminare questo utente?</p>
+        <p class="text-danger small">Questa azione eliminerà tutti i dati associati all'utente e non può essere annullata.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+        <form action="/adminDashboard/elimina-utente" method="POST" class="d-inline">
+          <input type="hidden" id="elimina-utente-id" name="utenteId">
+          <button type="submit" class="btn btn-danger">Elimina</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
   <%- include('../partials/logout-modal') %>
   
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="/javascripts/peso-chart.js"></script>
-  
-  <!-- Inclusione del file JavaScript esterno -->
   <script src="/javascripts/admin_dashboard.js"></script>
 </body>
 
