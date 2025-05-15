@@ -1,6 +1,7 @@
 'use strict'
 const express = require("express");
 const router = express.Router();
+const dayjs = require("dayjs");
 const misurazioniDAO = require("../models/daos/misurazioniDAO");
 const recensioniDAO = require("../models/daos/recensioniDAO");
 const pianiAlimentariDAO = require("../models/daos/pianiAlimentariDAO");
@@ -16,14 +17,17 @@ router.get('/', async (req, res) => {
     let pianiAlimentariFormattati = [];
     
     try {
+        // Formatta la data di nascita dell'utente
+        const userWithFormattedDate = {...req.user};
+        userWithFormattedDate.dataFormattata = dayjs(req.user.data_di_nascita).format('DD/MM/YYYY');
+        
         // Recupera le misurazioni dell'utente
         const misurazioni = await misurazioniDAO.getMisurazioniByUserId(req.user.id);
         
         // Formatta le date per la visualizzazione
         misurazioniFormattate = misurazioni.map(m => {
-            const data = new Date(m.data);
-            m.dataFormattata = `${data.getDate().toString().padStart(2, '0')}/${(data.getMonth() + 1).toString().padStart(2, '0')}/${data.getFullYear()}`;
-            m.data_iso = m.data.split('T')[0];
+            m.dataFormattata = dayjs(m.data).format('DD/MM/YYYY');
+            m.data_iso = dayjs(m.data).format('YYYY-MM-DD');
             return m;
         });
         
@@ -31,8 +35,7 @@ router.get('/', async (req, res) => {
         try {
             recensione = await recensioniDAO.getRecensioneByUserId(req.user.id);
             if (recensione) {
-                const data = new Date(recensione.data_creazione);
-                recensione.dataFormattata = `${data.getDate().toString().padStart(2, '0')}/${(data.getMonth() + 1).toString().padStart(2, '0')}/${data.getFullYear()}`;
+                recensione.dataFormattata = dayjs(recensione.data_creazione).format('DD/MM/YYYY');
             }
         } catch (recErr) {
             console.error("Errore nel recupero delle recensioni:", recErr);
@@ -49,10 +52,9 @@ router.get('/', async (req, res) => {
                 
                 // Formatta le date per la visualizzazione
                 pianiAlimentariFormattati = pianiArray.map(p => {
-                    const data = new Date(p.data_creazione);
-                    p.dataFormattata = `${data.getDate().toString().padStart(2, '0')}/${(data.getMonth() + 1).toString().padStart(2, '0')}/${data.getFullYear()}`;
+                    p.dataFormattata = dayjs(p.data_creazione).format('DD/MM/YYYY');
                     if (p.data) {
-                        p.data_iso = p.data.split('T')[0];
+                        p.data_iso = dayjs(p.data).format('YYYY-MM-DD');
                     }
                     return p;
                 });
@@ -71,7 +73,7 @@ router.get('/', async (req, res) => {
         // Renderizza la pagina con tutti i dati raccolti
         res.render('pages/utente_dashboard', {
             title: 'NutriPlan - Dashboard',
-            user: req.user,
+            user: userWithFormattedDate,
             isAuth: req.isAuthenticated(),
             misurazioni: misurazioniFormattate,
             recensione: recensione,

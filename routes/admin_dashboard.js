@@ -1,6 +1,7 @@
 'use strict'
 const express = require("express")
 const router = express.Router()
+const dayjs = require("dayjs");
 const utentiDAO = require("../models/daos/utentiDAO");
 const recensioniDAO = require("../models/daos/recensioniDAO");
 const contattiDAO = require("../models/daos/contattiDAO");
@@ -15,24 +16,21 @@ router.get('/', async (req, res) => {
         // Recupero tutti i pazienti
         const pazienti = await utentiDAO.getAllPazienti();
         const pazientiFormattati = pazienti.map(paziente => {
-            const data = new Date(paziente.data_di_nascita);
-            paziente.data_formattata = `${data.getDate().toString().padStart(2, '0')}/${(data.getMonth() + 1).toString().padStart(2, '0')}/${data.getFullYear()}`;
+            paziente.data_formattata = dayjs(paziente.data_di_nascita).format('DD/MM/YYYY');
             return paziente;
         });
         
         // Recupero tutte le recensioni con nomi dei pazienti
         const recensioni = await recensioniDAO.getAllRecensioniWithUserInfo();
         const recensioniFormattate = recensioni.map(recensione => {
-            const data = new Date(recensione.data_creazione); // Modifica da data_inserimento a data_creazione
-            recensione.dataFormattata = `${data.getDate().toString().padStart(2, '0')}/${(data.getMonth() + 1).toString().padStart(2, '0')}/${data.getFullYear()}`;
+            recensione.dataFormattata = dayjs(recensione.data_creazione).format('DD/MM/YYYY');
             return recensione;
         });
         
         // Recupero tutte le richieste di contatto
         const richieste = await contattiDAO.getAllRichiesteContatto();
         const richiesteFormattate = richieste.map(richiesta => {
-            const data = new Date(richiesta.data_creazione); // Modifica da data_inserimento a data_creazione
-            richiesta.dataFormattata = `${data.getDate().toString().padStart(2, '0')}/${(data.getMonth() + 1).toString().padStart(2, '0')}/${data.getFullYear()}`;
+            richiesta.dataFormattata = dayjs(richiesta.data_creazione).format('DD/MM/YYYY');
             return richiesta;
         });
 
@@ -86,7 +84,7 @@ router.get('/paziente/:id/misurazioni', authMiddleware.isAdmin, async (req, res)
     const misurazioniFormattate = misurazioni.map(m => ({
       id: m.id,
       misura: m.misura,
-      dataFormattata: new Date(m.data).toLocaleDateString('it-IT')
+      dataFormattata: dayjs(m.data).format('DD/MM/YYYY')
     }));
     
     res.json(misurazioniFormattate);

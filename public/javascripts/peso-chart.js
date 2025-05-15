@@ -142,13 +142,14 @@ function updateTabellaStoriaQuantitativa(misurazioni) {
   let htmlContent = '';
   
   misurazioni.forEach(misurazione => {
-    // Formatta la data in formato italiano
-    const data = new Date(misurazione.data);
-    const dataFormattata = data.toLocaleDateString('it-IT', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
+    // Usare la data formattata già presente nell'oggetto invece di riformattarla
+    // Se non è disponibile, formattare usando una libreria come dayjs
+    const dataFormattata = misurazione.dataFormattata || 
+                          new Date(misurazione.data).toLocaleDateString('it-IT', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric'
+                          });
     
     htmlContent += `
       <tr>

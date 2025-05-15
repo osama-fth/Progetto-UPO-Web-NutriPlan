@@ -2,6 +2,7 @@
 
 const express = require("express");
 const router = express.Router();
+const dayjs = require("dayjs");
 const misurazioniDAO = require("../models/daos/misurazioniDAO");
 const authMiddleware = require("../middleware/auth");
 
@@ -67,12 +68,11 @@ router.get('/paziente/:id', authMiddleware.isAdmin, async (req, res) => {
         
         // Formatta le date per JSON
         const misurazioniFormattate = misurazioni.map(m => {
-            const data = new Date(m.data);
             return {
                 id: m.id,
                 misura: m.misura,
-                data_iso: m.data.split('T')[0],
-                dataFormattata: `${data.getDate().toString().padStart(2, '0')}/${(data.getMonth() + 1).toString().padStart(2, '0')}/${data.getFullYear()}`,
+                data_iso: dayjs(m.data).format('YYYY-MM-DD'),
+                dataFormattata: dayjs(m.data).format('DD/MM/YYYY'),
             };
         });
         

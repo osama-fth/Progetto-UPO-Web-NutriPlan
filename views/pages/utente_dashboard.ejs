@@ -299,11 +299,7 @@
                 <div class="row mb-3">
                   <div class="col-md-6">
                     <label class="form-label text-muted">Data di nascita</label>
-                    <% 
-                      const dataNascita = new Date(user.data_di_nascita);
-                      const formattedDate = `${dataNascita.getDate().toString().padStart(2, '0')}/${(dataNascita.getMonth() + 1).toString().padStart(2, '0')}/${dataNascita.getFullYear()}`;
-                    %>
-                    <p class="fs-5"><%= formattedDate %></p>
+                    <p class="fs-5"><%= user.dataFormattata %></p>
                   </div>
                   <div class="col-md-6">
                     <label class="form-label text-muted">Email</label>
