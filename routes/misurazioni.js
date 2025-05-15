@@ -16,24 +16,24 @@ router.post('/modifica', authMiddleware.isPaziente, async (req, res) => {
         
         if (!misurazioneId || !peso || !data || isNaN(parseFloat(peso)) || parseFloat(peso) <= 0) {
             req.session.error = 'I dati inseriti non sono validi.';
-            return res.redirect('/utenteDashboard');
+            return res.redirect('/utenteDashboard#misurazioni');
         }
         
         // Verifica che la misurazione appartenga all'utente
         const misurazione = await misurazioniDAO.getMisurazioneById(misurazioneId);
         if (!misurazione || misurazione.utente_id !== req.user.id) {
             req.session.error = 'Non hai il permesso di modificare questa misurazione.';
-            return res.redirect('/utenteDashboard');
+            return res.redirect('/utenteDashboard#misurazioni');
         }
         
         await misurazioniDAO.updateMisurazione(misurazioneId, parseFloat(peso), data);
         
         req.session.success = 'Misurazione aggiornata con successo.';
-        res.redirect('/utenteDashboard');
+        res.redirect('/utenteDashboard#misurazioni');
     } catch (err) {
         console.error("Errore durante la modifica della misurazione:", err);
         req.session.error = 'Si è verificato un errore durante la modifica della misurazione.';
-        res.redirect('/utenteDashboard');
+        res.redirect('/utenteDashboard#misurazioni');
     }
 });
 
@@ -46,17 +46,17 @@ router.get('/cancella/:id', authMiddleware.isPaziente, async (req, res) => {
         const misurazione = await misurazioniDAO.getMisurazioneById(misurazioneId);
         if (!misurazione || misurazione.utente_id !== req.user.id) {
             req.session.error = 'Non hai il permesso di eliminare questa misurazione.';
-            return res.redirect('/utenteDashboard');
+            return res.redirect('/utenteDashboard#misurazioni');
         }
         
         await misurazioniDAO.deleteMisurazione(misurazioneId);
         
         req.session.success = 'Misurazione eliminata con successo.';
-        res.redirect('/utenteDashboard');
+        res.redirect('/utenteDashboard#misurazioni');
     } catch (err) {
         console.error("Errore durante l'eliminazione della misurazione:", err);
         req.session.error = 'Si è verificato un errore durante l\'eliminazione della misurazione.';
-        res.redirect('/utenteDashboard');
+        res.redirect('/utenteDashboard#misurazioni');
     }
 });
 

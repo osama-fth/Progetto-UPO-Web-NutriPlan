@@ -95,17 +95,17 @@ router.post('/nuovaMisurazione', async (req, res) => {
         
         if (!peso || !data || isNaN(parseFloat(peso)) || parseFloat(peso) <= 0) {
             req.session.error = 'I dati inseriti non sono validi.';
-            return res.redirect('/utenteDashboard');
+            return res.redirect('/utenteDashboard#misurazioni');
         }
         
         await misurazioniDAO.insertMisurazione(req.user.id, parseFloat(peso), data);
         
         req.session.success = 'Misurazione aggiunta con successo.';
-        res.redirect('/utenteDashboard');
+        res.redirect('/utenteDashboard#misurazioni');
     } catch (err) {
         console.error("Errore nell'inserimento della misurazione:", err);
         req.session.error = 'Impossibile modificare la misurazione.';
-        res.redirect('/utenteDashboard');
+        res.redirect('/utenteDashboard#misurazioni');
     }
 });
 

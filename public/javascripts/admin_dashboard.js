@@ -1,34 +1,65 @@
 document.addEventListener('DOMContentLoaded', function() {
-  // Gestione click sui link della sidebar per cambiare sezione
-  const sidebarLinks = document.querySelectorAll('.sidebar-link[data-section]');
-  sidebarLinks.forEach(link => {
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      
-      // Rimuove la classe active da tutti i link
-      sidebarLinks.forEach(l => l.parentElement.classList.remove('active'));
-      
-      // Aggiunge la classe active al link corrente
-      this.parentElement.classList.add('active');
-      
-      // Nasconde tutte le sezioni
-      const sections = document.querySelectorAll('.sezione-contenuto');
-      sections.forEach(section => section.classList.add('d-none'));
-      
-      // Mostra la sezione corrente
-      const sectionToShow = document.getElementById('sezione-' + this.dataset.section);
-      if (sectionToShow) {
-        sectionToShow.classList.remove('d-none');
-      }
-      
-      // Chiude il sidebar mobile se aperto
-      const sidebarMobile = document.getElementById('sidebar-mobile');
-      const bsOffcanvas = bootstrap.Offcanvas.getInstance(sidebarMobile);
-      if (bsOffcanvas) {
-        bsOffcanvas.hide();
-      }
+  // Funzione per gestire il click sui link della sidebar
+  const setupSidebarLinks = () => {
+    document.querySelectorAll('.sidebar-link').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Ottieni la sezione target dal data-attribute
+        const targetSection = this.getAttribute('data-section');
+        
+        // Aggiorna l'URL con il hash
+        window.location.hash = targetSection;
+        
+        // Nascondi tutte le sezioni
+        document.querySelectorAll('.sezione-contenuto').forEach(section => {
+          section.classList.add('d-none');
+        });
+        
+        // Mostra la sezione cliccata
+        document.getElementById(`sezione-${targetSection}`).classList.remove('d-none');
+        
+        // Aggiorna lo stato attivo nella sidebar
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+          item.classList.remove('active');
+        });
+        this.parentElement.classList.add('active');
+      });
     });
-  });
+  };
+  
+  // Gestione del fragment URL al caricamento della pagina (codice che hai già aggiunto)
+  const handleUrlHash = () => {
+    const hash = window.location.hash.substring(1);
+    if (hash) {
+      const validSections = ['pazienti', 'recensioni', 'richieste-contatto'];
+      
+      if (validSections.includes(hash)) {
+        document.querySelectorAll('.sezione-contenuto').forEach(sezione => {
+          sezione.classList.add('d-none');
+        });
+        
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+          item.classList.remove('active');
+        });
+        
+        const sectionToShow = document.getElementById('sezione-' + hash);
+        if (sectionToShow) {
+          sectionToShow.classList.remove('d-none');
+          
+          document.querySelectorAll(`.sidebar-link[data-section="${hash}"]`).forEach(link => {
+            link.parentElement.classList.add('active');
+          });
+        }
+      }
+    }
+  };
+  
+  // Inizializza i link della sidebar
+  setupSidebarLinks();
+  
+  // Gestisci l'hash URL al caricamento della pagina
+  handleUrlHash();
   
   // Gestione click sui pulsanti dettagli recensione
   document.querySelectorAll('.btn-dettagli-recensione').forEach(btn => {
@@ -99,6 +130,4 @@ document.addEventListener('DOMContentLoaded', function() {
       modal.show();
     });
   });
-
-  
 });

@@ -27,20 +27,18 @@ router.post('/nuova', authMiddleware.isAuthenticated, async (req, res) => {
     const { commento } = req.body;
     
     if (!commento || commento.trim() === '') {
-      // Usa req.session.error invece di renderizzare direttamente
       req.session.error = 'Il testo della recensione non può essere vuoto.';
-      return res.redirect('/utenteDashboard#recensione'); // Aggiunto anchor per portare l'utente alla sezione recensioni
+      return res.redirect('/utenteDashboard#recensioni');
     }
 
     await recensioniDAO.insertRecensione(req.user.id, commento.trim());
     
-    // Reindirizza alla pagina utente_dashboard con messaggio di successo
     req.session.success = 'Recensione pubblicata con successo.';
-    res.redirect('/utenteDashboard#recensione');
+    res.redirect('/utenteDashboard#recensioni');
   } catch (error) {
     console.error('Errore durante l\'aggiunta della recensione:', error);
     req.session.error = 'Errore durante la gestione della recensione.';
-    res.redirect('/utenteDashboard#recensione');
+    res.redirect('/utenteDashboard#recensioni');
   }
 });
 
@@ -49,14 +47,21 @@ router.post('/cancella', authMiddleware.isAuthenticated, async (req, res) => {
   try {
     const { recensioneId } = req.body;
     
+    // Verifica che la recensione appartenga all'utente
+    const recensione = await recensioniDAO.getRecensioneById(recensioneId);
+    if (!recensione || recensione.utente_id !== req.user.id) {
+      req.session.error = 'Non hai il permesso di eliminare questa recensione.';
+      return res.redirect('/utenteDashboard#recensioni');
+    }
+    
     await recensioniDAO.deleteRecensione(recensioneId);
     
     req.session.success = 'Recensione eliminata con successo.';
-    res.redirect('/utenteDashboard#recensione');
+    res.redirect('/utenteDashboard#recensioni');
   } catch (error) {
     console.error('Errore durante l\'eliminazione della recensione:', error);
     req.session.error = 'Errore durante la gestione della recensione.';
-    res.redirect('/utenteDashboard#recensione');
+    res.redirect('/utenteDashboard#recensioni');
   }
 });
 

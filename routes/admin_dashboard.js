@@ -66,11 +66,11 @@ router.post('/elimina-utente', authMiddleware.isAdmin, async (req, res) => {
     await utentiDAO.deleteAccount(utenteId);
     
     req.session.success = 'Utente eliminato con successo';
-    res.redirect('/admin_dashboard');
+    res.redirect('/adminDashboard#pazienti');
   } catch (error) {
     console.error("Errore durante l'eliminazione dell'utente:", error);
     req.session.error = 'Impossibile eliminare l\'utente';
-    res.redirect('/admin_dashboard');
+    res.redirect('/adminDashboard#pazienti');
   }
 });
 

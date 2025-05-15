@@ -1,36 +1,66 @@
 document.addEventListener('DOMContentLoaded', function() {
-  // ===== GESTIONE NAVIGAZIONE =====
-  
-  const sidebarLinks = document.querySelectorAll('.sidebar-link[data-section]');
-  
-  sidebarLinks.forEach(link => {
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      
-      const sezioneId = this.getAttribute('data-section');
-      
-      document.querySelectorAll('.sezione-contenuto').forEach(sezione => {
-        sezione.classList.add('d-none');
+  // Funzione per gestire il click sui link della sidebar
+  const setupSidebarLinks = () => {
+    document.querySelectorAll('.sidebar-link').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Ottieni la sezione target dal data-attribute
+        const targetSection = this.getAttribute('data-section');
+        
+        // Aggiorna l'URL con il hash
+        window.location.hash = targetSection;
+        
+        // Nascondi tutte le sezioni
+        document.querySelectorAll('.sezione-contenuto').forEach(section => {
+          section.classList.add('d-none');
+        });
+        
+        // Mostra la sezione cliccata
+        document.getElementById(`sezione-${targetSection}`).classList.remove('d-none');
+        
+        // Aggiorna lo stato attivo nella sidebar
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+          item.classList.remove('active');
+        });
+        this.parentElement.classList.add('active');
       });
-      
-      document.getElementById('sezione-' + sezioneId).classList.remove('d-none');
-      
-      document.querySelectorAll('.sidebar-item').forEach(item => {
-        item.classList.remove('active');
-      });
-      
-      document.querySelectorAll(`.sidebar-link[data-section="${sezioneId}"]`).forEach(link => {
-        link.parentElement.classList.add('active');
-      });
-      
-      const sidebarMobile = document.getElementById('sidebar-mobile');
-      const bsOffcanvas = bootstrap.Offcanvas.getInstance(sidebarMobile);
-      if (bsOffcanvas) {
-        bsOffcanvas.hide();
-      }
     });
-  });
-
+  };
+  
+  // Gestione del fragment URL al caricamento della pagina (codice che hai già aggiunto)
+  const handleUrlHash = () => {
+    const hash = window.location.hash.substring(1);
+    if (hash) {
+      const validSections = ['misurazioni', 'piani-alimentari', 'recensioni', 'impostazioni'];
+      
+      if (validSections.includes(hash)) {
+        document.querySelectorAll('.sezione-contenuto').forEach(sezione => {
+          sezione.classList.add('d-none');
+        });
+        
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+          item.classList.remove('active');
+        });
+        
+        const sectionToShow = document.getElementById('sezione-' + hash);
+        if (sectionToShow) {
+          sectionToShow.classList.remove('d-none');
+          
+          document.querySelectorAll(`.sidebar-link[data-section="${hash}"]`).forEach(link => {
+            link.parentElement.classList.add('active');
+          });
+        }
+      }
+    }
+  };
+  
+  // Inizializza i link della sidebar
+  setupSidebarLinks();
+  
+  // Gestisci l'hash URL al caricamento della pagina
+  handleUrlHash();
+  
   // ===== GESTIONE MISURAZIONI =====
   
   document.querySelectorAll('.btn-modifica-misurazione').forEach(button => {
