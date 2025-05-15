@@ -3,14 +3,53 @@
 
 <%- include('../partials/header') %>
 
-  <body>
-    <div class="dashboard-container">
-      <!-- Sidebar per desktop (visibile solo su schermi md e superiori) -->
-      <aside class="sidebar d-none d-md-block" id="sidebar-desktop">
+<body>
+  <div class="dashboard-container">
+    <!-- Sidebar per desktop (visibile solo su schermi md e superiori) -->
+    <aside class="sidebar d-none d-md-block" id="sidebar-desktop">
+      <div class="sidebar-header">
+        <img src="images/logo.webp" alt="NutriPlan Logo" height="50">
+      </div>
+
+      <nav>
+        <ul class="sidebar-nav">
+          <li class="sidebar-item active">
+            <a href="#" class="sidebar-link" data-section="misurazioni">
+              <i class="fas fa-home"></i>
+              <span>Misurazioni</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a href="#" class="sidebar-link" data-section="piani-alimentari">
+              <i class="fas fa-utensils"></i>
+              <span>Piani alimentari</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a href="#" class="sidebar-link" data-section="recensioni">
+              <i class="fas fa-star"></i>
+              <span>Recensioni</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a href="#" class="sidebar-link" data-section="impostazioni">
+              <i class="fas fa-cog"></i>
+              <span>Impostazioni</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Sidebar mobile con Offcanvas (visibile solo su dispositivi mobili) -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar-mobile" aria-labelledby="sidebarMobileLabel">
+      <div class="offcanvas-header">
         <div class="sidebar-header">
           <img src="images/logo.webp" alt="NutriPlan Logo" height="50">
         </div>
-
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
         <nav>
           <ul class="sidebar-nav">
             <li class="sidebar-item active">
@@ -26,255 +65,284 @@
               </a>
             </li>
             <li class="sidebar-item">
-              <a href="#" class="sidebar-link" data-bs-toggle="modal" data-bs-target="#recensioneModal">
+              <a href="#" class="sidebar-link" data-section="recensioni">
                 <i class="fas fa-star"></i>
                 <span>Recensioni</span>
               </a>
             </li>
             <li class="sidebar-item">
-              <a href="#" class="sidebar-link" data-bs-toggle="modal" data-bs-target="#impostazioniModal">
+              <a href="#" class="sidebar-link" data-section="impostazioni">
                 <i class="fas fa-cog"></i>
                 <span>Impostazioni</span>
               </a>
             </li>
           </ul>
         </nav>
-      </aside>
-
-      <!-- Sidebar mobile con Offcanvas (visibile solo su dispositivi mobili) -->
-      <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar-mobile" aria-labelledby="sidebarMobileLabel">
-        <div class="offcanvas-header">
-          <div class="sidebar-header">
-            <img src="images/logo.webp" alt="NutriPlan Logo" height="50">
-          </div>
-          <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-          <nav>
-            <ul class="sidebar-nav">
-              <li class="sidebar-item active">
-                <a href="#" class="sidebar-link" data-section="misurazioni">
-                  <i class="fas fa-home"></i>
-                  <span>Misurazioni</span>
-                </a>
-              </li>
-              <li class="sidebar-item">
-                <a href="#" class="sidebar-link" data-section="piani-alimentari">
-                  <i class="fas fa-utensils"></i>
-                  <span>Piani alimentari</span>
-                </a>
-              </li>
-              <li class="sidebar-item">
-                <a href="#" class="sidebar-link" data-bs-toggle="modal" data-bs-target="#recensioneModal">
-                  <i class="fas fa-star"></i>
-                  <span>Recensioni</span>
-                </a>
-              </li>
-              <li class="sidebar-item">
-                <a href="#" class="sidebar-link" data-bs-toggle="modal" data-bs-target="#impostazioniModal">
-                  <i class="fas fa-cog"></i>
-                  <span>Impostazioni</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
       </div>
-
-      <!-- Contenuto principale -->
-      <main class="main-content">
-        <!-- Header della dashboard -->
-        <header class="dashboard-header">
-          <div class="d-flex align-items-center">
-            <button class="btn d-md-none me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar-mobile"
-              aria-controls="sidebar-mobile">
-              <i class="fas fa-bars"></i>
-            </button>
-            <h3 class="m-0">Benvenuto <%= user.nome %>
-            </h3>
-          </div>
-          <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#logoutModal">
-            <i class="fas fa-sign-out-alt"></i>
-            <span class="d-none d-md-inline-block ms-2">Logout</span>
-          </button>
-        </header>
-
-        <div class="container-fluid mt-3">
-          <%- include('../partials/alerts') %>
-        </div>
-
-        <!-- Sezione Misurazioni -->
-        <div id="sezione-misurazioni" class="sezione-contenuto">
-          <!-- Grafico misurazioni -->
-          <section class="row mt-4">
-            <div class="col-md-10 mx-auto mb-4">
-              <div class="card mx-2">
-                <header class="card-header bg-white border-0">
-                  <h5 class="mb-0">Il tuo andamento</h5>
-                </header>
-                <div class="card-body">
-                  <div class="chart-scroll-container">
-                    <div class="chart-inner-container">
-                      <canvas id="myChart"></canvas>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <!-- Tabella misurazioni -->
-          <section class="row mt-4">
-            <div class="col-lg-10 mx-auto mb-4">
-              <div class="card mx-2">
-                <header class="card-header bg-white d-flex justify-content-between align-items-center">
-                  <h5 class="mb-0">Le mie misurazioni</h5>
-                  <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#nuovaMisurazioneModal">
-                    <i class="fas fa-plus me-1"></i> Nuova misurazione
-                  </button>
-                </header>
-                <div class="card-body">
-                  <div class="table-responsive">
-                    <table class="table table-hover align-middle">
-                      <thead>
-                        <tr>
-                          <th scope="col" class="text-center">Data</th>
-                          <th scope="col" class="text-center">Peso (kg)</th>
-                          <th scope="col" class="text-center">Azioni</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <% if (typeof misurazioni !=='undefined' && misurazioni.length> 0) { %>
-                          <% misurazioni.forEach(misurazione=> { %>
-                            <tr>
-                              <td class="text-center">
-                                <%= misurazione.dataFormattata %>
-                              </td>
-                              <td class="text-center">
-                                <%= misurazione.misura %>
-                              </td>
-                              <td class="text-center">
-                                <div class="d-flex justify-content-center">
-                                  <button type="button"
-                                    class="btn btn-sm btn-outline-primary me-2 btn-modifica-misurazione"
-                                    data-misurazione-id="<%= misurazione.id %>" data-peso="<%= misurazione.misura %>"
-                                    data-data="<%= misurazione.data_iso %>">
-                                    <i class="fas fa-pencil-alt me-1"></i> Modifica
-                                  </button>
-                                </div>
-                              </td>
-                            </tr>
-                            <% }); %>
-                              <% } else { %>
-                                <tr>
-                                  <td colspan="3" class="text-center py-4">
-                                    <i class="fas fa-weight text-muted mb-3" style="font-size: 3rem;"></i>
-                                    <p class="text-muted mb-0">Nessuna misurazione disponibile</p>
-                                  </td>
-                                </tr>
-                                <% } %>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-        </div>
-
-        <!-- Sezione Piani Alimentari -->
-        <div id="sezione-piani-alimentari" class="sezione-contenuto d-none">
-          <section class="row mt-4">
-            <div class="col-lg-10 mx-auto">
-              <div class="card mx-2">
-                <header class="card-header bg-white d-flex justify-content-between align-items-center">
-                  <h4 class="py-1 mb-0">I tuoi piani alimentari</h4>
-                </header>
-                <div class="card-body">
-                  <div class="table-responsive">
-                    <table class="table table-hover align-middle">
-                      <thead>
-                        <tr>
-                          <th scope="col" class="text-center">Titolo</th>
-                          <th scope="col" class="text-center">Data</th>
-                          <th scope="col" class="text-center">Azioni</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <% if (typeof pianiAlimentari !=='undefined' && pianiAlimentari.length> 0) { %>
-                          <% pianiAlimentari.forEach(piano=> { %>
-                            <tr>
-                              <td class="text-center">
-                                <%= piano.titolo %>
-                              </td>
-                              <td class="text-center">
-                                <%= piano.dataFormattata %>
-                              </td>
-                              <td class="text-center">
-                                <div class="d-flex justify-content-center">
-                                  <button type="button" class="btn btn-sm btn-outline-primary me-2"
-                                    data-piano-id="<%= piano.id %>">
-                                    <i class="fas fa-eye me-1"></i> Visualizza
-                                  </button>
-                                  <button type="button" class="btn btn-sm btn-outline-success"
-                                    data-piano-id="<%= piano.id %>">
-                                    <i class="fas fa-download me-1"></i> Scarica
-                                  </button>
-                                </div>
-                              </td>
-                            </tr>
-                            <% }) %>
-                              <% } else { %>
-                                <tr>
-                                  <td colspan="3" class="text-center py-4">
-                                    <i class="fas fa-utensils text-muted mb-3" style="font-size: 3rem;"></i>
-                                    <p class="text-muted mb-0">Nessun piano alimentare disponibile</p>
-                                  </td>
-                                </tr>
-                                <% } %>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-        </div>
-      </main>
     </div>
 
-    <!-- Modal per conferma logout -->
-    <%- include('../partials/logout-modal') %>
+    <!-- Contenuto principale -->
+    <main class="main-content">
+      <!-- Header della dashboard -->
+      <header class="dashboard-header">
+        <div class="d-flex align-items-center">
+          <button class="btn d-md-none me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar-mobile"
+            aria-controls="sidebar-mobile">
+            <i class="fas fa-bars"></i>
+          </button>
+          <h3 class="m-0">Benvenuto <%= user.nome %></h3>
+        </div>
+        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#logoutModal">
+          <i class="fas fa-sign-out-alt"></i>
+          <span class="d-none d-md-inline-block ms-2">Logout</span>
+        </button>
+      </header>
 
-      <!-- Includo il modal per inserire nuove misurazioni -->
-      <%- include('../partials/misurazione-form-modal') %>
+      <div class="container-fluid mt-3">
+        <%- include('../partials/alerts') %>
+      </div>
 
-        <!-- Includo il modal per gestire le misurazioni esistenti -->
-        <%- include('../partials/misurazione-azioni-modal') %>
+      <!-- Sezione Misurazioni -->
+      <div id="sezione-misurazioni" class="sezione-contenuto">
+        <!-- Grafico misurazioni -->
+        <section class="row mt-4">
+          <div class="col-md-10 mx-auto mb-4">
+            <div class="card mx-2">
+              <header class="card-header bg-white border-0">
+                <h5 class="mb-0">Il tuo andamento</h5>
+              </header>
+              <div class="card-body">
+                <div class="chart-scroll-container">
+                  <div class="chart-inner-container">
+                    <canvas id="myChart"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
-          <!-- Includo il modal per le recensioni -->
-          <%- include('../partials/recensione-modal') %>
+        <!-- Tabella misurazioni -->
+        <section class="row mt-4">
+          <div class="col-lg-10 mx-auto mb-4">
+            <div class="card mx-2">
+              <header class="card-header bg-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Le mie misurazioni</h5>
+                <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#nuovaMisurazioneModal">
+                  <i class="fas fa-plus me-1"></i> Nuova misurazione
+                </button>
+              </header>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-hover align-middle">
+                    <thead>
+                      <tr>
+                        <th scope="col" class="text-center">Data</th>
+                        <th scope="col" class="text-center">Peso (kg)</th>
+                        <th scope="col" class="text-center">Azioni</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% if (typeof misurazioni !== 'undefined' && misurazioni.length > 0) { %>
+                        <% misurazioni.forEach(misurazione => { %>
+                          <tr>
+                            <td class="text-center"><%= misurazione.dataFormattata %></td>
+                            <td class="text-center"><%= misurazione.misura %></td>
+                            <td class="text-center">
+                              <div class="d-flex justify-content-center">
+                                <button type="button" class="btn btn-sm btn-outline-primary me-2 btn-modifica-misurazione"
+                                  data-misurazione-id="<%= misurazione.id %>" 
+                                  data-peso="<%= misurazione.misura %>"
+                                  data-data="<%= misurazione.data_iso %>">
+                                  <i class="fas fa-pencil-alt me-1"></i> Modifica
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        <% }); %>
+                      <% } else { %>
+                        <tr>
+                          <td colspan="3" class="text-center py-4">
+                            <i class="fas fa-weight text-muted mb-3" style="font-size: 3rem;"></i>
+                            <p class="text-muted mb-0">Nessuna misurazione disponibile</p>
+                          </td>
+                        </tr>
+                      <% } %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
 
-            <!-- Includo il modal per le impostazioni -->
-            <%- include('../partials/impostazioni-modal') %>
+      <!-- Sezione Piani Alimentari -->
+      <div id="sezione-piani-alimentari" class="sezione-contenuto d-none">
+        <section class="row mt-4">
+          <div class="col-lg-10 mx-auto">
+            <div class="card mx-2">
+              <header class="card-header bg-white d-flex justify-content-between align-items-center">
+                <h4 class="py-1 mb-0">I tuoi piani alimentari</h4>
+              </header>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-hover align-middle">
+                    <thead>
+                      <tr>
+                        <th scope="col" class="text-center">Titolo</th>
+                        <th scope="col" class="text-center">Data</th>
+                        <th scope="col" class="text-center">Azioni</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% if (typeof pianiAlimentari !== 'undefined' && pianiAlimentari.length > 0) { %>
+                        <% pianiAlimentari.forEach(piano => { %>
+                          <tr>
+                            <td class="text-center"><%= piano.titolo %></td>
+                            <td class="text-center"><%= piano.dataFormattata %></td>
+                            <td class="text-center">
+                              <div class="d-flex justify-content-center">
+                                <button type="button" class="btn btn-sm btn-outline-primary me-2" 
+                                  data-piano-id="<%= piano.id %>">
+                                  <i class="fas fa-eye me-1"></i> Visualizza
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-success"
+                                  data-piano-id="<%= piano.id %>">
+                                  <i class="fas fa-download me-1"></i> Scarica
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        <% }) %>
+                      <% } else { %>
+                        <tr>
+                          <td colspan="3" class="text-center py-4">
+                            <i class="fas fa-utensils text-muted mb-3" style="font-size: 3rem;"></i>
+                            <p class="text-muted mb-0">Nessun piano alimentare disponibile</p>
+                          </td>
+                        </tr>
+                      <% } %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
 
-              <!-- Script -->
-              <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      <!-- Sezione Recensioni -->
+      <div id="sezione-recensioni" class="sezione-contenuto d-none">
+        <section class="row mt-4">
+          <div class="col-lg-10 mx-auto">
+            <div class="card mx-2">
+              <header class="card-header bg-white">
+                <h4 class="py-1 mb-0">Le mie recensioni</h4>
+              </header>
+              <div class="card-body">
+                <% if (typeof recensione !== 'undefined' && recensione) { %>
+                  <!-- Se l'utente ha già una recensione, mostrarla -->
+                  <div class="mb-3">
+                    <label class="form-label">Il tuo commento:</label>
+                    <div class="border p-3 rounded bg-light"><%= recensione.commento %></div>
+                  </div>
+                  <div class="small text-muted mb-3">
+                    Recensione inserita il <%= recensione.dataFormattata %>
+                  </div>
+                  <div class="d-flex justify-content-end">
+                    <form action="/recensioni/cancella" method="POST" class="d-inline">
+                      <input type="hidden" name="recensioneId" value="<%= recensione.id %>">
+                      <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash me-1"></i> Elimina recensione
+                      </button>
+                    </form>
+                  </div>
+                <% } else { %>
+                  <!-- Se non c'è ancora una recensione, mostra il form per crearne una -->
+                  <form id="recensioneForm" action="/recensioni/nuova" method="POST">
+                    <div class="mb-3">
+                      <label for="commento" class="form-label">Il tuo commento</label>
+                      <textarea class="form-control" id="commento" name="commento" rows="5" style="resize: none;" 
+                        placeholder="Condividi la tua esperienza con NutriPlan..."></textarea>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                      <button type="submit" class="btn btn-primary">Pubblica recensione</button>
+                    </div>
+                  </form>
+                <% } %>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
 
-              <!-- Dati per il grafico (nascosti) -->
-              <script id="chart-data" type="application/json">
+      <!-- Sezione Impostazioni -->
+      <div id="sezione-impostazioni" class="sezione-contenuto d-none">
+        <section class="row mt-4">
+          <div class="col-lg-10 mx-auto">
+            <div class="card mx-2">
+              <header class="card-header bg-white">
+                <h4 class="py-1 mb-0">Le tue informazioni</h4>
+              </header>
+              <div class="card-body">
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label class="form-label text-muted">Nome</label>
+                    <p class="fs-5"><%= user.nome %></p>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label text-muted">Cognome</label>
+                    <p class="fs-5"><%= user.cognome %></p>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label class="form-label text-muted">Data di nascita</label>
+                    <% 
+                      const dataNascita = new Date(user.data_di_nascita);
+                      const formattedDate = `${dataNascita.getDate().toString().padStart(2, '0')}/${(dataNascita.getMonth() + 1).toString().padStart(2, '0')}/${dataNascita.getFullYear()}`;
+                    %>
+                    <p class="fs-5"><%= formattedDate %></p>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label text-muted">Email</label>
+                    <p class="fs-5"><%= user.email %></p>
+                  </div>
+                </div>
+                <hr class="my-4">
+                <div class="text-center">
+                  <p class="text-muted mb-2">Vuoi eliminare il tuo account?</p>
+                  <button type="button" id="btnEliminaAccount" class="btn btn-outline-danger">
+                    <i class="fas fa-user-times me-1"></i> Elimina account
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <%- include('../partials/logout-modal') %>
+  <%- include('../partials/misurazione-form-modal') %>
+  <%- include('../partials/misurazione-azioni-modal') %>
+  <%- include('../partials/elimina-account-modal') %>
+ 
+  <!-- Dati per il grafico (nascosti) -->
+  <script id="chart-data" type="application/json">
     <%- JSON.stringify({
       labels: misurazioni ? misurazioni.map(m => m.dataFormattata) : [],
       values: misurazioni ? misurazioni.map(m => m.misura) : []
     }) %>
   </script>
 
-              <!-- Script del grafico e Bootstrap -->
-              <script src="/javascripts/peso-chart.js"></script>
-              <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-              <!-- Script per la navigazione tra le sezioni -->
-              <script src="/javascripts/user_dashboard.js"></script>
-  </body>
+  <!-- Script del grafico e Bootstrap -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="/javascripts/peso-chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/javascripts/user_dashboard.js"></script>
+</body>
 
 </html>

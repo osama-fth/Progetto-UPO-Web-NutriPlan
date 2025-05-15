@@ -79,4 +79,13 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }
   });
+
+  // ===== GESTIONE ELIMINAZIONE ACCOUNT =====
+  const btnEliminaAccount = document.getElementById('btnEliminaAccount');
+  if (btnEliminaAccount) {
+    btnEliminaAccount.addEventListener('click', function() {
+      const eliminaAccountModal = new bootstrap.Modal(document.getElementById('eliminaAccountModal'));
+      eliminaAccountModal.show();
+    });
+  }
 });
