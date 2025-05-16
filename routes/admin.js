@@ -8,10 +8,11 @@ const contattiDAO = require("../models/daos/contattiDAO");
 const misurazioniDAO = require("../models/daos/misurazioniDAO");
 const authMiddleware = require("../middleware/auth");
 
-
+// Middleware per tutte le rotte dell'admin
 router.use(authMiddleware.isAdmin);
 
-router.get('/', async (req, res) => {
+// Dashboard principale dell'admin
+router.get('/dashboard', async (req, res) => {
     try {
         // Recupero tutti i pazienti
         const pazienti = await utentiDAO.getAllPazienti();
@@ -57,8 +58,8 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Route per eliminare un utente
-router.post('/elimina-utente', authMiddleware.isAdmin, async (req, res) => {
+// Eliminazione utente
+router.post('/utenti/elimina', async (req, res) => {
   try {
     const { utenteId } = req.body;
     
@@ -66,16 +67,16 @@ router.post('/elimina-utente', authMiddleware.isAdmin, async (req, res) => {
     await utentiDAO.deleteAccount(utenteId);
     
     req.session.success = 'Utente eliminato con successo';
-    res.redirect('/adminDashboard#pazienti');
+    res.redirect('/admin/dashboard#pazienti');
   } catch (error) {
     console.error("Errore durante l'eliminazione dell'utente:", error);
     req.session.error = 'Impossibile eliminare l\'utente';
-    res.redirect('/adminDashboard#pazienti');
+    res.redirect('/admin/dashboard#pazienti');
   }
 });
 
 // Route per ottenere le misurazioni di un paziente
-router.get('/paziente/:id/misurazioni', authMiddleware.isAdmin, async (req, res) => {
+router.get('/pazienti/:id/misurazioni', async (req, res) => {
   try {
     const pazienteId = req.params.id;
     const misurazioni = await misurazioniDAO.getMisurazioniByUtente(pazienteId);
@@ -91,6 +92,38 @@ router.get('/paziente/:id/misurazioni', authMiddleware.isAdmin, async (req, res)
   } catch (error) {
     console.error('Errore nel recupero delle misurazioni:', error);
     res.status(500).json({ error: 'Errore nel recupero delle misurazioni' });
+  }
+});
+
+// Elimina recensione dall'admin dashboard
+router.post('/recensioni/elimina', async (req, res) => {
+  try {
+    const { recensioneId } = req.body;
+    
+    await recensioniDAO.deleteRecensione(recensioneId);
+    
+    req.session.success = 'Recensione eliminata con successo.';
+    res.redirect('/admin/dashboard#recensioni');
+  } catch (error) {
+    console.error('Errore durante l\'eliminazione della recensione:', error);
+    req.session.error = 'Errore durante l\'eliminazione della recensione.';
+    res.redirect('/admin/dashboard#recensioni');
+  }
+});
+
+// Elimina richiesta di contatto
+router.post('/contatti/elimina', async (req, res) => {
+  try {
+    const { richiestaId } = req.body;
+    
+    await contattiDAO.deleteRichiestaContatto(richiestaId);
+    
+    req.session.success = 'Richiesta di contatto eliminata con successo.';
+    res.redirect('/admin/dashboard#richieste-contatto');
+  } catch (error) {
+    console.error('Errore durante l\'eliminazione della richiesta di contatto:', error);
+    req.session.error = 'Errore durante l\'eliminazione della richiesta di contatto.';
+    res.redirect('/admin/dashboard#richieste-contatto');
   }
 });
 

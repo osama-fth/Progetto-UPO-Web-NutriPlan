@@ -7,18 +7,12 @@ const morgan = require("morgan")
 const PORT = 3000
 const app = express()
 
-// Import delle route
-const indexRouter = require("./routes/index");
-const recensioniRouter = require("./routes/recensioni");
-const loginRouter = require("./routes/login");
-const registerRouter = require("./routes/register");
-const misurazioniRouter = require("./routes/misurazioni");
-const utenteDashboardRouter = require("./routes/utente_dashboard");
-const adminDashboardRouter = require("./routes/admin_dashboard")
-const logoutRouter = require("./routes/logout");
-const accountRouter = require('./routes/account');
-const contattiRouter = require('./routes/contatti');
-const errorRouter = require('./routes/error')
+// Importazione delle route
+const siteRouter = require('./routes/site');
+const authRouter = require('./routes/auth');
+const userRouter = require('./routes/user');
+const adminRouter = require('./routes/admin');
+
 
 // Configurazione del server
 app.set("view engine", "ejs")
@@ -40,18 +34,11 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 
-// Rotte
-app.use("/", indexRouter);
-app.use("/login", loginRouter);
-app.use("/logout", logoutRouter);
-app.use("/register", registerRouter);
-app.use("/recensioni", recensioniRouter);
-app.use("/utenteDashboard", utenteDashboardRouter);
-app.use("/adminDashboard", adminDashboardRouter);
-app.use('/account', accountRouter);
-app.use("/misurazioni", misurazioniRouter);
-app.use('/contatti', contattiRouter);
-app.use("/error", errorRouter)
+// Utilizzo delle route
+app.use('/', siteRouter);
+app.use('/auth', authRouter);
+app.use('/user', userRouter);
+app.use('/admin', adminRouter);
 
 // Avvia il server
 app.listen(PORT, () => {

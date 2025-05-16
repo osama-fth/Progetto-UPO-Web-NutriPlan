@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
     btnEliminaMisurazione.addEventListener('click', function() {
       const misurazioneId = document.getElementById('misurazioneId').value;
       const confermaMisurazioneCancella = document.getElementById('confermaCancellazioneMisurazione');
-      confermaMisurazioneCancella.href = `/misurazioni/cancella/${misurazioneId}`;
+      confermaMisurazioneCancella.href = `/user/misurazioni/cancella/${misurazioneId}`;
       
       bootstrap.Modal.getInstance(document.getElementById('misurazioneAzioniModal')).hide();
       

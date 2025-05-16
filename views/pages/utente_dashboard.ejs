@@ -8,7 +8,7 @@
     <!-- Sidebar per desktop (visibile solo su schermi md e superiori) -->
     <aside class="sidebar d-none d-md-block" id="sidebar-desktop">
       <div class="sidebar-header">
-        <img src="images/logo.webp" alt="NutriPlan Logo" height="50">
+        <img src="/images/logo.webp" alt="NutriPlan Logo" height="50">
       </div>
 
       <nav>
@@ -45,7 +45,7 @@
     <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar-mobile" aria-labelledby="sidebarMobileLabel">
       <div class="offcanvas-header">
         <div class="sidebar-header">
-          <img src="images/logo.webp" alt="NutriPlan Logo" height="50">
+          <img src="/images/logo.webp" alt="NutriPlan Logo" height="50">
         </div>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
@@ -251,7 +251,7 @@
                     Recensione inserita il <%= recensione.dataFormattata %>
                   </div>
                   <div class="d-flex justify-content-end">
-                    <form action="/recensioni/cancella" method="POST" class="d-inline">
+                    <form action="/user/recensioni/cancella" method="POST" class="d-inline">
                       <input type="hidden" name="recensioneId" value="<%= recensione.id %>">
                       <button type="submit" class="btn btn-danger">
                         <i class="fas fa-trash me-1"></i> Elimina recensione
@@ -260,7 +260,7 @@
                   </div>
                 <% } else { %>
                   <!-- Se non c'è ancora una recensione, mostra il form per crearne una -->
-                  <form id="recensioneForm" action="/recensioni/nuova" method="POST">
+                  <form id="recensioneForm" action="/user/recensioni/nuova" method="POST">
                     <div class="mb-3">
                       <label for="commento" class="form-label">Il tuo commento</label>
                       <textarea class="form-control" id="commento" name="commento" rows="5" style="resize: none;" 
@@ -330,7 +330,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form id="nuovaMisurazioneForm" action="/utenteDashboard/nuovaMisurazione" method="POST">
+        <form id="nuovaMisurazioneForm" action="/user/misurazioni/nuova" method="POST">
           <div class="mb-3">
             <label for="peso" class="form-label">Peso (kg)</label>
             <input type="number" class="form-control" id="peso" name="peso" step="0.1" min="0" max="300" required>
@@ -358,7 +358,7 @@
       </div>
       <div class="modal-body">
         <!-- Form per modifica -->
-        <form id="modificaMisurazioneForm" action="/misurazioni/modifica" method="POST">
+        <form id="modificaMisurazioneForm" action="/user/misurazioni/modifica" method="POST">
           <input type="hidden" id="misurazioneId" name="misurazioneId">
           <div class="mb-3">
             <label for="pesoModifica" class="form-label">Peso (kg)</label>
@@ -423,7 +423,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
-        <a href="/account/elimina" class="btn btn-danger">Elimina definitivamente</a>
+        <a href="/user/account/elimina" class="btn btn-danger">Elimina definitivamente</a>
       </div>
     </div>
   </div>

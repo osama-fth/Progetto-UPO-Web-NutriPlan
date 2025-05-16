@@ -8,7 +8,7 @@
     <!-- Sidebar per desktop (visibile solo su schermi md e superiori) -->
     <aside class="sidebar d-none d-md-block" id="sidebar-desktop">
       <div class="sidebar-header">
-        <img src="images/logo.webp" alt="NutriPlan Logo" height="50">
+        <img src="/images/logo.webp" alt="NutriPlan Logo" height="50">
       </div>
 
       <nav>
@@ -39,7 +39,7 @@
     <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar-mobile" aria-labelledby="sidebarMobileLabel">
       <div class="offcanvas-header">
         <div class="sidebar-header">
-          <img src="images/logo.webp" alt="NutriPlan Logo" height="50">
+          <img src="/images/logo.webp" alt="NutriPlan Logo" height="50">
         </div>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
@@ -424,7 +424,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
-        <form action="/recensioni/elimina-admin" method="POST" class="d-inline">
+        <form action="/admin/recensioni/elimina" method="POST" class="d-inline">
           <input type="hidden" id="elimina-recensione-id" name="recensioneId">
           <button type="submit" class="btn btn-danger">Elimina</button>
         </form>
@@ -446,7 +446,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
-        <form action="/contatti/elimina-richiesta" method="POST" class="d-inline">
+        <form action="/admin/contatti/elimina" method="POST" class="d-inline">
           <input type="hidden" id="elimina-richiesta-id" name="richiestaId">
           <button type="submit" class="btn btn-danger">Elimina</button>
         </form>
@@ -469,7 +469,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
-        <form action="/adminDashboard/elimina-utente" method="POST" class="d-inline">
+        <form action="/admin/utenti/elimina" method="POST" class="d-inline">
           <input type="hidden" id="elimina-utente-id" name="utenteId">
           <button type="submit" class="btn btn-danger">Elimina</button>
         </form>

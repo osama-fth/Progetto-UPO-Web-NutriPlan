@@ -2,7 +2,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark">
       <div class="container-fluid mx-1">
         <a class="navbar-brand" href="/">
-          <img src="images/logo.webp" alt="NutriPlan Logo" height="50">
+          <img src="/images/logo.webp" alt="NutriPlan Logo" height="50">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
           <span class="navbar-toggler-icon"></span>
@@ -24,11 +24,11 @@
           </ul>
           <div class="d-flex">
             <% if (typeof isAuth !== 'undefined' && isAuth) { %>
-              <% const dashboardUrl = (typeof user !== 'undefined' && user && user.ruolo === 'admin') ? '/adminDashboard' : '/utenteDashboard'; %>
+              <% const dashboardUrl = (typeof user !== 'undefined' && user && user.ruolo === 'admin') ? '/admin/dashboard' : '/user/dashboard'; %>
               <a href="<%= dashboardUrl %>" class="btn btn-primary">Dashboard</a>
             <% } else { %>
-              <a href="/login" class="btn btn-outline-primary me-2">Accedi</a>
-              <a href="/register" class="btn btn-primary">Registrati</a>
+              <a href="/auth/login" class="btn btn-outline-primary me-2">Accedi</a>
+              <a href="/auth/register" class="btn btn-primary">Registrati</a>
             <% } %>
           </div>
         </div>

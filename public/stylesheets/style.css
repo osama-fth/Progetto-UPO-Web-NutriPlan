@@ -622,7 +622,8 @@ footer {
 /* Recensioni CSS */
 .recensioni {
     background-color: var(--pale-blue);
-    padding: 3rem 0;
+    margin-top: 76px;
+    height: 75vh;
 }
 
 .recensioni h2 {
