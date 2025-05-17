@@ -6,7 +6,7 @@ const utentiDAO = require("../models/daos/utentiDAO");
 const recensioniDAO = require("../models/daos/recensioniDAO");
 const contattiDAO = require("../models/daos/contattiDAO");
 const misurazioniDAO = require("../models/daos/misurazioniDAO");
-const authMiddleware = require("../middleware/auth");
+const authMiddleware = require("../middleware/permessi");
 
 // Middleware per tutte le rotte dell'admin
 router.use(authMiddleware.isAdmin);

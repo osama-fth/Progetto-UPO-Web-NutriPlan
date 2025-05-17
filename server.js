@@ -8,7 +8,7 @@ const PORT = 3000
 const app = express()
 
 // Importazione delle route
-const siteRouter = require('./routes/site');
+const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
 const userRouter = require('./routes/user');
 const adminRouter = require('./routes/admin');
@@ -35,7 +35,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 // Utilizzo delle route
-app.use('/', siteRouter);
+app.use('/', indexRouter);
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
 app.use('/admin', adminRouter);

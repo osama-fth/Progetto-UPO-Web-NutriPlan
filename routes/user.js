@@ -6,7 +6,7 @@ const misurazioniDAO = require("../models/daos/misurazioniDAO");
 const recensioniDAO = require("../models/daos/recensioniDAO");
 const pianiAlimentariDAO = require("../models/daos/pianiAlimentariDAO");
 const utentiDAO = require("../models/daos/utentiDAO");
-const authMiddleware = require("../middleware/auth");
+const authMiddleware = require("../middleware/permessi");
 
 // Middleware per tutte le rotte dell'utente
 router.use(authMiddleware.isAuthenticated);

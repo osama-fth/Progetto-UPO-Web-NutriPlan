@@ -154,7 +154,7 @@ router.post("/register", [
         return res.redirect("/auth/login");
     } catch (error) {
         console.log("Errore durante la registrazione: ", error);
-        req.session.error = "Errore durante la registrazione. Potrebbe essere che l'email sia già in uso.";
+        req.session.error = "Errore durante la registrazione. Email già in uso.";
         return res.redirect("/auth/register");
     }
 });
