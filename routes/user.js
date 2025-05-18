@@ -8,12 +8,11 @@ const pianiAlimentariDAO = require("../models/daos/pianiAlimentariDAO");
 const utentiDAO = require("../models/daos/utentiDAO");
 const authMiddleware = require("../middleware/permessi");
 
-// Middleware per tutte le rotte dell'utente
 router.use(authMiddleware.isAuthenticated);
 
 // Dashboard principale dell'utente
 router.get('/dashboard', authMiddleware.isPaziente, async (req, res) => {
-    // Imposto i valori predefiniti
+    
     let misurazioniFormattate = [];
     let recensione = null;
     let pianiAlimentariFormattati = [];
@@ -111,7 +110,7 @@ router.post('/misurazioni/modifica', authMiddleware.isPaziente, async (req, res)
 });
 
 // Cancella una misurazione
-router.get('/misurazioni/cancella/:id', authMiddleware.isPaziente, async (req, res) => {
+router.get('/misurazioni/elimina/:id', authMiddleware.isPaziente, async (req, res) => {
     try {
         const misurazioneId = req.params.id;
         

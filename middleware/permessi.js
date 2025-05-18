@@ -6,7 +6,7 @@ exports.isAuthenticated = (req, res, next) => {
     return next();
   }
   req.session.error = 'Effettuare il login per accedere a questa pagina.';
-  res.redirect('/login');
+  res.redirect('/auth/login');
 };
 
 // Middleware per verificare se l'utente è un admin

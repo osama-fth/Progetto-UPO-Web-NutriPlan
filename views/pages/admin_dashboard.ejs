@@ -319,12 +319,13 @@
             <h6 class="mb-0">Andamento peso</h6>
           </div>
           <div class="card-body">
-            <div class="chart-container" style="position: relative; height: 300px;">
-      <canvas id="pazienteChart"></canvas>
-    </div>
-    <div class="text-center mt-2" id="no-chart-data" style="display: none;">
-      <p class="text-muted">Nessuna misurazione disponibile</p>
-    </div>
+            <div class="chart-scroll-container">
+              <div class="chart-inner-container">
+                <div class="chart-container" style="position: relative; height: 300px;">
+                  <canvas id="pazienteChart"></canvas>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
