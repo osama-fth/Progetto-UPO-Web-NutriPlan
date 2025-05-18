@@ -1,25 +1,18 @@
 document.addEventListener('DOMContentLoaded', function() {
-  // Funzione per gestire il click sui link della sidebar
   const setupSidebarLinks = () => {
     document.querySelectorAll('.sidebar-link').forEach(link => {
       link.addEventListener('click', function(e) {
         e.preventDefault();
         
-        // Ottieni la sezione target dal data-attribute
         const targetSection = this.getAttribute('data-section');
-        
-        // Aggiorna l'URL con il hash
         window.location.hash = targetSection;
         
-        // Nascondi tutte le sezioni
         document.querySelectorAll('.sezione-contenuto').forEach(section => {
           section.classList.add('d-none');
         });
         
-        // Mostra la sezione cliccata
         document.getElementById(`sezione-${targetSection}`).classList.remove('d-none');
         
-        // Aggiorna lo stato attivo nella sidebar
         document.querySelectorAll('.sidebar-item').forEach(item => {
           item.classList.remove('active');
         });
@@ -28,7 +21,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   };
   
-  // Gestione del fragment URL al caricamento della pagina (codice che hai già aggiunto)
   const handleUrlHash = () => {
     const hash = window.location.hash.substring(1);
     if (hash) {
@@ -55,13 +47,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   };
   
-  // Inizializza i link della sidebar
   setupSidebarLinks();
-  
-  // Gestisci l'hash URL al caricamento della pagina
   handleUrlHash();
   
-  // Gestione click sui pulsanti dettagli recensione
   document.querySelectorAll('.btn-dettagli-recensione').forEach(btn => {
     btn.addEventListener('click', function() {
       const nome = this.getAttribute('data-recensione-nome');
@@ -77,7 +65,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   
-  // Gestione click sui pulsanti elimina recensione
   document.querySelectorAll('.btn-elimina-recensione').forEach(btn => {
     btn.addEventListener('click', function() {
       const recensioneId = this.getAttribute('data-recensione-id');
@@ -88,7 +75,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   
-  // Gestione click sui pulsanti dettagli richiesta
   document.querySelectorAll('.btn-dettagli-richiesta').forEach(btn => {
     btn.addEventListener('click', function() {
       const nome = this.getAttribute('data-richiesta-nome');
@@ -106,7 +92,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   
-  // Gestione click sui pulsanti elimina richiesta
   document.querySelectorAll('.btn-elimina-richiesta').forEach(btn => {
     btn.addEventListener('click', function() {
       const richiestaId = this.getAttribute('data-richiesta-id');
@@ -117,17 +102,86 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   
-  // Gestione pulsanti eliminazione pazienti
   document.querySelectorAll('.btn-elimina-paziente').forEach(button => {
     button.addEventListener('click', function() {
       const pazienteId = this.getAttribute('data-paziente-id');
-      
-      // Imposta l'ID utente nel form di eliminazione
       document.getElementById('elimina-utente-id').value = pazienteId;
-      
-      // Mostra il modal di conferma
       const modal = new bootstrap.Modal(document.getElementById('confermaEliminaUtenteModal'));
       modal.show();
     });
+  });
+  
+  document.querySelectorAll('button[data-paziente-id]').forEach(btn => {
+    if (btn.querySelector('i.fa-eye')) {
+      btn.addEventListener('click', function() {
+        const pazienteId = this.getAttribute('data-paziente-id');
+        const nome = this.getAttribute('data-paziente-nome');
+        const cognome = this.getAttribute('data-paziente-cognome');
+        const dataNascita = this.getAttribute('data-paziente-data-nascita');
+        const email = this.getAttribute('data-paziente-email');
+        
+        document.getElementById('paziente-nome').textContent = nome;
+        document.getElementById('paziente-cognome').textContent = cognome;
+        document.getElementById('paziente-data-nascita').textContent = dataNascita;
+        document.getElementById('paziente-email').textContent = email;
+        
+        const modal = new bootstrap.Modal(document.getElementById('pazienteDetailsModal'));
+        modal.show();
+        
+        document.getElementById('pazienteDetailsModal').addEventListener('shown.bs.modal', function loadMisurazioni() {
+          document.getElementById('pazienteDetailsModal').removeEventListener('shown.bs.modal', loadMisurazioni);
+          
+          fetch(`/admin/pazienti/${pazienteId}/misurazioni`)
+            .then(response => {
+              if (!response.ok) {
+                throw new Error(`Errore nella risposta: ${response.status} ${response.statusText}`);
+              }
+              return response.json();
+            })
+            .then(misurazioni => {
+              if (misurazioni && misurazioni.length > 0) {
+                const labels = misurazioni.map(m => m.dataFormattata);
+                const values = misurazioni.map(m => m.misura);
+                
+                try {
+                  if (window.pazienteChart && typeof window.pazienteChart.destroy === 'function') {
+                    window.pazienteChart.destroy();
+                  }
+                  window.pazienteChart = createWeightChart('pazienteChart', labels, values);
+                } catch(e) {
+                  console.error('Errore durante la creazione del grafico:', e);
+                }
+                
+                const noChartData = document.querySelector('#pazienteDetailsModal #no-chart-data');
+                if (noChartData) {
+                  noChartData.style.display = 'none';
+                }
+              } else {
+                const noChartData = document.querySelector('#pazienteDetailsModal #no-chart-data');
+                if (noChartData) {
+                  noChartData.style.display = 'block';
+                }
+                
+                try {
+                  if (window.pazienteChart && typeof window.pazienteChart.destroy === 'function') {
+                    window.pazienteChart.destroy();
+                  }
+                  window.pazienteChart = createWeightChart('pazienteChart', [], []);
+                } catch(e) {
+                  console.error('Errore durante la creazione del grafico vuoto:', e);
+                }
+              }
+            })
+            .catch(error => {
+              console.error('Errore nel caricamento delle misurazioni:', error);
+              alert('Errore nel caricamento delle misurazioni. Controlla la console per i dettagli.');
+              const noChartData = document.querySelector('#pazienteDetailsModal #no-chart-data');
+              if (noChartData) {
+                noChartData.style.display = 'block';
+              }
+            });
+        }, { once: true });
+      });
+    }
   });
 });

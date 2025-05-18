@@ -88,20 +88,5 @@ exports.deleteMisurazione = async (misurazioneId) => {
     });
 };
 
-// Recupera tutte le misurazioni di un utente specifico
-exports.getMisurazioniByUtente = async (utenteId) => {
-    return new Promise((resolve, reject) => {
-        const sql = `
-            SELECT * FROM misurazioni
-            WHERE utente_id = ?
-            ORDER BY data DESC`;
-        
-        db.all(sql, [utenteId], (err, rows) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(rows);
-            }
-        });
-    });
-};
+// getMisurazioniByUserId e getMisurazioniByUtente sono duplicati quasi identici.
+// Vuoi tenerli entrambi o unificarli?

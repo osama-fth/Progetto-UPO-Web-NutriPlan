@@ -1,34 +1,35 @@
 document.addEventListener('DOMContentLoaded', function() {
-  // Funzione per gestire il click sui link della sidebar
   const setupSidebarLinks = () => {
     document.querySelectorAll('.sidebar-link').forEach(link => {
       link.addEventListener('click', function(e) {
         e.preventDefault();
         
-        // Ottieni la sezione target dal data-attribute
         const targetSection = this.getAttribute('data-section');
-        
-        // Aggiorna l'URL con il hash
         window.location.hash = targetSection;
         
-        // Nascondi tutte le sezioni
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+          item.classList.remove('active');
+        });
+        
+        this.parentElement.classList.add('active');
+        
         document.querySelectorAll('.sezione-contenuto').forEach(section => {
           section.classList.add('d-none');
         });
         
-        // Mostra la sezione cliccata
         document.getElementById(`sezione-${targetSection}`).classList.remove('d-none');
         
-        // Aggiorna lo stato attivo nella sidebar
-        document.querySelectorAll('.sidebar-item').forEach(item => {
-          item.classList.remove('active');
-        });
-        this.parentElement.classList.add('active');
+        const sidebarMobile = document.getElementById('sidebar-mobile');
+        if (sidebarMobile) {
+          const bsOffcanvas = bootstrap.Offcanvas.getInstance(sidebarMobile);
+          if (bsOffcanvas) {
+            bsOffcanvas.hide();
+          }
+        }
       });
     });
   };
   
-  // Gestione del fragment URL al caricamento della pagina (codice che hai già aggiunto)
   const handleUrlHash = () => {
     const hash = window.location.hash.substring(1);
     if (hash) {
@@ -55,13 +56,17 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   };
   
-  // Inizializza i link della sidebar
   setupSidebarLinks();
-  
-  // Gestisci l'hash URL al caricamento della pagina
   handleUrlHash();
   
-  // ===== GESTIONE MISURAZIONI =====
+  const dataInput = document.getElementById('data');
+  if (dataInput) {
+    const oggi = new Date();
+    const anno = oggi.getFullYear();
+    const mese = String(oggi.getMonth() + 1).padStart(2, '0');
+    const giorno = String(oggi.getDate()).padStart(2, '0');
+    dataInput.value = `${anno}-${mese}-${giorno}`;
+  }
   
   document.querySelectorAll('.btn-modifica-misurazione').forEach(button => {
     button.addEventListener('click', function() {
@@ -82,18 +87,16 @@ document.addEventListener('DOMContentLoaded', function() {
   if (btnEliminaMisurazione) {
     btnEliminaMisurazione.addEventListener('click', function() {
       const misurazioneId = document.getElementById('misurazioneId').value;
-      const confermaMisurazioneCancella = document.getElementById('confermaCancellazioneMisurazione');
-      confermaMisurazioneCancella.href = `/user/misurazioni/cancella/${misurazioneId}`;
+      document.getElementById('confermaCancellazioneMisurazione').href = `/user/misurazioni/elimina/${misurazioneId}`;
       
-      bootstrap.Modal.getInstance(document.getElementById('misurazioneAzioniModal')).hide();
+      const misurazioneModal = bootstrap.Modal.getInstance(document.getElementById('misurazioneAzioniModal'));
+      misurazioneModal.hide();
       
-      const modalConferma = new bootstrap.Modal(document.getElementById('confermaCancellazioneMisurazioneModal'));
-      modalConferma.show();
+      const confermaModal = new bootstrap.Modal(document.getElementById('confermaCancellazioneMisurazioneModal'));
+      confermaModal.show();
     });
   }
 
-  // ===== GESTIONE PIANI ALIMENTARI =====
-  
   document.querySelectorAll('[data-piano-id]').forEach(button => {
     if (button.querySelector('i.fa-eye')) {
       button.addEventListener('click', function() {
@@ -110,7 +113,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // ===== GESTIONE ELIMINAZIONE ACCOUNT =====
   const btnEliminaAccount = document.getElementById('btnEliminaAccount');
   if (btnEliminaAccount) {
     btnEliminaAccount.addEventListener('click', function() {
@@ -118,4 +120,10 @@ document.addEventListener('DOMContentLoaded', function() {
       eliminaAccountModal.show();
     });
   }
+  
+  document.getElementById('confermaEliminaRecensioneModal').addEventListener('show.bs.modal', function(event) {
+    const button = event.relatedTarget;
+    const recensioneId = button.getAttribute('data-recensione-id');
+    document.getElementById('elimina-recensione-id').value = recensioneId;
+  });
 });

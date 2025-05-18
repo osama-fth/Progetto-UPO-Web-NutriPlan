@@ -1,0 +1,17 @@
+<!-- Grafico misurazioni peso -->
+<div class="chart-container" style="position: relative; height: 300px;">
+  <canvas id="<%= canvasId %>"></canvas>
+</div>
+<div class="text-center mt-2" id="no-chart-data" style="display: none;">
+  <p class="text-muted">Nessuna misurazione disponibile</p>
+</div>
+
+<!-- Dati per il grafico (nascosti) -->
+<% if (typeof misurazioni !== 'undefined') { %>
+<script id="chart-data-<%= canvasId %>" type="application/json">
+  <%- JSON.stringify({
+    labels: misurazioni ? misurazioni.map(m => m.dataFormattata) : [],
+    values: misurazioni ? misurazioni.map(m => m.misura) : []
+  }) %>
+</script>
+<% } %>

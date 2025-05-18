@@ -5,6 +5,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const db = require('./db');
 
+
 passport.use(new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password'
@@ -28,16 +29,16 @@ passport.use(new LocalStrategy({
         } else {
             return done(null, false, { message: 'Password errata.' });
         }
-
     } catch (err) {
         return done(err);
     }
-}))
+}));
 
 
 passport.serializeUser((utente, done) => {
     done(null, utente.id);
 });
+
 
 passport.deserializeUser((id, done) => {
     db.get('SELECT * FROM utenti WHERE id = ?', [id], (err, row) => {
@@ -45,6 +46,8 @@ passport.deserializeUser((id, done) => {
     });
 });
 
+
 console.log("Passport configurato con successo");
+
 
 module.exports = passport;

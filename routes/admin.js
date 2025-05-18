@@ -76,16 +76,17 @@ router.post('/utenti/elimina', async (req, res) => {
 });
 
 // Route per ottenere le misurazioni di un paziente
-router.get('/pazienti/:id/misurazioni', async (req, res) => {
+router.get('/pazienti/:id/misurazioni', authMiddleware.isAdmin, async (req, res) => {
   try {
     const pazienteId = req.params.id;
-    const misurazioni = await misurazioniDAO.getMisurazioniByUtente(pazienteId);
+    const misurazioni = await misurazioniDAO.getMisurazioniByUserId(pazienteId);
     
-    // Formato richiesto per il frontend
+    // Formattazione per il front-end
     const misurazioniFormattate = misurazioni.map(m => ({
       id: m.id,
       misura: m.misura,
-      dataFormattata: dayjs(m.data).format('DD/MM/YYYY')
+      dataFormattata: dayjs(m.data).format('DD/MM/YYYY'),
+      data: m.data
     }));
     
     res.json(misurazioniFormattate);

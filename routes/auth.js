@@ -135,7 +135,6 @@ router.post("/register", [
 ], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        console.log("Errori di validazione:", errors.array());
         return res.render("pages/register", { 
             title: 'NutriPlan - Registrazione',
             user: req.user,
