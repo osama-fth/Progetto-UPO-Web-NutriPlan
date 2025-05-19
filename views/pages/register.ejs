@@ -26,7 +26,7 @@
                     <i class="fas fa-exclamation-circle me-2"></i> Si sono verificati i seguenti errori:
                     <ul class="mb-0 mt-2">
                       <% errors.forEach(err => { %>
-                        <li><%= err.msg || 'Campo non valido: ' + err.param %></li>
+                        <li><%= err.msg %></li>
                       <% }); %>
                     </ul>
                   </div>

@@ -8,10 +8,10 @@
 
 <!-- Dati per il grafico (nascosti) -->
 <% if (typeof misurazioni !== 'undefined') { %>
-<script id="chart-data-<%= canvasId %>" type="application/json">
-  <%- JSON.stringify({
-    labels: misurazioni ? misurazioni.map(m => m.dataFormattata) : [],
-    values: misurazioni ? misurazioni.map(m => m.misura) : []
-  }) %>
-</script>
+  <script id="chart-data-<%= canvasId %>" type="application/json">
+    <%- JSON.stringify({
+      labels: misurazioni ? misurazioni.map(m => m.dataFormattata) : [],
+      values: misurazioni ? misurazioni.map(m => m.misura) : []
+    }) %>
+  </script>
 <% } %>
