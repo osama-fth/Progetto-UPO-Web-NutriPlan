@@ -18,7 +18,6 @@ router.get("/login", (req, res) => {
         }
     }
     
-    // Recupera i messaggi dalla sessione
     const success = req.session.success;
     const error = req.session.error;
     delete req.session.success;

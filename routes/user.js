@@ -6,21 +6,18 @@ const misurazioniDAO = require("../models/daos/misurazioniDAO");
 const recensioniDAO = require("../models/daos/recensioniDAO");
 const pianiAlimentariDAO = require("../models/daos/pianiAlimentariDAO");
 const utentiDAO = require("../models/daos/utentiDAO");
-const authMiddleware = require("../middleware/permessi");
+const middleware = require("../middleware/permessi");
 
-router.use(authMiddleware.isAuthenticated);
+router.use(middleware.isAuthenticated);
 
 // Dashboard principale dell'utente
-router.get('/dashboard', authMiddleware.isPaziente, async (req, res) => {
+router.get('/dashboard', middleware.isPaziente, async (req, res) => {
     
     let misurazioniFormattate = [];
     let recensione = null;
     let pianiAlimentariFormattati = [];
     
     try {
-        // Formatta la data di nascita dell'utente
-        const userWithFormattedDate = {...req.user};
-        userWithFormattedDate.dataFormattata = dayjs(req.user.data_di_nascita).format('DD/MM/YYYY');
         
         // Recupera le misurazioni dell'utente
         const misurazioni = await misurazioniDAO.getMisurazioniByUserId(req.user.id);
@@ -52,7 +49,7 @@ router.get('/dashboard', authMiddleware.isPaziente, async (req, res) => {
         // Renderizza la pagina con tutti i dati raccolti
         res.render('pages/utente_dashboard', {
             title: 'NutriPlan - Dashboard',
-            user: userWithFormattedDate,
+            user: req.user,
             isAuth: req.isAuthenticated(),
             misurazioni: misurazioniFormattate,
             recensione: recensione,
@@ -68,7 +65,7 @@ router.get('/dashboard', authMiddleware.isPaziente, async (req, res) => {
 });
 
 // POST nuova misurazione
-router.post('/misurazioni/nuova', authMiddleware.isPaziente, async (req, res) => {
+router.post('/misurazioni/nuova', middleware.isPaziente, async (req, res) => {
     try {
         const { peso, data } = req.body;
         
@@ -89,7 +86,7 @@ router.post('/misurazioni/nuova', authMiddleware.isPaziente, async (req, res) =>
 });
 
 // Modifica una misurazione
-router.post('/misurazioni/modifica', authMiddleware.isPaziente, async (req, res) => {
+router.post('/misurazioni/modifica', middleware.isPaziente, async (req, res) => {
     try {
         const { misurazioneId, peso, data } = req.body;
         
@@ -110,7 +107,7 @@ router.post('/misurazioni/modifica', authMiddleware.isPaziente, async (req, res)
 });
 
 // Cancella una misurazione
-router.get('/misurazioni/elimina/:id', authMiddleware.isPaziente, async (req, res) => {
+router.get('/misurazioni/elimina/:id', middleware.isPaziente, async (req, res) => {
     try {
         const misurazioneId = req.params.id;
         
@@ -126,7 +123,7 @@ router.get('/misurazioni/elimina/:id', authMiddleware.isPaziente, async (req, re
 });
 
 // Aggiungi recensione
-router.post('/recensioni/nuova', authMiddleware.isPaziente, async (req, res) => {
+router.post('/recensioni/nuova', middleware.isPaziente, async (req, res) => {
   try {
     const { commento } = req.body;
     
@@ -147,7 +144,7 @@ router.post('/recensioni/nuova', authMiddleware.isPaziente, async (req, res) => 
 });
 
 // Cancella recensione
-router.post('/recensioni/cancella', authMiddleware.isPaziente, async (req, res) => {
+router.post('/recensioni/cancella', middleware.isPaziente, async (req, res) => {
   try {
     const { recensioneId } = req.body;
     
@@ -163,7 +160,7 @@ router.post('/recensioni/cancella', authMiddleware.isPaziente, async (req, res) 
 });
 
 // Richiesta di eliminazione account
-router.get('/account/elimina', authMiddleware.isPaziente, async (req, res) => {
+router.get('/account/elimina', middleware.isPaziente, async (req, res) => {
     try {
         const utenteId = req.user.id;
         await utentiDAO.deleteAccount(utenteId);
