@@ -142,9 +142,29 @@ document.addEventListener('DOMContentLoaded', function() {
     setupPianiButtons() {
       document.querySelectorAll('[data-piano-id]').forEach(button => {
         if (button.querySelector('i.fa-eye')) {
-          button.addEventListener('click', function() {
-            const pianoId = this.getAttribute('data-piano-id');
-            window.location.href = `/piani-alimentari/${pianoId}`;
+          button.addEventListener('click', () => {
+            const pianoId = button.getAttribute('data-piano-id');
+            const titolo = button.getAttribute('data-piano-titolo');
+            const data = button.getAttribute('data-piano-data');
+            const descrizione = button.getAttribute('data-piano-descrizione');
+            
+            document.getElementById('dettaglio-piano-titolo').textContent = titolo;
+            document.getElementById('dettaglio-piano-data').textContent = `Data: ${data}`;
+            document.getElementById('dettaglio-piano-descrizione').textContent = descrizione || 'Nessuna descrizione disponibile.';
+            
+            fetch(`/user/piani-alimentari/${pianoId}`)
+              .then(response => {
+                if (!response.ok) throw new Error(`Errore nella risposta: ${response.status}`);
+                return response.json();
+              })
+              .then(piano => {
+                this.renderDettaglioPiano(piano.contenuto);
+                uiUtils.showModal('visualizzaPianoModal');
+              })
+              .catch(error => {
+                console.error('Errore nel caricamento del piano:', error);
+                alert('Errore nel caricamento dei dettagli del piano alimentare');
+              });
           });
         }
         
@@ -155,6 +175,61 @@ document.addEventListener('DOMContentLoaded', function() {
           });
         }
       });
+    },
+    
+    renderDettaglioPiano(contenutoJSON) {
+      const contenuto = typeof contenutoJSON === 'string' ? JSON.parse(contenutoJSON) : contenutoJSON;
+      const accordionContainer = document.getElementById('dettaglioPianoDieteticoAccordion');
+      
+      accordionContainer.innerHTML = '';
+      
+      const giorni = {
+        'lunedì': 'Lunedì',
+        'martedì': 'Martedì',
+        'mercoledì': 'Mercoledì',
+        'giovedì': 'Giovedì',
+        'venerdì': 'Venerdì',
+        'sabato': 'Sabato',
+        'domenica': 'Domenica'
+      };
+      
+      let index = 0;
+      for (const [giorno, label] of Object.entries(giorni)) {
+        if (contenuto[giorno]) {
+          const accordionItem = document.createElement('div');
+          accordionItem.className = 'accordion-item';
+          
+          accordionItem.innerHTML = `
+            <h2 class="accordion-header" id="dettaglio-heading-${giorno}">
+              <button class="accordion-button ${index > 0 ? 'collapsed' : ''}" type="button" 
+                data-bs-toggle="collapse" data-bs-target="#dettaglio-collapse-${giorno}" 
+                aria-expanded="${index === 0 ? 'true' : 'false'}" aria-controls="dettaglio-collapse-${giorno}">
+                ${label}
+              </button>
+            </h2>
+            <div id="dettaglio-collapse-${giorno}" class="accordion-collapse collapse ${index === 0 ? 'show' : ''}" 
+              aria-labelledby="dettaglio-heading-${giorno}">
+              <div class="accordion-body">
+                <div class="mb-3">
+                  <p class="fw-bold mb-1">Colazione:</p>
+                  <p class="border-bottom pb-2">${contenuto[giorno].colazione || 'Non specificato'}</p>
+                </div>
+                <div class="mb-3">
+                  <p class="fw-bold mb-1">Pranzo:</p>
+                  <p class="border-bottom pb-2">${contenuto[giorno].pranzo || 'Non specificato'}</p>
+                </div>
+                <div>
+                  <p class="fw-bold mb-1">Cena:</p>
+                  <p>${contenuto[giorno].cena || 'Non specificato'}</p>
+                </div>
+              </div>
+            </div>
+          `;
+          
+          accordionContainer.appendChild(accordionItem);
+          index++;
+        }
+      }
     }
   };
   

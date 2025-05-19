@@ -14,34 +14,53 @@ router.use(middleware.isAdmin);
 
 // Dashboard principale dell'admin
 router.get('/dashboard', async (req, res) => {
+    let pazientiFormattati = [];
+    let recensioniFormattate = [];
+    let richiesteFormattate = [];
+
+    // Recupero tutti i pazienti
     try {
-        // Recupero tutti i pazienti
         const pazienti = await utentiDAO.getAllPazienti();
-        const pazientiFormattati = pazienti.map(paziente => {
+        pazientiFormattati = pazienti.map(paziente => {
             paziente.data_formattata = dayjs(paziente.data_di_nascita).format('DD/MM/YYYY');
             return paziente;
         });
-        
-        // Recupero tutte le recensioni con nomi dei pazienti
+    } catch (error) {
+        console.error("Errore nel recupero dei pazienti:", error);
+        req.session.error = "Impossibile caricare la lista dei pazienti"; // Aggiunto messaggio di errore
+    }
+    
+    // Recupero tutte le recensioni con nomi dei pazienti
+    try {
         const recensioni = await recensioniDAO.getAllRecensioniWithUserInfo();
-        const recensioniFormattate = recensioni.map(recensione => {
+        recensioniFormattate = recensioni.map(recensione => {
             recensione.dataFormattata = dayjs(recensione.data_creazione).format('DD/MM/YYYY');
             return recensione;
         });
-        
-        // Recupero tutte le richieste di contatto
+    } catch (error) {
+        console.error("Errore nel recupero delle recensioni:", error);
+        req.session.error = "Impossibile caricare le recensioni"; // Aggiunto messaggio di errore
+    }
+    
+    // Recupero tutte le richieste di contatto
+    try {
         const richieste = await contattiDAO.getAllRichiesteContatto();
-        const richiesteFormattate = richieste.map(richiesta => {
+        richiesteFormattate = richieste.map(richiesta => {
             richiesta.dataFormattata = dayjs(richiesta.data_creazione).format('DD/MM/YYYY');
             return richiesta;
         });
+    } catch (error) {
+        console.error("Errore nel recupero delle richieste di contatto:", error);
+        req.session.error = "Impossibile caricare le richieste di contatto"; // Aggiunto messaggio di errore
+    }
 
-        // Recupera messaggi dalla sessione e poi cancellali
-        const success = req.session.success;
-        const error = req.session.error;
-        delete req.session.success;
-        delete req.session.error;
+    // Recupera messaggi dalla sessione e poi cancellali
+    const success = req.session.success;
+    const error = req.session.error;
+    delete req.session.success;
+    delete req.session.error;
 
+    try {
         res.render("pages/admin_dashboard", { 
             title: 'Dashboard Admin - NutriPlan',
             user: req.user, 
@@ -52,9 +71,9 @@ router.get('/dashboard', async (req, res) => {
             success: success,
             error: error
         });
-    } catch (error) {
-        console.error("Errore nel recupero dei dati:", error);
-        req.session.error = "Errore durante il recupero dei dati";
+    } catch (renderError) {
+        console.error("Errore nel rendering della pagina:", renderError);
+        req.session.error = "Errore durante la visualizzazione della dashboard";
         res.redirect("/error");
     }
 });

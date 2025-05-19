@@ -81,6 +81,14 @@ footer {
   margin-top: auto;
 }
 
+.icon-3x {
+  font-size: 3rem;
+}
+
+textArea{
+    resize: none;
+}
+
 /* ----------Navbar----------*/
 .navbar {
     background-color: var(--deep-blue);
@@ -394,6 +402,8 @@ footer {
     background-color: rgba(255, 255, 255, 0.9);
     border: 1px solid #e0e0e0;
 }
+
+
 
 .contact-form .btn-primary {
     background-color: var(--bright-cyan);

@@ -1,0 +1,29 @@
+<!-- Modal visualizza piano alimentare -->
+<div class="modal fade" id="visualizzaPianoModal" tabindex="-1" aria-labelledby="visualizzaPianoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="visualizzaPianoModalLabel">Dettaglio Piano Alimentare</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-4">
+          <h5 id="dettaglio-piano-titolo" class="mb-3"></h5>
+          <div class="d-flex justify-content-between align-items-center">
+            <p id="dettaglio-piano-data" class="text-muted mb-2"></p>
+            <!-- Questo elemento sarà visibile solo nella dashboard admin -->
+            <p id="dettaglio-piano-paziente" class="text-muted mb-2 <%= locals.isAdmin ? '' : 'd-none' %>"></p>
+          </div>
+          <p id="dettaglio-piano-descrizione" class="border-bottom pb-3"></p>
+        </div>
+        
+        <div class="accordion" id="dettaglioPianoDieteticoAccordion">
+          <!-- I giorni verranno inseriti dinamicamente qui -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+      </div>
+    </div>
+  </div>
+</div>

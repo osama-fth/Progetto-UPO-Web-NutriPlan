@@ -25,7 +25,6 @@ router.get("/login", (req, res) => {
     
     res.render("pages/login", { 
         title: 'NutriPlan - Login',
-        query: req.query,
         success: success,  
         error: error       
     });
@@ -70,7 +69,7 @@ router.post('/login', [
                 req.session.error = 'Errore durante il login.';
                 return res.redirect('/auth/login');
             }
-            
+             
             if (utente.ruolo === 'admin') {
                 return res.redirect('/admin/dashboard');
             } else {
@@ -134,12 +133,8 @@ router.post("/register", [
 ], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.render("pages/register", { 
-            title: 'NutriPlan - Registrazione',
-            user: req.user,
-            errors: errors.array(),
-            formData: req.body 
-        });
+        req.session.error = errors.array()[0].msg;
+        return res.redirect('/auth/register');
     }
 
     try {
