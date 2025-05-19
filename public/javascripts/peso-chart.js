@@ -110,43 +110,6 @@ window.createWeightChart = function(canvasId, labels, values) {
   });
 }
 
-function updateTabellaStoriaQuantitativa(misurazioni) {
-  const tabella = document.getElementById('tabella-misurazioni');
-  if (!misurazioni || misurazioni.length === 0) {
-    tabella.innerHTML = `
-      <tr id="no-misurazioni-row">
-        <td colspan="2" class="text-center py-4">
-          <i class="fas fa-weight text-muted mb-3" style="font-size: 3rem;"></i>
-          <p class="text-muted mb-0">Nessuna misurazione disponibile</p>
-        </td>
-      </tr>
-    `;
-    return;
-  }
-  let htmlContent = '';
-  misurazioni.forEach(misurazione => {
-    const dataFormattata = misurazione.dataFormattata || 
-      new Date(misurazione.data).toLocaleDateString('it-IT', {
-        day: '2-digit', month: '2-digit', year: 'numeric'
-      });
-    htmlContent += `
-      <tr>
-        <td class="text-center">${dataFormattata}</td>
-        <td class="text-center">${misurazione.peso} kg</td>
-      </tr>
-    `;
-  });
-  htmlContent += `
-    <tr id="no-misurazioni-row" style="display: none;">
-      <td colspan="2" class="text-center py-4">
-        <i class="fas fa-weight text-muted mb-3" style="font-size: 3rem;"></i>
-        <p class="text-muted mb-0">Nessuna misurazione disponibile</p>
-      </td>
-    </tr>
-  `;
-  tabella.innerHTML = htmlContent;
-}
-
 document.addEventListener('DOMContentLoaded', function() {
   const initChart = (canvasId) => {
     const chartDataElement = document.getElementById(`chart-data-${canvasId}`);

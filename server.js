@@ -7,19 +7,13 @@ const morgan = require("morgan")
 const PORT = 3000
 const app = express()
 
-app.set("view engine", "ejs")
+
 
 // Importazione delle route
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
 const userRouter = require('./routes/user');
 const adminRouter = require('./routes/admin');
-
-// Configurazione delle route
-app.use('/', indexRouter);
-app.use('/auth', authRouter);
-app.use('/user', userRouter);
-app.use('/admin', adminRouter);
 
 // Middleware
 app.use(morgan("dev"))
@@ -34,9 +28,17 @@ app.use(session({
     saveUninitialized: true
 }))
 
+app.set("view engine", "ejs")
+
 // Configurazione di Passport 
 app.use(passport.initialize())
 app.use(passport.session())
+
+// Configurazione delle route
+app.use('/', indexRouter);
+app.use('/auth', authRouter);
+app.use('/user', userRouter);
+app.use('/admin', adminRouter);
 
 // Avvio del server
 app.listen(PORT, () => {
