@@ -3,21 +3,20 @@ const express = require("express");
 const router = express.Router();
 const dayjs = require("dayjs");
 const bcrypt = require("bcrypt");
-const { check, validationResult } = require("express-validator"); // Modificato per usare check
+const { check, validationResult } = require("express-validator");
+const PDFDocument = require('pdfkit');
 const misurazioniDAO = require("../models/daos/misurazioniDAO");
 const recensioniDAO = require("../models/daos/recensioniDAO");
 const pianiAlimentariDAO = require("../models/daos/pianiAlimentariDAO");
 const utentiDAO = require("../models/daos/utentiDAO");
 const middleware = require("../middleware/permessi");
+const generaPianoPDF  = require("../models/pdfGenerator");
 
 router.use(middleware.isPaziente);
 
 // Dashboard principale dell'utente
 router.get('/dashboard', async (req, res) => {
-    // Formatta la data di nascita dell'utente
-    const userWithFormattedDate = {...req.user};
-    userWithFormattedDate.dataFormattata = dayjs(req.user.data_di_nascita).format('DD/MM/YYYY');
-
+    
     let misurazioniFormattate = [];
     let recensione = null;
     let pianiAlimentariFormattati = [];
@@ -69,7 +68,7 @@ router.get('/dashboard', async (req, res) => {
         // Renderizza la pagina con tutti i dati raccolti
         res.render('pages/utente_dashboard', {
             title: 'NutriPlan - Dashboard',
-            user: userWithFormattedDate,
+            user: req.user,
             isAuth: req.isAuthenticated(),
             misurazioni: misurazioniFormattate,
             recensione: recensione,
@@ -312,6 +311,47 @@ router.get('/piani-alimentari/:id', async (req, res) => {
   } catch (error) {
     console.error('Errore nel recupero del piano:', error);
     res.status(500).json({ error: 'Errore nel server' });
+  }
+});
+
+// Scarica un piano alimentare in formato PDF
+router.get('/piani-alimentari/download/:id', async (req, res) => {
+  try {
+    const pianoId = req.params.id;
+    const userId = req.user.id;
+    
+    // Verifica che il piano appartenga all'utente
+    const piano = await pianiAlimentariDAO.getPianoAlimentareById(pianoId);
+    
+    if (!piano || piano.utente_id !== userId) {
+      req.session.error = "Piano alimentare non trovato o non autorizzato";
+      return res.redirect('/user/dashboard#piani-alimentari');
+    }
+    
+    // Crea un nuovo documento PDF
+    const doc = new PDFDocument();
+    
+    // Imposta intestazione della risposta
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename=piano_alimentare_${pianoId}.pdf`);
+    
+    // Pipe del documento PDF nella risposta
+    doc.pipe(res);
+    
+    // Genera il contenuto del PDF usando l'utility
+    const success = generaPianoPDF(doc, piano);
+    
+    if (!success) {
+      throw new Error('Errore nella generazione del contenuto PDF');
+    }
+    
+    // Finalizza il documento
+    doc.end();
+    
+  } catch (error) {
+    console.error('Errore durante la generazione del PDF:', error);
+    req.session.error = 'Si è verificato un errore durante la generazione del PDF';
+    res.redirect('/user/dashboard#piani-alimentari');
   }
 });
 

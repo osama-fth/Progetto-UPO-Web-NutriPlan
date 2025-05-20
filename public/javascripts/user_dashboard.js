@@ -158,13 +158,6 @@ document.addEventListener('DOMContentLoaded', function() {
               });
           });
         }
-        
-        if (button.querySelector('i.fa-download')) {
-          button.addEventListener('click', function() {
-            const pianoId = this.getAttribute('data-piano-id');
-            window.location.href = `/piani-alimentari/${pianoId}/download`;
-          });
-        }
       });
     },
     
