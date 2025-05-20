@@ -92,7 +92,6 @@ document.addEventListener('DOMContentLoaded', function() {
     init() {
       this.setupDateInputDefault();
       this.setupModifyButtons();
-      this.setupDeleteButton();
     },
     
     setupDateInputDefault() {
@@ -113,23 +112,15 @@ document.addEventListener('DOMContentLoaded', function() {
           document.getElementById('pesoModifica').value = peso;
           document.getElementById('dataModifica').value = data;
           
+          // Aggiorniamo l'id dell'elemento da eliminare nel pulsante di eliminazione
+          const btnEliminaMisurazione = document.getElementById('btnEliminaMisurazione');
+          if (btnEliminaMisurazione) {
+            btnEliminaMisurazione.setAttribute('data-item-id', misurazioneId);
+          }
+          
           uiUtils.showModal('misurazioneAzioniModal');
         });
       });
-    },
-    
-    setupDeleteButton() {
-      const btnEliminaMisurazione = document.getElementById('btnEliminaMisurazione');
-      if (btnEliminaMisurazione) {
-        btnEliminaMisurazione.addEventListener('click', function() {
-          const misurazioneId = document.getElementById('misurazioneId').value;
-          document.getElementById('confermaCancellazioneMisurazione').href = 
-            `/user/misurazioni/elimina/${misurazioneId}`;
-          
-          uiUtils.hideModal('misurazioneAzioniModal');
-          uiUtils.showModal('confermaCancellazioneMisurazioneModal');
-        });
-      }
     }
   };
   
@@ -236,41 +227,13 @@ document.addEventListener('DOMContentLoaded', function() {
   // ===== Gestione impostazioni utente =====
   const impostazioniManager = {
     init() {
-      this.setupDeleteAccountButton();
-    },
-    
-    setupDeleteAccountButton() {
-      const btnEliminaAccount = document.getElementById('btnEliminaAccount');
-      if (btnEliminaAccount) {
-        btnEliminaAccount.addEventListener('click', function() {
-          uiUtils.showModal('eliminaAccountModal');
-        });
-      }
+      // Rimosso il metodo setupDeleteAccountButton che non è più necessario
     }
   };
   
-  // ===== Gestione recensioni =====
-  const recensioniManager = {
-    init() {
-      this.setupDeleteConfirmationModal();
-    },
-    
-    setupDeleteConfirmationModal() {
-      const modal = document.getElementById('confermaEliminaRecensioneModal');
-      if (modal) {
-        modal.addEventListener('show.bs.modal', function(event) {
-          const button = event.relatedTarget;
-          const recensioneId = button.getAttribute('data-recensione-id');
-          document.getElementById('elimina-recensione-id').value = recensioneId;
-        });
-      }
-    }
-  };
-
   // Inizializza tutti i moduli
   navigationManager.init();
   misurazioniManager.init();
   pianiAlimentariManager.init();
   impostazioniManager.init();
-  recensioniManager.init();
 });

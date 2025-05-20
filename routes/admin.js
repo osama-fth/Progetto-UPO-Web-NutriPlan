@@ -137,6 +137,11 @@ router.post('/contatti/elimina', async (req, res) => {
   try {
     const { richiestaId } = req.body;
     
+    if (!richiestaId) {
+      req.session.error = 'ID richiesta mancante';
+      return res.redirect('/admin/dashboard#richieste-contatto');
+    }
+    
     await contattiDAO.deleteRichiestaContatto(richiestaId);
     
     req.session.success = 'Richiesta di contatto eliminata con successo.';

@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const recensioniManager = {
     init() {
       this.setupDetailButtons();
-      this.setupDeleteButtons();
+      // Rimosso setupDeleteButtons() perché ora è gestito dal nuovo componente
     },
     
     setupDetailButtons() {
@@ -121,16 +121,6 @@ document.addEventListener('DOMContentLoaded', function() {
           uiUtils.showModal('recensioneDetailsModal');
         });
       });
-    },
-    
-    setupDeleteButtons() {
-      document.querySelectorAll('.btn-elimina-recensione').forEach(btn => {
-        btn.addEventListener('click', function() {
-          const recensioneId = this.getAttribute('data-recensione-id');
-          document.getElementById('elimina-recensione-id').value = recensioneId;
-          uiUtils.showModal('confermaEliminaRecensioneModal');
-        });
-      });
     }
   };
 
@@ -138,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const richiesteManager = {
     init() {
       this.setupDetailButtons();
-      this.setupDeleteButtons();
+      // Rimosso setupDeleteButtons() perché ora è gestito dal nuovo componente
     },
     
     setupDetailButtons() {
@@ -161,16 +151,6 @@ document.addEventListener('DOMContentLoaded', function() {
           uiUtils.showModal('richiestaDetailsModal');
         });
       });
-    },
-    
-    setupDeleteButtons() {
-      document.querySelectorAll('.btn-elimina-richiesta').forEach(btn => {
-        btn.addEventListener('click', function() {
-          const richiestaId = this.getAttribute('data-richiesta-id');
-          document.getElementById('elimina-richiesta-id').value = richiestaId;
-          uiUtils.showModal('confermaEliminaRichiestaModal');
-        });
-      });
     }
   };
   
@@ -178,7 +158,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const pazientiManager = {
     init() {
       this.setupDetailButtons();
-      this.setupDeleteButtons();
+      // Rimosso setupDeleteButtons() perché ora è gestito dal nuovo componente
     },
     
     setupDetailButtons() {
@@ -204,16 +184,6 @@ document.addEventListener('DOMContentLoaded', function() {
             pazientiManager.loadMisurazioni(pazienteId);
           });
         }
-      });
-    },
-    
-    setupDeleteButtons() {
-      document.querySelectorAll('.btn-elimina-paziente').forEach(btn => {
-        btn.addEventListener('click', function() {
-          const pazienteId = this.getAttribute('data-paziente-id');
-          document.getElementById('elimina-utente-id').value = pazienteId;
-          uiUtils.showModal('confermaEliminaUtenteModal');
-        });
       });
     },
     
@@ -554,8 +524,14 @@ document.addEventListener('DOMContentLoaded', function() {
       document.querySelectorAll('.btn-elimina-piano').forEach(btn => {
         btn.addEventListener('click', function() {
           const pianoId = this.getAttribute('data-piano-id');
-          document.getElementById('elimina-piano-id').value = pianoId;
-          uiUtils.showModal('confermaEliminaPianoModal');
+          
+          // Utilizziamo il sistema di conferma eliminazione centralizzato
+          const btnElimina = document.createElement('button');
+          btnElimina.setAttribute('data-elimina', 'piano');
+          btnElimina.setAttribute('data-item-id', pianoId);
+          document.body.appendChild(btnElimina);
+          btnElimina.click();
+          document.body.removeChild(btnElimina);
         });
       });
     }
