@@ -46,6 +46,39 @@ router.get('/recensioni', async (req, res) => {
   }
 });
 
+// Ricerca recensioni
+router.get('/recensioni/search', async (req, res) => {
+  const query = req.query.q || '';
+  const success = req.session.success;
+  const error = req.session.error;
+  delete req.session.success;
+  delete req.session.error;
+  
+  try {
+    let recensioni = [];
+    
+    if (query.trim() !== '') {
+      recensioni = await recensioniDAO.searchRecensioni(query);
+    } else {
+      recensioni = await recensioniDAO.getAllRecensioni();
+    }
+    
+    res.render('pages/recensioni', {
+      title: 'NutriPlan - Ricerca Recensioni',
+      recensioni,
+      query,
+      user: req.user || null,
+      isAuth: req.isAuthenticated(),
+      success: success,
+      error: error
+    });
+  } catch (error) {
+    console.error('Errore durante la ricerca delle recensioni:', error);
+    req.session.error = "Errore durante la ricerca delle recensioni";
+    res.redirect("/recensioni");
+  }
+});
+
 // Invio messaggio di contatto
 router.post('/contatti/invia', [
   check('nome').notEmpty().withMessage('Il nome è obbligatorio'),

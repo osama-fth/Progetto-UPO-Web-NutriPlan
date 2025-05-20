@@ -99,58 +99,18 @@ document.addEventListener('DOMContentLoaded', function() {
   // ===== Gestione recensioni =====
   const recensioniManager = {
     init() {
-      this.setupDetailButtons();
-      // Rimosso setupDeleteButtons() perché ora è gestito dal nuovo componente
-    },
-    
-    setupDetailButtons() {
-      document.querySelectorAll('.btn-dettagli-recensione').forEach(btn => {
-        btn.addEventListener('click', function() {
-          const data = {
-            nome: this.getAttribute('data-recensione-nome'),
-            commento: this.getAttribute('data-recensione-commento'),
-            data: this.getAttribute('data-recensione-data')
-          };
-          
-          uiUtils.setModalData({
-            nome: 'recensione-paziente',
-            commento: 'recensione-commento',
-            data: 'recensione-data'
-          }, data);
-          
-          uiUtils.showModal('recensioneDetailsModal');
-        });
-      });
+      // Non è più necessario setupDetailButtons poiché i dettagli sono già visibili nell'accordion
+      // Ora gestiremo solo la cancellazione delle recensioni attraverso gli attributi data-*
+      console.log("Inizializzazione gestione recensioni");
     }
   };
 
   // ===== Gestione richieste di contatto =====
   const richiesteManager = {
     init() {
-      this.setupDetailButtons();
-      // Rimosso setupDeleteButtons() perché ora è gestito dal nuovo componente
-    },
-    
-    setupDetailButtons() {
-      document.querySelectorAll('.btn-dettagli-richiesta').forEach(btn => {
-        btn.addEventListener('click', function() {
-          const data = {
-            nome: this.getAttribute('data-richiesta-nome'),
-            email: this.getAttribute('data-richiesta-email'),
-            messaggio: this.getAttribute('data-richiesta-messaggio'),
-            data: this.getAttribute('data-richiesta-data')
-          };
-          
-          uiUtils.setModalData({
-            nome: 'richiesta-nome',
-            email: 'richiesta-email',
-            data: 'richiesta-data',
-            messaggio: 'richiesta-messaggio'
-          }, data);
-          
-          uiUtils.showModal('richiestaDetailsModal');
-        });
-      });
+      // Non è più necessario setupDetailButtons poiché i dettagli sono già visibili nell'accordion
+      // Ora gestiremo solo la cancellazione delle richieste attraverso gli attributi data-*
+      console.log("Inizializzazione gestione richieste di contatto");
     }
   };
   

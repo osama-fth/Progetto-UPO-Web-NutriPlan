@@ -165,51 +165,57 @@
                 <h4 class="py-1 mb-0">Recensioni dei pazienti</h4>
               </header>
               <div class="card-body">
-                <div class="table-responsive">
-                  <table class="table table-hover align-middle">
-                    <thead>
-                      <tr>
-                        <th scope="col" class="text-center">Cognome</th>
-                        <th scope="col" class="text-center">Nome</th>
-                        <th scope="col" class="text-center">Data</th>
-                        <th scope="col" class="text-center">Azioni</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <% if (typeof recensioni !== 'undefined' && recensioni.length > 0) { %>
-                        <% recensioni.forEach(recensione => { %>
-                          <tr>
-                            <td class="text-center"><%= recensione.cognome %></td>
-                            <td class="text-center"><%= recensione.nome %></td>
-                            <td class="text-center"><%= recensione.dataFormattata %></td>
-                            <td class="text-center">
-                              <div class="d-flex justify-content-center">
-                                <button type="button" class="btn btn-sm btn-outline-primary me-2 btn-dettagli-recensione"
-                                        data-recensione-id="<%= recensione.id %>"
-                                        data-recensione-commento="<%= recensione.commento %>"
-                                        data-recensione-nome="<%= recensione.nome %> <%= recensione.cognome %>"
-                                        data-recensione-data="<%= recensione.dataFormattata %>">
-                                  <i class="fas fa-eye me-1"></i> Dettagli
-                                </button>
-                                <button type="button" class="btn btn-sm btn-outline-danger" 
-                                        data-elimina="recensione" data-item-id="<%= recensione.id %>">
-                                  <i class="fas fa-trash me-1"></i> Elimina
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                        <% }) %>
-                      <% } else { %>
-                        <tr>
-                          <td colspan="4" class="text-center py-4">
-                            <i class="fas fa-star text-muted mb-3" style="font-size: 3rem;"></i>
-                            <p class="text-muted mb-0">Nessuna recensione trovata</p>
-                          </td>
-                        </tr>
-                      <% } %>
-                    </tbody>
-                  </table>
-                </div>
+                <% if (typeof recensioni !== 'undefined' && recensioni.length > 0) { %>
+                  <div class="accordion" id="recensioniAccordion">
+                    <% recensioni.forEach((recensione, index) => { %>
+                      <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading-recensione-<%= recensione.id %>">
+                          <button class="accordion-button <%= index > 0 ? 'collapsed' : '' %>" type="button" data-bs-toggle="collapse" 
+                            data-bs-target="#collapse-recensione-<%= recensione.id %>" 
+                            aria-expanded="<%= index === 0 ? 'true' : 'false' %>" 
+                            aria-controls="collapse-recensione-<%= recensione.id %>">
+                            <div class="d-flex justify-content-between w-100 me-3">
+                              <span><strong><%= recensione.cognome %> <%= recensione.nome %></strong></span>
+                              <span class="text-muted"><%= recensione.dataFormattata %></span>
+                            </div>
+                          </button>
+                        </h2>
+                        <div id="collapse-recensione-<%= recensione.id %>" 
+                          class="accordion-collapse collapse <%= index === 0 ? 'show' : '' %>" 
+                          aria-labelledby="heading-recensione-<%= recensione.id %>" 
+                          data-bs-parent="#recensioniAccordion">
+                          <div class="accordion-body">
+                            <!-- Valutazione con stelle -->
+                            <div class="mb-3">
+                              <% for(let i = 1; i <= 5; i++) { %>
+                                <i class="fas fa-star <%= i <= recensione.valutazione ? 'text-warning' : 'text-muted' %>"></i>
+                              <% } %>
+                            </div>
+                            
+                            <!-- Commento -->
+                            <div class="mb-3">
+                              <label class="form-label fw-bold">Commento:</label>
+                              <div class="border p-3 rounded bg-light"><%= recensione.commento %></div>
+                            </div>
+                            
+                            <!-- Pulsante per eliminare -->
+                            <div class="d-flex justify-content-end mt-3">
+                              <button type="button" class="btn btn-sm btn-outline-danger" 
+                                data-elimina="recensione" data-item-id="<%= recensione.id %>">
+                                <i class="fas fa-trash me-1"></i> Elimina recensione
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    <% }); %>
+                  </div>
+                <% } else { %>
+                  <div class="text-center py-5">
+                    <i class="fas fa-star text-muted mb-3" style="font-size: 3rem;"></i>
+                    <p class="text-muted mb-0">Nessuna recensione trovata</p>
+                  </div>
+                <% } %>
               </div>
             </div>
           </div>
@@ -225,52 +231,62 @@
                 <h4 class="py-1 mb-0">Richieste di contatto</h4>
               </header>
               <div class="card-body">
-                <div class="table-responsive">
-                  <table class="table table-hover align-middle">
-                    <thead>
-                      <tr>
-                        <th scope="col" class="text-center">Nome</th>
-                        <th scope="col" class="text-center">Email</th>
-                        <th scope="col" class="text-center">Data</th>
-                        <th scope="col" class="text-center">Azioni</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <% if (typeof richieste !== 'undefined' && richieste.length > 0) { %>
-                        <% richieste.forEach(richiesta => { %>
-                          <tr>
-                            <td class="text-center"><%= richiesta.nome %></td>
-                            <td class="text-center"><%= richiesta.email %></td>
-                            <td class="text-center"><%= richiesta.dataFormattata %></td>
-                            <td class="text-center">
-                              <div class="d-flex justify-content-center">
-                                <button type="button" class="btn btn-sm btn-outline-primary me-2 btn-dettagli-richiesta"
-                                        data-richiesta-id="<%= richiesta.id %>"
-                                        data-richiesta-nome="<%= richiesta.nome %>"
-                                        data-richiesta-email="<%= richiesta.email %>"
-                                        data-richiesta-messaggio="<%= richiesta.messaggio %>"
-                                        data-richiesta-data="<%= richiesta.dataFormattata %>">
-                                  <i class="fas fa-eye me-1"></i> Dettagli
-                                </button>
-                                <button type="button" class="btn btn-sm btn-outline-danger"
-                                        data-elimina="richiesta" data-item-id="<%= richiesta.id %>">
-                                  <i class="fas fa-trash me-1"></i> Elimina
-                                </button>
+                <% if (typeof richieste !== 'undefined' && richieste.length > 0) { %>
+                  <div class="accordion" id="richiesteAccordion">
+                    <% richieste.forEach((richiesta, index) => { %>
+                      <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading-richiesta-<%= richiesta.id %>">
+                          <button class="accordion-button <%= index > 0 ? 'collapsed' : '' %>" type="button" data-bs-toggle="collapse" 
+                            data-bs-target="#collapse-richiesta-<%= richiesta.id %>" 
+                            aria-expanded="<%= index === 0 ? 'true' : 'false' %>" 
+                            aria-controls="collapse-richiesta-<%= richiesta.id %>">
+                            <div class="d-flex justify-content-between w-100 me-3">
+                              <span><strong><%= richiesta.nome %></strong> - <%= richiesta.email %></span>
+                              <span class="text-muted"><%= richiesta.dataFormattata %></span>
+                            </div>
+                          </button>
+                        </h2>
+                        <div id="collapse-richiesta-<%= richiesta.id %>" 
+                          class="accordion-collapse collapse <%= index === 0 ? 'show' : '' %>" 
+                          aria-labelledby="heading-richiesta-<%= richiesta.id %>" 
+                          data-bs-parent="#richiesteAccordion">
+                          <div class="accordion-body">
+                            <!-- Messaggio -->
+                            <div class="mb-3">
+                              <label class="form-label fw-bold">Messaggio:</label>
+                              <div class="border p-3 rounded bg-light"><%= richiesta.messaggio %></div>
+                            </div>
+                            
+                            <!-- Informazioni aggiuntive -->
+                            <div class="row mb-3">
+                              <div class="col-md-6">
+                                <label class="form-label fw-bold">Email:</label>
+                                <p><a href="mailto:<%= richiesta.email %>"><%= richiesta.email %></a></p>
                               </div>
-                            </td>
-                          </tr>
-                        <% }) %>
-                      <% } else { %>
-                        <tr>
-                          <td colspan="4" class="text-center py-4">
-                            <i class="fas fa-envelope text-muted mb-3" style="font-size: 3rem;"></i>
-                            <p class="text-muted mb-0">Nessuna richiesta di contatto trovata</p>
-                          </td>
-                        </tr>
-                      <% } %>
-                    </tbody>
-                  </table>
-                </div>
+                              <div class="col-md-6">
+                                <label class="form-label fw-bold">Data:</label>
+                                <p><%= richiesta.dataFormattata %></p>
+                              </div>
+                            </div>
+                            
+                            <!-- Pulsante per eliminare -->
+                            <div class="d-flex justify-content-end mt-3">
+                              <button type="button" class="btn btn-sm btn-outline-danger"
+                                data-elimina="richiesta" data-item-id="<%= richiesta.id %>">
+                                <i class="fas fa-trash me-1"></i> Elimina richiesta
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    <% }); %>
+                  </div>
+                <% } else { %>
+                  <div class="text-center py-5">
+                    <i class="fas fa-envelope text-muted mb-3" style="font-size: 3rem;"></i>
+                    <p class="text-muted mb-0">Nessuna richiesta di contatto trovata</p>
+                  </div>
+                <% } %>
               </div>
             </div>
           </div>
@@ -353,6 +369,12 @@
         <div class="mb-3">
           <label class="form-label">Commento:</label>
           <div class="border p-3 rounded bg-light" id="recensione-commento"></div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Valutazione:</label>
+          <div id="recensione-valutazione" class="fs-5">
+            <!-- Le stelle verranno inserite dal javascript -->
+          </div>
         </div>
       </div>
       <div class="modal-footer">

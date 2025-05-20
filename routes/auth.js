@@ -82,6 +82,9 @@ router.post('/login', [
 // ==================== LOGOUT ====================
 
 router.get('/logout', (req, res) => {
+    if (!req.isAuthenticated()) {
+        return res.redirect('/auth/login');
+    }
     req.logout((err) => {
         if (err) {
             console.error('Errore durante il logout:', err);

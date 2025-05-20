@@ -130,6 +130,12 @@ router.get('/misurazioni/elimina/:id', async (req, res) => {
     try {
         const misurazioneId = req.params.id;
         
+        const misurazione = await misurazioniDAO.getMisurazioneById(misurazioneId);
+        if (!misurazione || misurazione.utente_id !== req.user.id) {
+            req.session.error = 'Misurazione non trovata o non autorizzata';
+            return res.redirect('/user/dashboard#misurazioni');
+        }
+        
         await misurazioniDAO.deleteMisurazione(misurazioneId);
         
         req.session.success = 'Misurazione eliminata con successo.';
@@ -144,14 +150,21 @@ router.get('/misurazioni/elimina/:id', async (req, res) => {
 // Aggiungi recensione
 router.post('/recensioni/nuova', async (req, res) => {
   try {
-    const { commento } = req.body;
+    const { commento, valutazione } = req.body;
     
     if (!commento || commento.trim() === '') {
       req.session.error = 'Il testo della recensione non può essere vuoto.';
       return res.redirect('/user/dashboard#recensioni');
     }
+    
+    // Validazione della valutazione
+    const voto = parseInt(valutazione) || 3;
+    if (voto < 1 || voto > 5) {
+      req.session.error = 'La valutazione deve essere un numero da 1 a 5.';
+      return res.redirect('/user/dashboard#recensioni');
+    }
 
-    await recensioniDAO.insertRecensione(req.user.id, commento.trim());
+    await recensioniDAO.insertRecensione(req.user.id, commento.trim(), voto);
     
     req.session.success = 'Recensione pubblicata con successo.';
     res.redirect('/user/dashboard#recensioni');
@@ -166,6 +179,12 @@ router.post('/recensioni/nuova', async (req, res) => {
 router.post('/recensioni/cancella', async (req, res) => {
   try {
     const { recensioneId } = req.body;
+    
+    const recensione = await recensioniDAO.getRecensioneById(recensioneId);
+    if (!recensione || recensione.utente_id !== req.user.id) {
+        req.session.error = 'Recensione non trovata o non autorizzata';
+        return res.redirect('/user/dashboard#recensioni');
+    }
     
     await recensioniDAO.deleteRecensione(recensioneId);
     

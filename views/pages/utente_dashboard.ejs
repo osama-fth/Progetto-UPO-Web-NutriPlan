@@ -246,6 +246,11 @@
                 <% if (typeof recensione !== 'undefined' && recensione) { %>
                   <!-- Se l'utente ha già una recensione, mostrarla -->
                   <div class="mb-3">
+                    <div class="mb-2">
+                      <% for(let i = 1; i <= 5; i++) { %>
+                        <i class="fas fa-star <%= i <= recensione.valutazione ? 'text-warning' : 'text-muted' %>"></i>
+                      <% } %>
+                    </div>
                     <label class="form-label">Il tuo commento:</label>
                     <div class="border p-3 rounded bg-light"><%= recensione.commento %></div>
                   </div>
@@ -261,6 +266,31 @@
                 <% } else { %>
                   <!-- Se non c'è ancora una recensione, mostra il form per crearne una -->
                   <form id="recensioneForm" action="/user/recensioni/nuova" method="POST">
+                    <div class="mb-3">
+                      <label for="valutazione" class="form-label">La tua valutazione</label>
+                      <div class="rating-input mb-2">
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="valutazione" id="rating1" value="1">
+                          <label class="form-check-label" for="rating1">1 <i class="far fa-star"></i></label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="valutazione" id="rating2" value="2">
+                          <label class="form-check-label" for="rating2">2 <i class="far fa-star"></i></label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="valutazione" id="rating3" value="3" checked>
+                          <label class="form-check-label" for="rating3">3 <i class="far fa-star"></i></label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="valutazione" id="rating4" value="4">
+                          <label class="form-check-label" for="rating4">4 <i class="far fa-star"></i></label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="valutazione" id="rating5" value="5">
+                          <label class="form-check-label" for="rating5">5 <i class="far fa-star"></i></label>
+                        </div>
+                      </div>
+                    </div>
                     <div class="mb-3">
                       <label for="commento" class="form-label">Il tuo commento</label>
                       <textarea class="form-control" id="commento" name="commento" rows="5" style="resize: none;" 

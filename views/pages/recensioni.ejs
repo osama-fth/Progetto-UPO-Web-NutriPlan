@@ -9,22 +9,44 @@
   <main>
     <section class="recensioni py-5">
       <div class="container">
-        <h2 class="text-center mb-5">Cosa Dicono i Nostri Clienti</h2>
+        <h2 class="text-center">Cosa Dicono i Nostri Clienti</h2>
+        
+        <!-- Form di ricerca -->
+        <div class="row justify-content-center mb-5">
+          <div class="col-md-6">
+            <form action="/recensioni/search" method="GET" class="d-flex">
+              <input type="text" name="q" class="form-control" placeholder="Cerca recensioni..." value="<%= locals.query || '' %>">
+              <button type="submit" class="btn btn-primary ms-2">Cerca</button>
+            </form>
+          </div>
+        </div>
         
         <% if (locals.recensioni && recensioni.length > 0) { %>
           <div class="row">
             <% recensioni.forEach(function(recensione) { %>
               <div class="col-md-6 mb-4">
                 <div class="recensioni-card h-100">
+                  <!-- Aggiunta visualizzazione stelle -->
+                  <div class="mb-2">
+                    <% for(let i = 1; i <= 5; i++) { %>
+                      <i class="fas fa-star <%= i <= recensione.valutazione ? 'text-warning' : 'text-muted' %>"></i>
+                    <% } %>
+                  </div>
                   <p class="recensioni-text">"<%= recensione.commento %>"</p>
-                  <p class="client-name"><%= recensione.nome %></p>
+                  <p class="client-name"><strong><%= recensione.nome %></strong> %></p>
                 </div>
               </div>
             <% }); %>
           </div>
         <% } else { %>
           <div class="text-center py-5">
-            <p class="text-muted">Nessuna recensione disponibile al momento.</p>
+            <i class="fas fa-comment-slash text-muted mb-3" style="font-size: 3rem;"></i>
+            <% if(locals.query) { %>
+              <p class="text-muted">Nessuna recensione trovata per "<%= query %>".</p>
+              <a href="/recensioni" class="btn btn-outline-primary mt-3">Mostra tutte le recensioni</a>
+            <% } else { %>
+              <p class="text-muted">Nessuna recensione disponibile al momento.</p>
+            <% } %>
           </div>
         <% } %>
       </div>
