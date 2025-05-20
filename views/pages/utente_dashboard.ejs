@@ -280,39 +280,79 @@
 
       <!-- Sezione Impostazioni -->
       <div id="sezione-impostazioni" class="sezione-contenuto d-none">
-        <section class="row mt-4">
-          <div class="col-lg-10 mx-auto">
-            <div class="card mx-2">
-              <header class="card-header bg-white">
-                <h4 class="py-1 mb-0">Le tue informazioni</h4>
-              </header>
+        <section class="row mt-4 justify-content-center">
+          <div class="col-md-10 mb-4">
+            <div class="card shadow-sm">
+              <div class="card-header bg-white">
+                <h5 class="mb-0"><i class="fas fa-user-edit me-2"></i> Modifica dati personali</h5>
+              </div>
               <div class="card-body">
-                <div class="row mb-3">
-                  <div class="col-md-6">
-                    <label class="form-label text-muted">Nome</label>
-                    <p class="fs-5"><%= user.nome %></p>
+                <form id="updateUserForm" action="/user/account/aggiorna-dati" method="POST">
+                  <div class="mb-3">
+                    <label for="nome" class="form-label">Nome</label>
+                    <input type="text" class="form-control" id="nome" name="nome" value="<%= user.nome %>" required>
                   </div>
-                  <div class="col-md-6">
-                    <label class="form-label text-muted">Cognome</label>
-                    <p class="fs-5"><%= user.cognome %></p>
+                  <div class="mb-3">
+                    <label for="cognome" class="form-label">Cognome</label>
+                    <input type="text" class="form-control" id="cognome" name="cognome" value="<%= user.cognome %>" required>
                   </div>
-                </div>
-                <div class="row mb-3">
-                  <div class="col-md-6">
-                    <label class="form-label text-muted">Data di nascita</label>
-                    <p class="fs-5"><%= user.dataFormattata %></p>
+                  <div class="mb-3">
+                    <label for="data_di_nascita" class="form-label">Data di nascita</label>
+                    <input type="date" class="form-control" id="data_di_nascita" name="data_di_nascita" 
+                      value="<%= user.data_di_nascita %>" required>
                   </div>
-                  <div class="col-md-6">
-                    <label class="form-label text-muted">Email</label>
+                  <div class="text-center">
+                    <button type="submit" class="btn btn-primary px-4">Aggiorna dati</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-10 mb-4">
+            <div class="card shadow-sm">
+              <div class="card-header bg-white">
+                <h5 class="mb-0"><i class="fas fa-key me-2"></i> Cambia password</h5>
+              </div>
+              <div class="card-body">
+                <form id="changePasswordForm" action="/user/account/cambia-password" method="POST">
+                  <div class="mb-3">
+                    <label for="password_attuale" class="form-label">Password attuale</label>
+                    <input type="password" class="form-control" id="password_attuale" name="password_attuale" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="nuova_password" class="form-label">Nuova password</label>
+                    <input type="password" class="form-control" id="nuova_password" name="nuova_password" required>
+                    <div class="form-text">La password deve essere lunga almeno 8 caratteri.</div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="conferma_password" class="form-label">Conferma nuova password</label>
+                    <input type="password" class="form-control" id="conferma_password" name="conferma_password" required>
+                  </div>
+                  <div class="text-center">
+                    <button type="submit" class="btn btn-primary px-4">Cambia password</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-10 mb-4">
+            <div class="card shadow-sm">
+              <div class="card-header bg-white">
+                <h5 class="mb-0"><i class="fas fa-shield-alt me-2"></i> Sicurezza account</h5>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6 mb-3 mb-md-0">
+                    <label class="form-label text-muted">Email (non modificabile)</label>
                     <p class="fs-5"><%= user.email %></p>
                   </div>
-                </div>
-                <hr class="my-4">
-                <div class="text-center">
-                  <p class="text-muted mb-2">Vuoi eliminare il tuo account?</p>
-                  <button type="button" id="btnEliminaAccount" class="btn btn-outline-danger" data-elimina="account" data-item-id="<%= user.id %>">
-                    <i class="fas fa-user-times me-1"></i> Elimina account
-                  </button>
+                  <div class="col-md-6 text-md-end align-self-end">
+                    <button type="button" id="btnEliminaAccount" class="btn btn-outline-danger" data-elimina="account" data-item-id="<%= user.id %>">
+                      <i class="fas fa-user-times me-1"></i> Elimina account
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

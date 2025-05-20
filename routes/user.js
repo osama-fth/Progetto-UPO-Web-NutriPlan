@@ -2,6 +2,8 @@
 const express = require("express");
 const router = express.Router();
 const dayjs = require("dayjs");
+const bcrypt = require("bcrypt");
+const { check, validationResult } = require("express-validator"); // Modificato per usare check
 const misurazioniDAO = require("../models/daos/misurazioniDAO");
 const recensioniDAO = require("../models/daos/recensioniDAO");
 const pianiAlimentariDAO = require("../models/daos/pianiAlimentariDAO");
@@ -197,6 +199,93 @@ router.get('/account/elimina', async (req, res) => {
         req.session.error = 'Impossibile eliminare l\'elemento selezionato.';
         res.redirect('/user/dashboard');
     }
+});
+
+// Rotta per aggiornare i dati utente con validazione integrata
+router.post('/account/aggiorna-dati', [
+  check('nome')
+    .notEmpty().withMessage('Il nome è obbligatorio')
+    .matches(/^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/).withMessage('Il nome può contenere solo lettere'),
+  
+  check('cognome')
+    .notEmpty().withMessage('Il cognome è obbligatorio')
+    .matches(/^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/).withMessage('Il cognome può contenere solo lettere'),
+  
+  check('data_di_nascita')
+    .notEmpty().withMessage('La data di nascita è obbligatoria')
+    .isDate().withMessage('Formato data non valido')
+], async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      req.session.error = errors.array()[0].msg;
+      return res.redirect('/user/dashboard#impostazioni');
+    }
+    
+    const { nome, cognome, data_di_nascita } = req.body;
+    const userId = req.user.id;
+    
+    await utentiDAO.updateUserData(userId, nome, cognome, data_di_nascita);
+    
+    req.session.success = 'Dati aggiornati con successo';
+    res.redirect('/user/dashboard#impostazioni');
+  } catch (error) {
+    console.error('Errore durante l\'aggiornamento dei dati:', error);
+    req.session.error = 'Si è verificato un errore durante l\'aggiornamento dei dati';
+    res.redirect('/user/dashboard#impostazioni');
+  }
+});
+
+// Rotta per cambiare la password con validazione integrata
+router.post('/account/cambia-password', [
+  check('password_attuale')
+    .notEmpty().withMessage('La password attuale è obbligatoria'),
+  
+  check('nuova_password')
+    .notEmpty().withMessage('La nuova password è obbligatoria')
+    .isLength({ min: 8 }).withMessage('La password deve essere lunga almeno 8 caratteri'),
+    
+  check('conferma_password')
+    .notEmpty().withMessage('La conferma password è obbligatoria')
+    .custom((value, { req }) => {
+      if (value !== req.body.nuova_password) {
+        throw new Error('Le password non coincidono');
+      }
+      return true;
+    })
+], async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      req.session.error = errors.array()[0].msg;
+      return res.redirect('/user/dashboard#impostazioni');
+    }
+    
+    const { password_attuale, nuova_password } = req.body;
+    const userId = req.user.id;
+    
+    // Verifica password attuale
+    const user = await utentiDAO.getUserById(userId);
+    const isMatch = await bcrypt.compare(password_attuale, user.password);
+    
+    if (!isMatch) {
+      req.session.error = 'La password attuale non è corretta';
+      return res.redirect('/user/dashboard#impostazioni');
+    }
+    
+    // Hash della nuova password
+    const hashedPassword = await bcrypt.hash(nuova_password, 10);
+    
+    // Aggiornamento nel DB
+    await utentiDAO.updatePassword(userId, hashedPassword);
+    
+    req.session.success = 'Password aggiornata con successo';
+    res.redirect('/user/dashboard#impostazioni');
+  } catch (error) {
+    console.error('Errore durante il cambio password:', error);
+    req.session.error = 'Si è verificato un errore durante il cambio password';
+    res.redirect('/user/dashboard#impostazioni');
+  }
 });
 
 // Route per ottenere un piano alimentare specifico dell'utente

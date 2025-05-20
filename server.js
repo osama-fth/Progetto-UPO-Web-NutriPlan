@@ -25,7 +25,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(session({
     secret: "chiave-super-segreta",
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: false
 }))
 
 app.set("view engine", "ejs")

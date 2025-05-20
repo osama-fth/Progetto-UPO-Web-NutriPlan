@@ -227,10 +227,11 @@ document.addEventListener('DOMContentLoaded', function() {
   // ===== Gestione impostazioni utente =====
   const impostazioniManager = {
     init() {
-      // Rimosso il metodo setupDeleteAccountButton che non è più necessario
+      // La validazione ora viene gestita completamente dal server con express-validator
+      // e tramite gli attributi "required" nei campi del form
     }
   };
-  
+
   // Inizializza tutti i moduli
   navigationManager.init();
   misurazioniManager.init();
