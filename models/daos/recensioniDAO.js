@@ -43,7 +43,7 @@ class RecensioniDAO {
                  ORDER BY r.data_creazione DESC`;
 
     return new Promise((resolve, reject) => {
-      this.db.all(sql, [parola], (err, rows) => {
+      this.db.all(sql, [`%${parola}%`], (err, rows) => {
         if (err) reject(err);
         else resolve(rows);
       });

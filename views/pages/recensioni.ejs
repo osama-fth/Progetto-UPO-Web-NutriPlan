@@ -25,15 +25,45 @@
           <div class="row">
             <% recensioni.forEach(function(recensione) { %>
               <div class="col-md-6 mb-4">
-                <div class="recensioni-card h-100">
-                  <!-- Aggiunta visualizzazione stelle -->
-                  <div class="mb-2">
-                    <% for(let i = 1; i <= 5; i++) { %>
-                      <i class="fas fa-star <%= i <= recensione.valutazione ? 'text-warning' : 'text-muted' %>"></i>
+                <div class="recensioni-card h-100 position-relative">
+                  <!-- Quote icon -->
+                  <div class="recensioni-quote">
+                    <i class="fas fa-quote-right fa-2x"></i>
+                  </div>
+                  
+                  <!-- Header con valutazione -->
+                  <div class="recensioni-header">
+                    <!-- Avatar -->
+                    <div class="recensioni-avatar">
+                      <i class="fas fa-user"></i>
+                    </div>
+                    
+                    <div class="recensioni-info">
+                      <h5 class="mb-1"><%= recensione.nome %></h5>
+                      <!-- Stelle -->
+                      <div>
+                        <% for(let i = 1; i <= 5; i++) { %>
+                          <i class="fas fa-star <%= i <= recensione.valutazione ? 'text-warning' : 'text-secondary opacity-25' %>"></i>
+                        <% } %>
+                      </div>
+                    </div>
+                    
+                    <!-- Data (se disponibile) -->
+                    <% if (recensione.data) { %>
+                      <div class="recensioni-date ms-auto">
+                        <i class="far fa-calendar-alt me-1"></i>
+                        <%= new Date(recensione.data).toLocaleDateString('it-IT') %>
+                      </div>
                     <% } %>
                   </div>
-                  <p class="recensioni-text">"<%= recensione.commento %>"</p>
-                  <p class="client-name"><strong><%= recensione.nome %></strong> %></p>
+                  
+                  <!-- Contenuto recensione -->
+                  <div class="recensioni-content">
+                    <p class="recensioni-text">"<%= recensione.commento %>"</p>
+                  </div>
+                  
+                  <!-- Decorazione in basso -->
+                  <div class="recensioni-gradient"></div>
                 </div>
               </div>
             <% }); %>
