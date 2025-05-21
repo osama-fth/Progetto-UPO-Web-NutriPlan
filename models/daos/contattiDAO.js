@@ -12,11 +12,8 @@ class ContattiDAO {
     
     return new Promise((resolve, reject) => {
       this.db.run(sql, [nome, email, messaggio], function(err) {
-        if (err) {
-          reject(err);
-          return;
-        }
-        resolve(this.lastID);
+        if (err) reject(err);
+        else resolve(this.lastID);
       });
     });
   }
@@ -26,11 +23,8 @@ class ContattiDAO {
     
     return new Promise((resolve, reject) => {
       this.db.all(sql, [], (err, rows) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-        resolve(rows);
+        if (err) reject(err);
+        else resolve(rows);
       });
     });
   }
@@ -40,11 +34,8 @@ class ContattiDAO {
     
     return new Promise((resolve, reject) => {
       this.db.get(sql, [id], (err, row) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-        resolve(row);
+        if (err) reject(err);
+        else resolve(row);
       });
     });
   }
@@ -54,11 +45,8 @@ class ContattiDAO {
     
     return new Promise((resolve, reject) => {
       this.db.run(sql, [id], function(err) {
-        if (err) {
-          reject(err);
-          return;
-        }
-        resolve(this.changes);
+        if (err) reject(err);
+        else resolve(this.changes);
       });
     });
   }

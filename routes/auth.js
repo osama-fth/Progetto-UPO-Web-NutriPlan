@@ -6,8 +6,6 @@ const { check, validationResult } = require('express-validator')
 const bcrypt = require("bcrypt")
 const utentiDAO = require("../models/daos/utentiDAO")
 
-// ==================== LOGIN ====================
-
 // GET pagina login
 router.get("/login", (req, res) => {
     if (req.isAuthenticated()) {
@@ -30,15 +28,14 @@ router.get("/login", (req, res) => {
     });
 });
 
-// POST login con middleware di validazione
+// POST login
 router.post('/login', [
-    check('email').notEmpty().withMessage('Il campo email è obbligatorio').isEmail().withMessage('Inserisci un indirizzo email valido'),
-    check('password').notEmpty().withMessage('Il campo password è obbligatorio')
-], (req, res, next) => {
-    
+    check('email').notEmpty().isEmail(),
+    check('password').notEmpty()
+    ], (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        req.session.error = errors.array()[0].msg;
+        req.session.error = 'Completare tutti i campi correttamente.';
         return res.redirect('/auth/login');
     }
 
@@ -51,13 +48,9 @@ router.post('/login', [
         
         if (!utente) {
             if (info && info.message) {
-                if (info.message == 'Utente non trovato.') {
-                    req.session.error = 'Nessun utente trovato con questa email.';
-                } else if (info.message == 'Password errata.') {
-                    req.session.error = 'Password non corretta. Riprova.';
-                } else {
-                    req.session.error = info.message;
-                }
+                if (info.message == 'Utente non trovato.' || 'Password errata.') {
+                    req.session.error = 'Email e/o password errata';
+                } 
             } else {
                 req.session.error = 'Si è verificato un errore durante l\'accesso.';
             }
@@ -79,8 +72,7 @@ router.post('/login', [
     })(req, res, next);
 });
 
-// ==================== LOGOUT ====================
-
+// LOGOUT
 router.get('/logout', (req, res) => {
     if (!req.isAuthenticated()) {
         return res.redirect('/auth/login');
@@ -96,8 +88,7 @@ router.get('/logout', (req, res) => {
     });
 });
 
-// ==================== REGISTER ====================
-
+// GET pagina registrazione
 router.get("/register", (req, res) => {
     if (req.isAuthenticated()) {
         if (req.user.ruolo === 'admin') {
@@ -121,6 +112,7 @@ router.get("/register", (req, res) => {
     });
 });
 
+// POST d ina registrazione
 router.post("/register", [
     check('nome').notEmpty().withMessage("Il nome è obbligatorio").matches(/^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/).withMessage('Il nome deve contenere solo lettere'),
     check('cognome').notEmpty().withMessage("Il cognome è obbligatorio").matches(/^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/).withMessage('Il cognome deve contenere solo lettere'),
@@ -141,16 +133,14 @@ router.post("/register", [
     }
 
     try {
-        const cryptoPwd = await bcrypt.hash(req.body.password, 10);
-        await utentiDAO.newUser(
-            req.body, 
-            cryptoPwd
-        );
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        await utentiDAO.newUser(req.body, hashedPassword);
+
         req.session.success = 'Registrazione completata con successo.';
         return res.redirect("/auth/login");
     } catch (error) {
         console.log("Errore durante la registrazione: ", error);
-        req.session.error = "Errore durante la registrazione. Email già in uso.";
+        req.session.error = "Errore durante la registrazione.";
         return res.redirect("/auth/register");
     }
 });

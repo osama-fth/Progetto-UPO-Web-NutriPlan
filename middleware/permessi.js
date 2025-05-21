@@ -1,7 +1,7 @@
 'use strict';
 
 // Middleware per verificare se un utente è autenticato
-exports.isAuthenticated = (req, res, next) => {
+exports.isLoggedIn = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
   }
@@ -15,11 +15,11 @@ exports.isAdmin = (req, res, next) => {
     req.session.error = 'Effettuare il login per accedere a questa pagina.';
     return res.redirect('/auth/login');
   }
-  
+
   if (req.isAuthenticated() && req.user.ruolo === 'admin') {
     return next();
   }
-  
+
   req.session.error = 'Non hai i permessi necessari per accedere a questa pagina.';
   res.redirect('/index/error');
 };
@@ -30,11 +30,11 @@ exports.isPaziente = (req, res, next) => {
     req.session.error = 'Effettuare il login per accedere a questa pagina.';
     return res.redirect('/auth/login');
   }
-  
+
   if (req.isAuthenticated() && req.user.ruolo === 'paziente') {
     return next();
   }
-  
+
   req.session.error = 'Non hai i permessi necessari per accedere a questa pagina.';
   res.redirect('/index/error');
 };

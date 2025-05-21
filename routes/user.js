@@ -1,153 +1,147 @@
 'use strict'
 const express = require("express");
 const router = express.Router();
+const { check, validationResult } = require("express-validator");
 const dayjs = require("dayjs");
 const bcrypt = require("bcrypt");
-const { check, validationResult } = require("express-validator");
-const PDFDocument = require('pdfkit');
 const misurazioniDAO = require("../models/daos/misurazioniDAO");
 const recensioniDAO = require("../models/daos/recensioniDAO");
 const pianiAlimentariDAO = require("../models/daos/pianiAlimentariDAO");
 const utentiDAO = require("../models/daos/utentiDAO");
 const middleware = require("../middleware/permessi");
-const generaPianoPDF  = require("../models/pdfGenerator");
+const PDFDocument = require('pdfkit');
+const PianoPDF  = require("../models/pdfGenerator");
 
 router.use(middleware.isPaziente);
 
-// Dashboard principale dell'utente
-router.get('/dashboard', async (req, res) => {
+router.get('/dashboard', async (req, res) => {  
+  let misurazioniFormattate = [];
+  let recensione = null;
+  let pianiAlimentariFormattati = [];
     
-    let misurazioniFormattate = [];
-    let recensione = null;
-    let pianiAlimentariFormattati = [];
-    
-    // Recupera le misurazioni dell'utente
-    try {
-        const misurazioni = await misurazioniDAO.getMisurazioniByUserId(req.user.id);
+  try {
+    const misurazioni = await misurazioniDAO.getMisurazioniByUserId(req.user.id);
         
-        misurazioniFormattate = misurazioni.map(m => {
-            m.dataFormattata = dayjs(m.data).format('DD/MM/YYYY');
-            m.data_iso = dayjs(m.data).format('YYYY-MM-DD');
-            return m;
-        });
-    } catch (err) {
-        console.error("Errore nel recupero delle misurazioni:", err);
-        req.session.error = "Impossibile caricare le misurazioni"; // Aggiunto messaggio di errore
-    }
+    misurazioniFormattate = misurazioni.map(m => {
+      m.dataFormattata = dayjs(m.data).format('DD/MM/YYYY');
+      m.data_iso = dayjs(m.data).format('YYYY-MM-DD');
+      return m;
+    });
+  } catch (err) {
+    console.error("Errore nel recupero delle misurazioni:", err);
+    req.session.error = "Impossibile caricare le misurazioni";
+  }
     
-    // Recupera la recensione dell'utente
-    try {
-        recensione = await recensioniDAO.getRecensioneByUserId(req.user.id);
-        if (recensione) {
-            recensione.dataFormattata = dayjs(recensione.data_creazione).format('DD/MM/YYYY');
-        }
-    } catch (err) {
-        console.error("Errore nel recupero delle recensioni:", err);
-        req.session.error = "Impossibile caricare la recensione"; // Aggiunto messaggio di errore
-    }
+  try {
+    recensione = await recensioniDAO.getRecensioneByUserId(req.user.id);
 
-    // Recupera i piani alimentari dell'utente
-    try {
-        const pianiAlimentari = await pianiAlimentariDAO.getPianiAlimentariByUserId(req.user.id);
-        pianiAlimentariFormattati = pianiAlimentari.map(p => {
-            p.dataFormattata = dayjs(p.data_creazione).format('DD/MM/YYYY');
-            return p;
-        });
-    } catch (err) {
-        console.error("Errore nel recupero dei piani alimentari:", err);
-        req.session.error = "Impossibile caricare i piani alimentari"; // Aggiunto messaggio di errore
-    }
+    if (recensione && recensione.data_creazione) {
+    recensione.dataFormattata = dayjs(recensione.data_creazione).format('DD/MM/YYYY');
+  }
+  } catch (err) {
+    console.error("Errore nel recupero delle recensioni:", err);
+    req.session.error = "Impossibile caricare la recensione";
+  }
 
-    // Recupera messaggi dalla sessione
-    const success = req.session.success;
-    const error = req.session.error;
-    delete req.session.success;
-    delete req.session.error;
+  try {
+    const pianiAlimentari = await pianiAlimentariDAO.getPianiAlimentariByUserId(req.user.id);
+    pianiAlimentariFormattati = pianiAlimentari.map(p => {
+      p.dataFormattata = dayjs(p.data_creazione).format('DD/MM/YYYY');
+      return p;
+    });
+  } catch (err) {
+    console.error("Errore nel recupero dei piani alimentari:", err);
+    req.session.error = "Impossibile caricare i piani alimentari";
+  }
 
-    try {
-        // Renderizza la pagina con tutti i dati raccolti
-        res.render('pages/utente_dashboard', {
-            title: 'NutriPlan - Dashboard',
-            user: req.user,
-            isAuth: req.isAuthenticated(),
-            misurazioni: misurazioniFormattate,
-            recensione: recensione,
-            pianiAlimentari: pianiAlimentariFormattati,
-            success: success,
-            error: error
-        });
-    } catch (err) {
-        console.log("Errore nel rendering della pagina:", err);
-        req.session.error = "Errore durante la visualizzazione della dashboard";
-        res.redirect("/error");
-    }
+  const success = req.session.success;
+  const error = req.session.error;
+  delete req.session.success;
+  delete req.session.error;
+
+  try {
+    res.render('pages/utente_dashboard', {
+      title: 'NutriPlan - Dashboard',
+      user: req.user,
+      isAuth: req.isAuthenticated(),
+      misurazioni: misurazioniFormattate,
+      recensione: recensione,
+      pianiAlimentari: pianiAlimentariFormattati,
+      success: success,
+      error: error
+    });
+  } catch (err) {
+    console.log("Errore nel rendering della pagina:", err);
+    req.session.error = "Errore durante la visualizzazione della dashboard";
+    res.redirect("/error");
+  }
 });
 
-// POST nuova misurazione
+// Nuova misurazione
 router.post('/misurazioni/nuova', async (req, res) => {
-    try {
-        const { peso, data } = req.body;
-        
-        if (!peso || !data || isNaN(parseFloat(peso)) || parseFloat(peso) <= 0) {
-            req.session.error = 'I dati inseriti non sono validi.';
-            return res.redirect('/user/dashboard#misurazioni');
-        }
-        
-        await misurazioniDAO.insertMisurazione(req.user.id, parseFloat(peso), data);
-        
-        req.session.success = 'Misurazione aggiunta con successo.';
-        res.redirect('/user/dashboard#misurazioni');
-    } catch (err) {
-        console.error("Errore nell'inserimento della misurazione:", err);
-        req.session.error = 'Impossibile modificare la misurazione.';
-        res.redirect('/user/dashboard#misurazioni');
+  try {
+    const { peso, data } = req.body;
+    
+    if (!peso || !data || isNaN(parseFloat(peso)) || parseFloat(peso) <= 0) {
+      req.session.error = 'I dati inseriti non sono validi.';
+      return res.redirect('/user/dashboard#misurazioni');
     }
+    
+    await misurazioniDAO.insertMisurazione(req.user.id, parseFloat(peso), data);
+    
+    req.session.success = 'Misurazione aggiunta con successo.';
+    res.redirect('/user/dashboard#misurazioni');
+  } catch (err) {
+    console.error("Errore nell'inserimento della misurazione:", err);
+    req.session.error = 'Impossibile modificare la misurazione.';
+    res.redirect('/user/dashboard#misurazioni');
+  }
 });
 
-// Modifica una misurazione
+// Modifica misurazione
 router.post('/misurazioni/modifica', async (req, res) => {
-    try {
-        const { misurazioneId, peso, data } = req.body;
-        
-        if (!parseFloat(peso) || !data) {
-            req.session.error = 'I dati inseriti non sono validi.';
-            return res.redirect('/user/dashboard#misurazioni');
-        }
-                
-        await misurazioniDAO.updateMisurazione(misurazioneId, parseFloat(peso), data);
-        
-        req.session.success = 'Misurazione aggiornata con successo.';
-        res.redirect('/user/dashboard#misurazioni');
-    } catch (err) {
-        console.error("Errore durante la modifica della misurazione:", err);
-        req.session.error = 'Si è verificato un errore durante la modifica della misurazione.';
-        res.redirect('/user/dashboard#misurazioni');
+  try {
+    const { misurazioneId, peso, data } = req.body;
+    
+    if (!peso || !data || isNaN(parseFloat(peso)) || parseFloat(peso) <= 0) {
+      req.session.error = 'I dati inseriti non sono validi.';
+      return res.redirect('/user/dashboard#misurazioni');
     }
+            
+    await misurazioniDAO.updateMisurazione(misurazioneId, parseFloat(peso), data);
+    
+    req.session.success = 'Misurazione aggiornata con successo.';
+    res.redirect('/user/dashboard#misurazioni');
+  } catch (err) {
+    console.error("Errore durante la modifica della misurazione:", err);
+    req.session.error = 'Si è verificato un errore durante la modifica della misurazione.';
+    res.redirect('/user/dashboard#misurazioni');
+  }
 });
 
-// Cancella una misurazione
+// Elimina misurazione
 router.get('/misurazioni/elimina/:id', async (req, res) => {
-    try {
-        const misurazioneId = req.params.id;
-        
-        const misurazione = await misurazioniDAO.getMisurazioneById(misurazioneId);
-        if (!misurazione || misurazione.utente_id !== req.user.id) {
-            req.session.error = 'Misurazione non trovata o non autorizzata';
-            return res.redirect('/user/dashboard#misurazioni');
-        }
-        
-        await misurazioniDAO.deleteMisurazione(misurazioneId);
-        
-        req.session.success = 'Misurazione eliminata con successo.';
-        res.redirect('/user/dashboard#misurazioni');
-    } catch (err) {
-        console.error("Errore durante l'eliminazione della misurazione:", err);
-        req.session.error = 'Si è verificato un errore durante l\'eliminazione della misurazione.';
-        res.redirect('/user/dashboard#misurazioni');
+  try {
+    const misurazioneId = req.params.id;
+    
+    const misurazione = await misurazioniDAO.getMisurazioneById(misurazioneId);
+    if (!misurazione || misurazione.utente_id !== req.user.id) {
+      req.session.error = 'Misurazione non trovata o non autorizzata';
+      return res.redirect('/user/dashboard#misurazioni');
     }
+    
+    await misurazioniDAO.deleteMisurazione(misurazioneId);
+    
+    req.session.success = 'Misurazione eliminata con successo.';
+    res.redirect('/user/dashboard#misurazioni');
+  } catch (err) {
+    console.error("Errore durante l'eliminazione della misurazione:", err);
+    req.session.error = 'Si è verificato un errore durante l\'eliminazione della misurazione.';
+    res.redirect('/user/dashboard#misurazioni');
+  }
 });
 
-// Aggiungi recensione
+// Nuova recensione
 router.post('/recensioni/nuova', async (req, res) => {
   try {
     const { commento, valutazione } = req.body;
@@ -157,7 +151,6 @@ router.post('/recensioni/nuova', async (req, res) => {
       return res.redirect('/user/dashboard#recensioni');
     }
     
-    // Validazione della valutazione
     const voto = parseInt(valutazione) || 3;
     if (voto < 1 || voto > 5) {
       req.session.error = 'La valutazione deve essere un numero da 1 a 5.';
@@ -175,15 +168,15 @@ router.post('/recensioni/nuova', async (req, res) => {
   }
 });
 
-// Cancella recensione
+// Elimina recensione
 router.post('/recensioni/cancella', async (req, res) => {
   try {
     const { recensioneId } = req.body;
     
     const recensione = await recensioniDAO.getRecensioneById(recensioneId);
     if (!recensione || recensione.utente_id !== req.user.id) {
-        req.session.error = 'Recensione non trovata o non autorizzata';
-        return res.redirect('/user/dashboard#recensioni');
+      req.session.error = 'Recensione non trovata o non autorizzata';
+      return res.redirect('/user/dashboard#recensioni');
     }
     
     await recensioniDAO.deleteRecensione(recensioneId);
@@ -197,42 +190,33 @@ router.post('/recensioni/cancella', async (req, res) => {
   }
 });
 
-// Richiesta di eliminazione account
+//Elimina account
 router.get('/account/elimina', async (req, res) => {
-    try {
-        const utenteId = req.user.id;
-        await utentiDAO.deleteAccount(utenteId);
-        
-        req.logout(function(err) {
-            if (err) { 
-                console.error("Errore durante il logout:", err);
-            }
-            
-            // Messaggio nella sessione temporanea
-            req.session.success = 'Account eliminato con successo.';
-            res.redirect('/auth/login');
-        });
-    } catch (error) {
-        console.error("Errore durante l'eliminazione dell'account:", error);
-        req.session.error = 'Impossibile eliminare l\'elemento selezionato.';
-        res.redirect('/user/dashboard');
-    }
+  try {
+    const utenteId = req.user.id;
+    await utentiDAO.deleteAccount(utenteId);
+    
+    req.logout(function(err) {
+      if (err) { 
+        console.error("Errore durante il logout:", err);
+      }
+      
+      req.session.success = 'Account eliminato con successo.';
+      res.redirect('/auth/login');
+    });
+  } catch (error) {
+    console.error("Errore durante l'eliminazione dell'account:", error);
+    req.session.error = 'Impossibile eliminare l\'elemento selezionato.';
+    res.redirect('/user/dashboard');
+  }
 });
 
-// Rotta per aggiornare i dati utente con validazione integrata
+// Modifica dati personali
 router.post('/account/aggiorna-dati', [
-  check('nome')
-    .notEmpty().withMessage('Il nome è obbligatorio')
-    .matches(/^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/).withMessage('Il nome può contenere solo lettere'),
-  
-  check('cognome')
-    .notEmpty().withMessage('Il cognome è obbligatorio')
-    .matches(/^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/).withMessage('Il cognome può contenere solo lettere'),
-  
-  check('data_di_nascita')
-    .notEmpty().withMessage('La data di nascita è obbligatoria')
-    .isDate().withMessage('Formato data non valido')
-], async (req, res) => {
+  check('nome').notEmpty().matches(/^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/).withMessage('Il nome può contenere solo lettere'),
+  check('cognome').notEmpty().withMessage('Il cognome è obbligatorio').matches(/^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/).withMessage('Il cognome può contenere solo lettere'),
+  check('data_di_nascita').notEmpty().withMessage('La data di nascita è obbligatoria').isDate().withMessage('Formato data non valido')
+  ], async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -254,24 +238,16 @@ router.post('/account/aggiorna-dati', [
   }
 });
 
-// Rotta per cambiare la password con validazione integrata
+// Modifica password
 router.post('/account/cambia-password', [
-  check('password_attuale')
-    .notEmpty().withMessage('La password attuale è obbligatoria'),
-  
-  check('nuova_password')
-    .notEmpty().withMessage('La nuova password è obbligatoria')
-    .isLength({ min: 8 }).withMessage('La password deve essere lunga almeno 8 caratteri'),
-    
-  check('conferma_password')
-    .notEmpty().withMessage('La conferma password è obbligatoria')
+  check('password_attuale').notEmpty().withMessage('La password attuale è obbligatoria'),
+  check('nuova_password').notEmpty().withMessage('La nuova password è obbligatoria').isLength({ min: 8 }).withMessage('La password deve essere lunga almeno 8 caratteri'),
+  check('conferma_password').notEmpty().withMessage('La conferma password è obbligatoria')
     .custom((value, { req }) => {
-      if (value !== req.body.nuova_password) {
-        throw new Error('Le password non coincidono');
-      }
+      if (value !== req.body.nuova_password) {throw new Error('Le password non coincidono');}
       return true;
     })
-], async (req, res) => {
+  ], async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -282,7 +258,6 @@ router.post('/account/cambia-password', [
     const { password_attuale, nuova_password } = req.body;
     const userId = req.user.id;
     
-    // Verifica password attuale
     const user = await utentiDAO.getUserById(userId);
     const isMatch = await bcrypt.compare(password_attuale, user.password);
     
@@ -291,10 +266,8 @@ router.post('/account/cambia-password', [
       return res.redirect('/user/dashboard#impostazioni');
     }
     
-    // Hash della nuova password
     const hashedPassword = await bcrypt.hash(nuova_password, 10);
     
-    // Aggiornamento nel DB
     await utentiDAO.updatePassword(userId, hashedPassword);
     
     req.session.success = 'Password aggiornata con successo';
@@ -306,17 +279,16 @@ router.post('/account/cambia-password', [
   }
 });
 
-// Route per ottenere un piano alimentare specifico dell'utente
+// GET piani alimentari
 router.get('/piani-alimentari/:id', async (req, res) => {
   try {
     const pianoId = req.params.id;
-    const userId = req.user.id; // ID dell'utente corrente
+    const userId = req.user.id;
     
-    // Recupera il piano dal database assicurandosi che appartenga all'utente corrente
     const piano = await pianiAlimentariDAO.getPianoAlimentareById(pianoId);
     
     if (!piano || piano.utente_id !== userId) {
-      return res.status(404).json({ error: 'Piano non trovato' });
+      return res.json({ error: 'Piano non trovato' });
     }
     
     res.json({
@@ -329,17 +301,15 @@ router.get('/piani-alimentari/:id', async (req, res) => {
     });
   } catch (error) {
     console.error('Errore nel recupero del piano:', error);
-    res.status(500).json({ error: 'Errore nel server' });
+    res.status(500).json({ error: 'Errore nel caricamento del piano alimentare' });
   }
 });
 
-// Scarica un piano alimentare in formato PDF
 router.get('/piani-alimentari/download/:id', async (req, res) => {
   try {
     const pianoId = req.params.id;
     const userId = req.user.id;
     
-    // Verifica che il piano appartenga all'utente
     const piano = await pianiAlimentariDAO.getPianoAlimentareById(pianoId);
     
     if (!piano || piano.utente_id !== userId) {
@@ -347,24 +317,19 @@ router.get('/piani-alimentari/download/:id', async (req, res) => {
       return res.redirect('/user/dashboard#piani-alimentari');
     }
     
-    // Crea un nuovo documento PDF
     const doc = new PDFDocument();
     
-    // Imposta intestazione della risposta
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename=piano_alimentare_${pianoId}.pdf`);
     
-    // Pipe del documento PDF nella risposta
     doc.pipe(res);
     
-    // Genera il contenuto del PDF usando l'utility
-    const success = generaPianoPDF(doc, piano);
+    const success = PianoPDF.generaPianoPDF(doc, piano);
     
     if (!success) {
       throw new Error('Errore nella generazione del contenuto PDF');
     }
     
-    // Finalizza il documento
     doc.end();
     
   } catch (error) {

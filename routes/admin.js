@@ -9,16 +9,13 @@ const misurazioniDAO = require("../models/daos/misurazioniDAO");
 const pianiAlimentariDAO = require("../models/daos/pianiAlimentariDAO");
 const middleware = require("../middleware/permessi");
 
-// Middleware per tutte le rotte dell'admin
 router.use(middleware.isAdmin);
 
-// Dashboard principale dell'admin
 router.get('/dashboard', async (req, res) => {
     let pazientiFormattati = [];
     let recensioniFormattate = [];
     let richiesteFormattate = [];
 
-    // Recupero tutti i pazienti
     try {
         const pazienti = await utentiDAO.getAllPazienti();
         pazientiFormattati = pazienti.map(paziente => {
@@ -27,10 +24,9 @@ router.get('/dashboard', async (req, res) => {
         });
     } catch (error) {
         console.error("Errore nel recupero dei pazienti:", error);
-        req.session.error = "Impossibile caricare la lista dei pazienti"; // Aggiunto messaggio di errore
+        req.session.error = "Impossibile caricare la lista dei pazienti";
     }
     
-    // Recupero tutte le recensioni con nomi dei pazienti
     try {
         const recensioni = await recensioniDAO.getAllRecensioniWithUserInfo();
         recensioniFormattate = recensioni.map(recensione => {
@@ -39,10 +35,9 @@ router.get('/dashboard', async (req, res) => {
         });
     } catch (error) {
         console.error("Errore nel recupero delle recensioni:", error);
-        req.session.error = "Impossibile caricare le recensioni"; // Aggiunto messaggio di errore
+        req.session.error = "Impossibile caricare le recensioni";
     }
     
-    // Recupero tutte le richieste di contatto
     try {
         const richieste = await contattiDAO.getAllRichiesteContatto();
         richiesteFormattate = richieste.map(richiesta => {
@@ -51,10 +46,9 @@ router.get('/dashboard', async (req, res) => {
         });
     } catch (error) {
         console.error("Errore nel recupero delle richieste di contatto:", error);
-        req.session.error = "Impossibile caricare le richieste di contatto"; // Aggiunto messaggio di errore
+        req.session.error = "Impossibile caricare le richieste di contatto"; 
     }
 
-    // Recupera messaggi dalla sessione e poi cancellali
     const success = req.session.success;
     const error = req.session.error;
     delete req.session.success;
@@ -71,8 +65,8 @@ router.get('/dashboard', async (req, res) => {
             success: success,
             error: error
         });
-    } catch (renderError) {
-        console.error("Errore nel rendering della pagina:", renderError);
+    } catch (err) {
+        console.error("Errore nel rendering della pagina:", err);
         req.session.error = "Errore durante la visualizzazione della dashboard";
         res.redirect("/error");
     }
@@ -83,7 +77,6 @@ router.post('/utenti/elimina', async (req, res) => {
   try {
     const { utenteId } = req.body;
     
-    // Elimina l'utente dal database
     await utentiDAO.deleteAccount(utenteId);
     
     req.session.success = 'Utente eliminato con successo';
@@ -95,13 +88,12 @@ router.post('/utenti/elimina', async (req, res) => {
   }
 });
 
-// Route per ottenere le misurazioni di un paziente
+// GET misurazioni di un paziente
 router.get('/pazienti/:id/misurazioni', async (req, res) => {
   try {
     const pazienteId = req.params.id;
     const misurazioni = await misurazioniDAO.getMisurazioniByUserId(pazienteId);
     
-    // Formattazione per il front-end
     const misurazioniFormattate = misurazioni.map(m => ({
       id: m.id,
       misura: m.misura,
@@ -112,11 +104,12 @@ router.get('/pazienti/:id/misurazioni', async (req, res) => {
     res.json(misurazioniFormattate);
   } catch (error) {
     console.error('Errore nel recupero delle misurazioni:', error);
-    res.status(500).json({ error: 'Errore nel recupero delle misurazioni' });
+    req.session.error = 'Impossibile recuperare le misurazioni';
+    res.redirect('/admin/dashboard#pazienti');
   }
 });
 
-// Elimina recensione dall'admin dashboard
+// Elimina recensione
 router.post('/recensioni/elimina', async (req, res) => {
   try {
     const { recensioneId } = req.body;
@@ -137,11 +130,6 @@ router.post('/contatti/elimina', async (req, res) => {
   try {
     const { richiestaId } = req.body;
     
-    if (!richiestaId) {
-      req.session.error = 'ID richiesta mancante';
-      return res.redirect('/admin/dashboard#richieste-contatto');
-    }
-    
     await contattiDAO.deleteRichiestaContatto(richiestaId);
     
     req.session.success = 'Richiesta di contatto eliminata con successo.';
@@ -153,13 +141,12 @@ router.post('/contatti/elimina', async (req, res) => {
   }
 });
 
-// Route per ottenere i piani alimentari di un paziente
+// GET piani alimentari di un paziente
 router.get('/pazienti/:id/piani-alimentari', async (req, res) => {
   try {
     const pazienteId = req.params.id;
     const piani = await pianiAlimentariDAO.getPianiAlimentariByUserId(pazienteId);
     
-    // Formattazione per il front-end
     const pianiFormattati = piani.map(piano => ({
       id: piano.id,
       titolo: piano.titolo,
@@ -171,61 +158,45 @@ router.get('/pazienti/:id/piani-alimentari', async (req, res) => {
     res.json(pianiFormattati);
   } catch (error) {
     console.error('Errore nel recupero dei piani alimentari:', error);
-    res.status(500).json({ error: 'Errore nel recupero dei piani alimentari' });
+    req.session.error = 'Impossibile recuperare i piani alimentari';
+    res.redirect('/admin/dashboard#pazienti');
   }
 });
 
-// Route per ottenere un piano alimentare specifico
+// GET piano alimentare specifico dato id
 router.get('/piani-alimentari/:id', async (req, res) => {
   try {
     const pianoId = req.params.id;
     const piano = await pianiAlimentariDAO.getPianoAlimentareById(pianoId);
     
-    if (!piano) {
-      return res.status(404).json({ error: 'Piano alimentare non trovato' });
-    }
-    
     res.json(piano);
   } catch (error) {
     console.error('Errore nel recupero del piano alimentare:', error);
-    res.status(500).json({ error: 'Errore nel recupero del piano alimentare' });
+    req.session.error = 'Impossibile recuperare il piano alimentare';
+    res.redirect('/admin/dashboard#pazienti');
   }
 });
 
-// Route per creare un nuovo piano alimentare
+// Creare un nuovo piano alimentare
 router.post('/piani-alimentari/nuovo', async (req, res) => {
   try {
     const { utenteId, titolo, descrizione, data, contenuto } = req.body;
-    
-    if (!utenteId || !titolo || !data || !contenuto) {
-      return res.status(400).json({ error: 'Dati mancanti' });
-    }
-    
-    const pianoId = await pianiAlimentariDAO.insertPianoAlimentare(
-      utenteId, 
-      titolo, 
-      descrizione || '', 
-      contenuto,
-      data
-    );
+     
+    const pianoId = await pianiAlimentariDAO.insertPianoAlimentare(utenteId, titolo, descrizione, contenuto, data);
     
     res.json({ success: true, pianoId });
   } catch (error) {
     console.error('Errore nella creazione del piano alimentare:', error);
-    res.status(500).json({ error: 'Errore nella creazione del piano alimentare' });
+    req.session.error = 'Impossibile creare il piano alimentare';
+    res.redirect('/admin/dashboard#pazienti');
   }
 });
 
-// Route per eliminare un piano alimentare
+// Elimina un piano alimentare
 router.post('/piani-alimentari/elimina', async (req, res) => {
   try {
     const { pianoId } = req.body;
-    
-    if (!pianoId) {
-      req.session.error = 'ID piano mancante';
-      return res.redirect('/admin/dashboard#pazienti');
-    }
-    
+     
     await pianiAlimentariDAO.deletePianoAlimentare(pianoId);
     req.session.success = 'Piano alimentare eliminato con successo';
     res.redirect('/admin/dashboard#pazienti');

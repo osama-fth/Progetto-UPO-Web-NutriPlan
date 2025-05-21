@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
   });
 });
 
-// Pagina recensioni pubblica
+// Pagina recensioni
 router.get('/recensioni', async (req, res) => {
   const success = req.session.success;
   const error = req.session.error;
@@ -81,14 +81,14 @@ router.get('/recensioni/search', async (req, res) => {
 
 // Invio messaggio di contatto
 router.post('/contatti/invia', [
-  check('nome').notEmpty().withMessage('Il nome è obbligatorio'),
-  check('email').notEmpty().withMessage('L\'email è obbligatoria').isEmail().withMessage('Inserire un indirizzo email valido'),
-  check('messaggio').notEmpty().withMessage('Il messaggio è obbligatorio')
+  check('nome').notEmpty(),
+  check('email').notEmpty().isEmail(),
+  check('messaggio').notEmpty()
 ], async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      req.session.error = 'Si prega di completare tutti i campi correttamente.';
+      req.session.error = 'Completare tutti i campi correttamente.';
       return res.redirect('/#contatti');
     }
     

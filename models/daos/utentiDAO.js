@@ -7,39 +7,31 @@ class UtentiDAO {
     this.db = database;
   }
 
-  async getUser(email){
-    let sql = `SELECT * FROM utenti WHERE email = ?`
+  async getUser(email) {
+    let sql = `SELECT * FROM utenti WHERE email = ?`;
 
-    return new Promise((resolve, reject) =>{
-      this.db.get(sql, [email], function(err, row){
-        if(err) reject(err)
-        else resolve(row)
-      })
-    })
+    return new Promise((resolve, reject) => {
+      this.db.get(sql, [email], function(err, row) {
+        if (err) reject(err);
+        else resolve(row);
+      });
+    });
   }
 
-  async getUserById(id){
-    let sql = `SELECT * FROM utenti WHERE id = ?`
+  async getUserById(id) {
+    let sql = `SELECT * FROM utenti WHERE id = ?`;
 
-    return new Promise((resolve, reject) =>{
-      this.db.get(sql, [id], function(err, row){
-        if(err) reject(err)
-        else resolve(row)
-      })
-    })
+    return new Promise((resolve, reject) => {
+      this.db.get(sql, [id], function(err, row) {
+        if (err) reject(err);
+        else resolve(row);
+      });
+    });
   }
 
-  async newUser(user, cryptPwd) {
-    let sql = `INSERT INTO utenti (nome, cognome, email, password, data_di_nascita, ruolo) 
-                VALUES (?, ?, ?, ?, ?, ?)`;
-    let params = [
-      user.nome,
-      user.cognome,
-      user.email,
-      cryptPwd,
-      user.data_di_nascita,
-      "paziente"
-    ];
+  async newUser(user, HashedPassword) {
+    let sql = `INSERT INTO utenti (nome, cognome, email, password, data_di_nascita, ruolo) VALUES (?, ?, ?, ?, ?, ?)`;
+    let params = [user.nome, user.cognome, user.email, HashedPassword, user.data_di_nascita, "paziente"];
     
     return new Promise((resolve, reject) => {
       this.db.run(sql, params, function(err) {
@@ -76,8 +68,8 @@ class UtentiDAO {
 
   async updateUserData(userId, nome, cognome, data_di_nascita) {
     const sql = `UPDATE utenti 
-               SET nome = ?, cognome = ?, data_di_nascita = ?
-               WHERE id = ?`;
+                 SET nome = ?, cognome = ?, data_di_nascita = ?
+                 WHERE id = ?`;
     const params = [nome, cognome, data_di_nascita, userId];
     
     return new Promise((resolve, reject) => {
@@ -90,12 +82,11 @@ class UtentiDAO {
 
   async updatePassword(userId, newPassword) {
     const sql = `UPDATE utenti 
-               SET password = ?
-               WHERE id = ?`;
-    const params = [newPassword, userId];
+                 SET password = ?
+                 WHERE id = ?`;
     
     return new Promise((resolve, reject) => {
-      this.db.run(sql, params, function(err) {
+      this.db.run(sql, [newPassword, userId], function(err) {
         if (err) reject(err);
         else resolve(this.changes);
       });

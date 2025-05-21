@@ -8,12 +8,10 @@ class MisurazioniDAO {
   }
 
   async insertMisurazione(utenteId, peso, data) {
-    const sql = `INSERT INTO misurazioni (utente_id, misura, data)
-                 VALUES (?, ?, ?)`;
-    const params = [utenteId, peso, data];
+    const sql = `INSERT INTO misurazioni (utente_id, misura, data) VALUES (?, ?, ?)`;
 
     return new Promise((resolve, reject) => {
-      this.db.run(sql, params, function (err) {
+      this.db.run(sql, [utenteId, peso, data], function(err) {
         if (err) {
           reject(err);
         } else {
@@ -28,10 +26,9 @@ class MisurazioniDAO {
                  FROM misurazioni
                  WHERE utente_id = ?
                  ORDER BY data`;
-    const params = [utenteId];
 
     return new Promise((resolve, reject) => {
-      this.db.all(sql, params, (err, rows) => {
+      this.db.all(sql, [utenteId], (err, rows) => {
         if (err) {
           reject(err);
         } else {
@@ -61,10 +58,9 @@ class MisurazioniDAO {
     const sql = `UPDATE misurazioni 
                  SET misura = ?, data = ? 
                  WHERE id = ?`;
-    const params = [peso, data, misurazioneId];
 
     return new Promise((resolve, reject) => {
-      this.db.run(sql, params, function (err) {
+      this.db.run(sql, [peso, data, misurazioneId], function(err) {
         if (err) {
           reject(err);
         } else {
@@ -78,7 +74,7 @@ class MisurazioniDAO {
     const sql = `DELETE FROM misurazioni WHERE id = ?`;
 
     return new Promise((resolve, reject) => {
-      this.db.run(sql, [misurazioneId], function (err) {
+      this.db.run(sql, [misurazioneId], function(err) {
         if (err) {
           reject(err);
         } else {

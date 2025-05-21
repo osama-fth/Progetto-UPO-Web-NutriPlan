@@ -1,10 +1,10 @@
-'use strict'
+'use strict';
 
 const db = require('../db');
 
 class PianiAlimentariDAO {
-  constructor(db) {
-    this.db = db;
+  constructor(databse) {
+    this.db = databse;
   }
 
   async getPianiAlimentariByUserId(userId) {
@@ -35,8 +35,7 @@ class PianiAlimentariDAO {
   }
 
   async insertPianoAlimentare(utenteId, titolo, descrizione, contenuto, dataCreazione) {
-    const sql = `INSERT INTO piano_alimentare (utente_id, titolo, descrizione, contenuto, data_creazione)
-                 VALUES (?, ?, ?, ?, ?)`;
+    const sql = `INSERT INTO piano_alimentare (utente_id, titolo, descrizione, contenuto, data_creazione) VALUES (?, ?, ?, ?, ?)`;
                  
     return new Promise((resolve, reject) => {
       this.db.run(sql, [utenteId, titolo, descrizione, contenuto, dataCreazione], function(err) {
