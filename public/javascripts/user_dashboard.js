@@ -23,70 +23,8 @@ document.addEventListener('DOMContentLoaded', function() {
   };
 
   // ===== Gestione navigazione =====
-  const navigationManager = {
-    init() {
-      this.setupSidebarLinks();
-      this.handleUrlHash();
-    },
+  // Rimosso navigationManager poiché ora utilizziamo URL reali invece di hash
 
-    setupSidebarLinks() {
-      document.querySelectorAll('.sidebar-link').forEach(link => {
-        link.addEventListener('click', function(e) {
-          e.preventDefault();
-          
-          const targetSection = this.getAttribute('data-section');
-          window.location.hash = targetSection;
-          
-          document.querySelectorAll('.sidebar-item').forEach(item => {
-            item.classList.remove('active');
-          });
-          
-          this.parentElement.classList.add('active');
-          
-          document.querySelectorAll('.sezione-contenuto').forEach(section => {
-            section.classList.add('d-none');
-          });
-          
-          document.getElementById(`sezione-${targetSection}`).classList.remove('d-none');
-          
-          const sidebarMobile = document.getElementById('sidebar-mobile');
-          if (sidebarMobile) {
-            const bsOffcanvas = bootstrap.Offcanvas.getInstance(sidebarMobile);
-            if (bsOffcanvas) {
-              bsOffcanvas.hide();
-            }
-          }
-        });
-      });
-    },
-    
-    handleUrlHash() {
-      const hash = window.location.hash.substring(1);
-      if (hash) {
-        const validSections = ['misurazioni', 'piani-alimentari', 'recensioni', 'impostazioni'];
-        
-        if (validSections.includes(hash)) {
-          document.querySelectorAll('.sezione-contenuto').forEach(sezione => {
-            sezione.classList.add('d-none');
-          });
-          
-          document.querySelectorAll('.sidebar-item').forEach(item => {
-            item.classList.remove('active');
-          });
-          
-          const sectionToShow = document.getElementById('sezione-' + hash);
-          if (sectionToShow) {
-            sectionToShow.classList.remove('d-none');
-            
-            document.querySelectorAll(`.sidebar-link[data-section="${hash}"]`).forEach(link => {
-              link.parentElement.classList.add('active');
-            });
-          }
-        }
-      }
-    }
-  };
-  
   // ===== Gestione misurazioni =====
   const misurazioniManager = {
     init() {
@@ -225,8 +163,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   };
 
-  // Inizializza tutti i moduli
-  navigationManager.init();
+  // Inizializza solo i moduli necessari
   misurazioniManager.init();
   pianiAlimentariManager.init();
   impostazioniManager.init();

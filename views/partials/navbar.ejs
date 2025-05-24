@@ -24,7 +24,7 @@
           </ul>
           <div class="d-flex">
             <% if (typeof isAuth !== 'undefined' && isAuth) { %>
-              <% const dashboardUrl = (typeof user !== 'undefined' && user && user.ruolo === 'admin') ? '/admin/dashboard' : '/user/dashboard'; %>
+              <% const dashboardUrl = (typeof user !== 'undefined' && user && user.ruolo === 'admin') ? '/admin/dashboard/pazienti' : '/user/dashboard/misurazioni'; %>
               <a href="<%= dashboardUrl %>" class="btn btn-primary">Dashboard</a>
             <% } else { %>
               <a href="/auth/login" class="btn btn-outline-primary me-2">Accedi</a>

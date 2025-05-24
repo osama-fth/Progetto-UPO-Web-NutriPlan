@@ -13,26 +13,26 @@
 
       <nav>
         <ul class="sidebar-nav">
-          <li class="sidebar-item active">
-            <a href="#" class="sidebar-link" data-section="misurazioni">
+          <li class="sidebar-item <%= currentSection === 'misurazioni' ? 'active' : '' %>">
+            <a href="/user/dashboard/misurazioni" class="sidebar-link">
               <i class="fas fa-home"></i>
               <span>Misurazioni</span>
             </a>
           </li>
-          <li class="sidebar-item">
-            <a href="#" class="sidebar-link" data-section="piani-alimentari">
+          <li class="sidebar-item <%= currentSection === 'piani-alimentari' ? 'active' : '' %>">
+            <a href="/user/dashboard/piani-alimentari" class="sidebar-link">
               <i class="fas fa-utensils"></i>
               <span>Piani alimentari</span>
             </a>
           </li>
-          <li class="sidebar-item">
-            <a href="#" class="sidebar-link" data-section="recensioni">
+          <li class="sidebar-item <%= currentSection === 'recensioni' ? 'active' : '' %>">
+            <a href="/user/dashboard/recensioni" class="sidebar-link">
               <i class="fas fa-star"></i>
               <span>Recensioni</span>
             </a>
           </li>
-          <li class="sidebar-item">
-            <a href="#" class="sidebar-link" data-section="impostazioni">
+          <li class="sidebar-item <%= currentSection === 'impostazioni' ? 'active' : '' %>">
+            <a href="/user/dashboard/impostazioni" class="sidebar-link">
               <i class="fas fa-cog"></i>
               <span>Impostazioni</span>
             </a>
@@ -52,26 +52,26 @@
       <div class="offcanvas-body">
         <nav>
           <ul class="sidebar-nav">
-            <li class="sidebar-item active">
-              <a href="#" class="sidebar-link" data-section="misurazioni">
+            <li class="sidebar-item <%= currentSection === 'misurazioni' ? 'active' : '' %>">
+              <a href="/user/dashboard/misurazioni" class="sidebar-link">
                 <i class="fas fa-home"></i>
                 <span>Misurazioni</span>
               </a>
             </li>
-            <li class="sidebar-item">
-              <a href="#" class="sidebar-link" data-section="piani-alimentari">
+            <li class="sidebar-item <%= currentSection === 'piani-alimentari' ? 'active' : '' %>">
+              <a href="/user/dashboard/piani-alimentari" class="sidebar-link">
                 <i class="fas fa-utensils"></i>
                 <span>Piani alimentari</span>
               </a>
             </li>
-            <li class="sidebar-item">
-              <a href="#" class="sidebar-link" data-section="recensioni">
+            <li class="sidebar-item <%= currentSection === 'recensioni' ? 'active' : '' %>">
+              <a href="/user/dashboard/recensioni" class="sidebar-link">
                 <i class="fas fa-star"></i>
                 <span>Recensioni</span>
               </a>
             </li>
-            <li class="sidebar-item">
-              <a href="#" class="sidebar-link" data-section="impostazioni">
+            <li class="sidebar-item <%= currentSection === 'impostazioni' ? 'active' : '' %>">
+              <a href="/user/dashboard/impostazioni" class="sidebar-link">
                 <i class="fas fa-cog"></i>
                 <span>Impostazioni</span>
               </a>
@@ -103,7 +103,7 @@
       </div>
 
       <!-- Sezione Misurazioni -->
-      <div id="sezione-misurazioni" class="sezione-contenuto">
+      <div id="sezione-misurazioni" class="sezione-contenuto <%= currentSection !== 'misurazioni' ? 'd-none' : '' %>">
         <!-- Grafico misurazioni -->
         <section class="row mt-4">
           <div class="col-md-10 mx-auto mb-4">
@@ -178,7 +178,7 @@
       </div>
 
       <!-- Sezione Piani Alimentari -->
-      <div id="sezione-piani-alimentari" class="sezione-contenuto d-none">
+      <div id="sezione-piani-alimentari" class="sezione-contenuto <%= currentSection !== 'piani-alimentari' ? 'd-none' : '' %>">
         <section class="row mt-4">
           <div class="col-lg-10 mx-auto">
             <div class="card mx-2">
@@ -235,7 +235,7 @@
       </div>
 
       <!-- Sezione Recensioni -->
-      <div id="sezione-recensioni" class="sezione-contenuto d-none">
+      <div id="sezione-recensioni" class="sezione-contenuto <%= currentSection !== 'recensioni' ? 'd-none' : '' %>">
         <section class="row mt-4">
           <div class="col-lg-10 mx-auto">
             <div class="card mx-2">
@@ -308,7 +308,7 @@
       </div>
 
       <!-- Sezione Impostazioni -->
-      <div id="sezione-impostazioni" class="sezione-contenuto d-none">
+      <div id="sezione-impostazioni" class="sezione-contenuto <%= currentSection !== 'impostazioni' ? 'd-none' : '' %>">
         <section class="row mt-4 justify-content-center">
           <div class="col-md-10 mb-4">
             <div class="card shadow-sm">

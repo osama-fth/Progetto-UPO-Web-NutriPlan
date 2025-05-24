@@ -13,20 +13,20 @@
 
       <nav>
         <ul class="sidebar-nav">
-          <li class="sidebar-item active">
-            <a href="#" class="sidebar-link" data-section="pazienti">
+          <li class="sidebar-item <%= currentSection === 'pazienti' ? 'active' : '' %>">
+            <a href="/admin/dashboard/pazienti" class="sidebar-link">
               <i class="fas fa-user"></i>
               <span>Pazienti</span>
             </a>
           </li>
-          <li class="sidebar-item">
-            <a href="#" class="sidebar-link" data-section="recensioni">
+          <li class="sidebar-item <%= currentSection === 'recensioni' ? 'active' : '' %>">
+            <a href="/admin/dashboard/recensioni" class="sidebar-link">
               <i class="fas fa-star"></i>
               <span>Recensioni</span>
             </a>
           </li>
-          <li class="sidebar-item">
-            <a href="#" class="sidebar-link" data-section="richieste-contatto">
+          <li class="sidebar-item <%= currentSection === 'richieste-contatto' ? 'active' : '' %>">
+            <a href="/admin/dashboard/richieste-contatto" class="sidebar-link">
               <i class="fas fa-envelope"></i>
               <span>Richieste di contatto</span>
             </a>
@@ -46,20 +46,20 @@
       <div class="offcanvas-body">
         <nav>
           <ul class="sidebar-nav">
-            <li class="sidebar-item active">
-              <a href="#" class="sidebar-link" data-section="pazienti">
+            <li class="sidebar-item <%= currentSection === 'pazienti' ? 'active' : '' %>">
+              <a href="/admin/dashboard/pazienti" class="sidebar-link">
                 <i class="fas fa-user"></i>
                 <span>Pazienti</span>
               </a>
             </li>
-            <li class="sidebar-item">
-              <a href="#" class="sidebar-link" data-section="recensioni">
+            <li class="sidebar-item <%= currentSection === 'recensioni' ? 'active' : '' %>">
+              <a href="/admin/dashboard/recensioni" class="sidebar-link">
                 <i class="fas fa-star"></i>
                 <span>Recensioni</span>
               </a>
             </li>
-            <li class="sidebar-item">
-              <a href="#" class="sidebar-link" data-section="richieste-contatto">
+            <li class="sidebar-item <%= currentSection === 'richieste-contatto' ? 'active' : '' %>">
+              <a href="/admin/dashboard/richieste-contatto" class="sidebar-link">
                 <i class="fas fa-envelope"></i>
                 <span>Richieste di contatto</span>
               </a>
@@ -90,7 +90,7 @@
       </div>
 
       <!-- Sezione Pazienti -->
-      <div id="sezione-pazienti" class="sezione-contenuto">
+      <div id="sezione-pazienti" class="sezione-contenuto <%= currentSection !== 'pazienti' ? 'd-none' : '' %>">
         <section class="row mt-4">
           <div class="col-lg-10 mx-auto">
             <div class="card mx-2">
@@ -157,7 +157,7 @@
       </div>
 
       <!-- Sezione Recensioni -->
-      <div id="sezione-recensioni" class="sezione-contenuto d-none">
+      <div id="sezione-recensioni" class="sezione-contenuto <%= currentSection !== 'recensioni' ? 'd-none' : '' %>">
         <section class="row mt-4">
           <div class="col-lg-10 mx-auto">
             <div class="card mx-2">
@@ -223,7 +223,7 @@
       </div>
 
       <!-- Sezione Richieste di Contatto -->
-      <div id="sezione-richieste-contatto" class="sezione-contenuto d-none">
+      <div id="sezione-richieste-contatto" class="sezione-contenuto <%= currentSection !== 'richieste-contatto' ? 'd-none' : '' %>">
         <section class="row mt-4">
           <div class="col-lg-10 mx-auto">
             <div class="card mx-2">

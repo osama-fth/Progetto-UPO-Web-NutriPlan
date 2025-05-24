@@ -11,7 +11,20 @@ const middleware = require("../middleware/permessi");
 
 router.use(middleware.isAdmin);
 
-router.get('/dashboard', async (req, res) => {
+// Rotta base che reindirizza alla vista pazienti
+router.get('/dashboard', (req, res) => {
+  res.redirect('/admin/dashboard/pazienti');
+});
+
+// Rotte specifiche per le diverse sezioni della dashboard
+router.get('/dashboard/:section', async (req, res) => {
+    const section = req.params.section;
+    const validSections = ['pazienti', 'recensioni', 'richieste-contatto'];
+    
+    if (!validSections.includes(section)) {
+        return res.redirect('/admin/dashboard/pazienti');
+    }
+    
     let pazientiFormattati = [];
     let recensioniFormattate = [];
     let richiesteFormattate = [];
@@ -63,7 +76,8 @@ router.get('/dashboard', async (req, res) => {
             richieste: richiesteFormattate,
             isAuth: req.isAuthenticated(),
             success: success,
-            error: error
+            error: error,
+            currentSection: section
         });
     } catch (err) {
         console.error("Errore nel rendering della pagina:", err);

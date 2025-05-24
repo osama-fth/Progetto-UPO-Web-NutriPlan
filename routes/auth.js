@@ -10,9 +10,9 @@ const utentiDAO = require("../models/daos/utentiDAO")
 router.get("/login", (req, res) => {
     if (req.isAuthenticated()) {
         if (req.user.ruolo === 'admin') {
-            return res.redirect('/admin/dashboard');
+            return res.redirect('/admin/dashboard/pazienti');
         } else {
-            return res.redirect('/user/dashboard');
+            return res.redirect('/user/dashboard/misurazioni');
         }
     }
     
@@ -64,9 +64,9 @@ router.post('/login', [
             }
              
             if (utente.ruolo === 'admin') {
-                return res.redirect('/admin/dashboard');
+                return res.redirect('/admin/dashboard/pazienti');
             } else {
-                return res.redirect('/user/dashboard');
+                return res.redirect('/user/dashboard/misurazioni');
             }
         });
     })(req, res, next);
@@ -92,9 +92,9 @@ router.get('/logout', (req, res) => {
 router.get("/register", (req, res) => {
     if (req.isAuthenticated()) {
         if (req.user.ruolo === 'admin') {
-            return res.redirect('/admin/dashboard');
+            return res.redirect('/admin/dashboard/pazienti');
         } else {
-            return res.redirect('/user/dashboard');
+            return res.redirect('/user/dashboard/misurazioni');
         }
     }
     
