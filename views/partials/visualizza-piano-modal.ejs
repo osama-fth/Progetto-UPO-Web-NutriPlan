@@ -18,7 +18,45 @@
         </div>
         
         <div class="accordion" id="dettaglioPianoDieteticoAccordion">
-          <!-- I giorni verranno inseriti dinamicamente qui -->
+          <!-- I giorni della settimana come struttura HTML fissa -->
+          <% const giorni = [
+            { id: 'lunedì', label: 'Lunedì' },
+            { id: 'martedì', label: 'Martedì' },
+            { id: 'mercoledì', label: 'Mercoledì' },
+            { id: 'giovedì', label: 'Giovedì' },
+            { id: 'venerdì', label: 'Venerdì' },
+            { id: 'sabato', label: 'Sabato' },
+            { id: 'domenica', label: 'Domenica' }
+          ]; %>
+          
+          <% giorni.forEach((giorno, index) => { %>
+            <div class="accordion-item" id="dettaglio-giorno-<%= giorno.id %>" style="display: none;">
+              <h2 class="accordion-header" id="dettaglio-heading-<%= giorno.id %>">
+                <button class="accordion-button <%= index > 0 ? 'collapsed' : '' %>" type="button" 
+                  data-bs-toggle="collapse" data-bs-target="#dettaglio-collapse-<%= giorno.id %>" 
+                  aria-expanded="<%= index === 0 ? 'true' : 'false' %>" aria-controls="dettaglio-collapse-<%= giorno.id %>">
+                  <%= giorno.label %>
+                </button>
+              </h2>
+              <div id="dettaglio-collapse-<%= giorno.id %>" class="accordion-collapse collapse <%= index === 0 ? 'show' : '' %>" 
+                aria-labelledby="dettaglio-heading-<%= giorno.id %>">
+                <div class="accordion-body">
+                  <div class="mb-3">
+                    <p class="fw-bold mb-1">Colazione:</p>
+                    <p class="border-bottom pb-2" id="dettaglio-<%= giorno.id %>-colazione">Non specificato</p>
+                  </div>
+                  <div class="mb-3">
+                    <p class="fw-bold mb-1">Pranzo:</p>
+                    <p class="border-bottom pb-2" id="dettaglio-<%= giorno.id %>-pranzo">Non specificato</p>
+                  </div>
+                  <div>
+                    <p class="fw-bold mb-1">Cena:</p>
+                    <p id="dettaglio-<%= giorno.id %>-cena">Non specificato</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% }); %>
         </div>
       </div>
       <div class="modal-footer">

@@ -1,9 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
-  // Rimossa la gestione della visualizzazione delle sezioni basata su JavaScript
-  // poiché la visibilità è ora gestita direttamente dal template EJS
   
   // Gestione modal dettagli paziente
-  document.querySelectorAll('[data-paziente-id]').forEach(button => {
+  document.querySelectorAll('.btn-dettagli-paziente').forEach(button => {
     button.addEventListener('click', function() {
       const pazienteId = this.getAttribute('data-paziente-id');
       const nome = this.getAttribute('data-paziente-nome');
@@ -21,7 +19,12 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(misurazioni => {
           if (misurazioni && misurazioni.length > 0) {
-            renderPesoChart(misurazioni, 'pazienteChart');
+            // Formato dei dati per il grafico
+            const labels = misurazioni.map(m => m.dataFormattata);
+            const values = misurazioni.map(m => m.misura);
+            
+            // Usa la funzione createWeightChart invece di renderPesoChart
+            window.createWeightChart('pazienteChart', labels, values);
           } else {
             // Gestisci caso di nessuna misurazione
             const canvas = document.getElementById('pazienteChart');
@@ -40,68 +43,21 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   
-  // Gestione piani alimentari paziente
+  // Gestione piani alimentari paziente - Modificato per usare approccio server-side
   document.querySelectorAll('.btn-piani-paziente').forEach(button => {
     button.addEventListener('click', function() {
       const pazienteId = this.getAttribute('data-paziente-id');
-      const nome = this.getAttribute('data-paziente-nome');
-      const cognome = this.getAttribute('data-paziente-cognome');
-      
-      document.getElementById('piani-paziente-nome').textContent = `${nome} ${cognome}`;
-      document.getElementById('piano-utente-id').value = pazienteId;
-      
-      // Carica i piani alimentari del paziente
-      fetch(`/admin/pazienti/${pazienteId}/piani-alimentari`)
-        .then(response => response.json())
-        .then(piani => {
-          const tableBody = document.getElementById('piani-alimentari-table-body');
-          const noPlansRow = document.getElementById('no-piani-row');
-          
-          // Pulisci la tabella esistente tranne la riga "nessun piano"
-          Array.from(tableBody.children).forEach(child => {
-            if (child.id !== 'no-piani-row') {
-              tableBody.removeChild(child);
-            }
-          });
-          
-          if (piani && piani.length > 0) {
-            noPlansRow.classList.add('d-none');
-            
-            piani.forEach(piano => {
-              const row = document.createElement('tr');
-              row.innerHTML = `
-                <td class="text-center">${piano.titolo}</td>
-                <td class="text-center">${piano.dataFormattata}</td>
-                <td class="text-center">
-                  <div class="d-flex justify-content-center">
-                    <button type="button" class="btn btn-sm btn-outline-primary me-2 btn-visualizza-piano" 
-                      data-piano-id="${piano.id}" 
-                      data-piano-titolo="${piano.titolo}" 
-                      data-piano-data="${piano.dataFormattata}" 
-                      data-piano-descrizione="${piano.descrizione || ''}">
-                      <i class="fas fa-eye me-1"></i> Visualizza
-                    </button>
-                    <button type="button" class="btn btn-sm btn-outline-danger" 
-                      data-elimina="piano" data-item-id="${piano.id}">
-                      <i class="fas fa-trash me-1"></i> Elimina
-                    </button>
-                  </div>
-                </td>
-              `;
-              tableBody.insertBefore(row, noPlansRow);
-            });
-            
-            // Aggiungi gli event listener ai pulsanti appena creati
-            addPianoViewListeners();
-          } else {
-            noPlansRow.classList.remove('d-none');
-          }
-        })
-        .catch(error => console.error('Errore nel caricamento dei piani alimentari:', error));
-      
-      // Apre il modal
-      const modalPianiAlimentari = new bootstrap.Modal(document.getElementById('pianiAlimentariModal'));
-      modalPianiAlimentari.show();
+      // Redirect alla nuova route che carica i piani del paziente
+      window.location.href = `/admin/pazienti/${pazienteId}/visualizza-piani`;
+    });
+  });
+  
+  // Modificato il click sul pulsante "Visualizza piano"
+  document.querySelectorAll('.btn-visualizza-piano').forEach(button => {
+    button.addEventListener('click', function() {
+      const pianoId = this.getAttribute('data-piano-id');
+      // Redirect alla nuova route che mostra il piano
+      window.location.href = `/admin/piani-alimentari/${pianoId}/visualizza`;
     });
   });
   
@@ -170,51 +126,12 @@ document.addEventListener('DOMContentLoaded', function() {
   });
   
   // Funzione per aggiungere event listener ai pulsanti di visualizzazione piano
+  // La funzione addPianoViewListeners è stata modificata per usare il nuovo approccio server-side
   function addPianoViewListeners() {
     document.querySelectorAll('.btn-visualizza-piano').forEach(button => {
       button.addEventListener('click', function() {
         const pianoId = this.getAttribute('data-piano-id');
-        const titolo = this.getAttribute('data-piano-titolo');
-        const data = this.getAttribute('data-piano-data');
-        const descrizione = this.getAttribute('data-piano-descrizione');
-        
-        document.getElementById('visualizza-piano-titolo').textContent = titolo;
-        document.getElementById('visualizza-piano-data').textContent = data;
-        document.getElementById('visualizza-piano-descrizione').textContent = descrizione;
-        
-        // Carica i dettagli del piano
-        fetch(`/admin/piani-alimentari/${pianoId}`)
-          .then(response => response.json())
-          .then(piano => {
-            if (piano && piano.contenuto) {
-              const contenuto = typeof piano.contenuto === 'string' ? JSON.parse(piano.contenuto) : piano.contenuto;
-              
-              const giorni = ['lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato', 'domenica'];
-              const pasti = ['colazione', 'pranzo', 'cena'];
-              
-              giorni.forEach(giorno => {
-                const capitalized = giorno.charAt(0).toUpperCase() + giorno.slice(1);
-                
-                pasti.forEach(pasto => {
-                  const elementId = `visualizza-${giorno}-${pasto}`;
-                  const element = document.getElementById(elementId);
-                  
-                  if (element) {
-                    if (contenuto[giorno] && contenuto[giorno][pasto]) {
-                      element.textContent = contenuto[giorno][pasto];
-                    } else {
-                      element.textContent = 'Nessuna indicazione';
-                    }
-                  }
-                });
-              });
-            }
-          })
-          .catch(error => console.error('Errore nel caricamento del piano alimentare:', error));
-        
-        // Apre il modal
-        const modalVisualizzaPiano = new bootstrap.Modal(document.getElementById('visualizzaPianoModal'));
-        modalVisualizzaPiano.show();
+        window.location.href = `/admin/piani-alimentari/${pianoId}/visualizza`;
       });
     });
   }

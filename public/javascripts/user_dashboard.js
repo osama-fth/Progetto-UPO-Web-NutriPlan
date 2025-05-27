@@ -22,9 +22,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   };
 
-  // ===== Gestione navigazione =====
-  // Rimosso navigationManager poiché ora utilizziamo URL reali invece di hash
-
   // ===== Gestione misurazioni =====
   const misurazioniManager = {
     init() {
@@ -50,7 +47,6 @@ document.addEventListener('DOMContentLoaded', function() {
           document.getElementById('pesoModifica').value = peso;
           document.getElementById('dataModifica').value = data;
           
-          // Aggiorniamo l'id dell'elemento da eliminare nel pulsante di eliminazione
           const btnEliminaMisurazione = document.getElementById('btnEliminaMisurazione');
           if (btnEliminaMisurazione) {
             btnEliminaMisurazione.setAttribute('data-item-id', misurazioneId);
@@ -101,70 +97,37 @@ document.addEventListener('DOMContentLoaded', function() {
     
     renderDettaglioPiano(contenutoJSON) {
       const contenuto = typeof contenutoJSON === 'string' ? JSON.parse(contenutoJSON) : contenutoJSON;
-      const accordionContainer = document.getElementById('dettaglioPianoDieteticoAccordion');
       
-      accordionContainer.innerHTML = '';
+      // Prima nasconde tutti gli elementi giorno
+      const giorni = ['lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato', 'domenica'];
+      giorni.forEach(giorno => {
+        const elementoGiorno = document.getElementById(`dettaglio-giorno-${giorno}`);
+        if (elementoGiorno) {
+          elementoGiorno.style.display = 'none';
+        }
+      });
       
-      const giorni = {
-        'lunedì': 'Lunedì',
-        'martedì': 'Martedì',
-        'mercoledì': 'Mercoledì',
-        'giovedì': 'Giovedì',
-        'venerdì': 'Venerdì',
-        'sabato': 'Sabato',
-        'domenica': 'Domenica'
-      };
-      
-      let index = 0;
-      for (const [giorno, label] of Object.entries(giorni)) {
+      // Poi mostra solo quelli con contenuto
+      for (const giorno of giorni) {
         if (contenuto[giorno]) {
-          const accordionItem = document.createElement('div');
-          accordionItem.className = 'accordion-item';
-          
-          accordionItem.innerHTML = `
-            <h2 class="accordion-header" id="dettaglio-heading-${giorno}">
-              <button class="accordion-button ${index > 0 ? 'collapsed' : ''}" type="button" 
-                data-bs-toggle="collapse" data-bs-target="#dettaglio-collapse-${giorno}" 
-                aria-expanded="${index === 0 ? 'true' : 'false'}" aria-controls="dettaglio-collapse-${giorno}">
-                ${label}
-              </button>
-            </h2>
-            <div id="dettaglio-collapse-${giorno}" class="accordion-collapse collapse ${index === 0 ? 'show' : ''}" 
-              aria-labelledby="dettaglio-heading-${giorno}">
-              <div class="accordion-body">
-                <div class="mb-3">
-                  <p class="fw-bold mb-1">Colazione:</p>
-                  <p class="border-bottom pb-2">${contenuto[giorno].colazione || 'Non specificato'}</p>
-                </div>
-                <div class="mb-3">
-                  <p class="fw-bold mb-1">Pranzo:</p>
-                  <p class="border-bottom pb-2">${contenuto[giorno].pranzo || 'Non specificato'}</p>
-                </div>
-                <div>
-                  <p class="fw-bold mb-1">Cena:</p>
-                  <p>${contenuto[giorno].cena || 'Non specificato'}</p>
-                </div>
-              </div>
-            </div>
-          `;
-          
-          accordionContainer.appendChild(accordionItem);
-          index++;
+          const elementoGiorno = document.getElementById(`dettaglio-giorno-${giorno}`);
+          if (elementoGiorno) {
+            elementoGiorno.style.display = 'block';
+            
+            // Aggiorna i contenuti dei pasti
+            const pasti = ['colazione', 'pranzo', 'cena'];
+            pasti.forEach(pasto => {
+              const elementoPasto = document.getElementById(`dettaglio-${giorno}-${pasto}`);
+              if (elementoPasto) {
+                elementoPasto.textContent = contenuto[giorno][pasto] || 'Non specificato';
+              }
+            });
+          }
         }
       }
     }
   };
-  
-  // ===== Gestione impostazioni utente =====
-  const impostazioniManager = {
-    init() {
-      // La validazione ora viene gestita completamente dal server con express-validator
-      // e tramite gli attributi "required" nei campi del form
-    }
-  };
 
-  // Inizializza solo i moduli necessari
   misurazioniManager.init();
   pianiAlimentariManager.init();
-  impostazioniManager.init();
 });
