@@ -16,15 +16,8 @@ router.get("/login", (req, res) => {
         }
     }
     
-    const success = req.session.success;
-    const error = req.session.error;
-    delete req.session.success;
-    delete req.session.error;
-    
     res.render("pages/login", { 
-        title: 'NutriPlan - Login',
-        success: success,  
-        error: error       
+        title: 'NutriPlan - Login'
     });
 });
 
@@ -98,17 +91,10 @@ router.get("/register", (req, res) => {
         }
     }
     
-    const success = req.session.success;
-    const error = req.session.error;
-    delete req.session.success;
-    delete req.session.error;
-    
     res.render("pages/register", { 
         title: 'NutriPlan - Registrazione',
         user: req.user,
-        isAuth: req.isAuthenticated(),
-        success: success,
-        error: error
+        isAuth: req.isAuthenticated()
     });
 });
 

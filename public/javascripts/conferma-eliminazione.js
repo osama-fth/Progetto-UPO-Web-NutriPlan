@@ -11,8 +11,8 @@ function apriModalConfermaEliminazione(config) {
     return;
   }
   
-  // Imposta il messaggio
-  messaggioElement.textContent = config.messaggio || 'Sei sicuro di voler eliminare questo elemento?';
+  // Imposta il messaggio semplificato, sempre uguale
+  messaggioElement.textContent = 'Sei sicuro?';
   
   // Imposta l'URL del form
   form.action = config.url;
@@ -65,33 +65,27 @@ document.addEventListener('DOMContentLoaded', function() {
     const configurazioni = {
       'recensione': {
         url: window.location.pathname.includes('/admin') ? '/admin/recensioni/elimina' : '/user/recensioni/cancella',
-        nomeCampo: 'recensioneId',
-        messaggio: 'Sei sicuro di voler eliminare questa recensione?'
+        nomeCampo: 'recensioneId'
       },
       'misurazione': {
         url: `/user/misurazioni/elimina/${itemId}`,
-        method: 'GET',
-        messaggio: 'Sei sicuro di voler eliminare questa misurazione?'
+        method: 'GET'
       },
       'richiesta': {
         url: '/admin/contatti/elimina',
-        nomeCampo: 'richiestaId',
-        messaggio: 'Sei sicuro di voler eliminare questa richiesta di contatto?'
+        nomeCampo: 'richiestaId'
       },
       'utente': {
         url: '/admin/utenti/elimina',
-        nomeCampo: 'utenteId',
-        messaggio: 'Sei sicuro di voler eliminare questo utente?'
+        nomeCampo: 'utenteId'
       },
       'piano': {
         url: '/admin/piani-alimentari/elimina',
-        nomeCampo: 'pianoId',
-        messaggio: 'Sei sicuro di voler eliminare questo piano alimentare?'
+        nomeCampo: 'pianoId'
       },
       'account': {
         url: '/user/account/elimina',
-        method: 'GET',
-        messaggio: 'Sei sicuro di voler eliminare definitivamente il tuo account? Questa azione non può essere annullata.'
+        method: 'GET'
       }
     };
     

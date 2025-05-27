@@ -3,6 +3,7 @@ const express = require("express");
 const session = require("express-session");
 const passport = require("passport");
 const morgan = require("morgan");
+const flashMessages = require('./middleware/messaggi');
 
 const PORT = 3000;
 const app = express();
@@ -25,6 +26,9 @@ app.use(session({
   resave: false,
   saveUninitialized: false
 }));
+
+// Middleware per i messaggi flash
+app.use(flashMessages);
 
 app.set("view engine", "ejs");
 

@@ -105,11 +105,6 @@ router.get('/dashboard/:section', async (req, res) => {
         req.session.error = "Impossibile caricare le richieste di contatto"; 
     }
 
-    const success = req.session.success;
-    const error = req.session.error;
-    delete req.session.success;
-    delete req.session.error;
-
     try {
         res.render("pages/admin_dashboard", { 
             title: 'Dashboard Admin - NutriPlan',
@@ -120,8 +115,6 @@ router.get('/dashboard/:section', async (req, res) => {
             pianoSelezionato: pianoSelezionato,
             pazienteSelezionato: pazienteSelezionato,
             isAuth: req.isAuthenticated(),
-            success: success,
-            error: error,
             currentSection: section
         });
     } catch (err) {
@@ -338,8 +331,6 @@ router.get('/piani-alimentari/:id/visualizza', async (req, res) => {
           pianoSelezionato: piano,
           pazienteSelezionato: null,
           isAuth: req.isAuthenticated(),
-          success: null,
-          error: null,
           currentSection: 'pazienti'
         });
         

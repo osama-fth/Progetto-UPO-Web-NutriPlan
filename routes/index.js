@@ -7,27 +7,15 @@ const { check, validationResult } = require('express-validator');
 
 // Home page
 router.get('/', async (req, res) => {
-  const success = req.session.success;
-  const error = req.session.error;
-  delete req.session.success;
-  delete req.session.error;
-  
   res.render('pages/home', {
     title: 'NutriPlan - Home',
     user: req.user || null,
-    isAuth: req.isAuthenticated(),
-    success: success,
-    error: error
+    isAuth: req.isAuthenticated()
   });
 });
 
 // Pagina recensioni
 router.get('/recensioni', async (req, res) => {
-  const success = req.session.success;
-  const error = req.session.error;
-  delete req.session.success;
-  delete req.session.error;
-  
   try {
     const recensioni = await recensioniDAO.getAllRecensioni();
     
@@ -35,9 +23,7 @@ router.get('/recensioni', async (req, res) => {
       title: ' NutriPlan - Recensioni',
       recensioni,
       user: req.user || null,
-      isAuth: req.isAuthenticated(),
-      success: success, 
-      error: error      
+      isAuth: req.isAuthenticated()  
     });
   } catch (error) {
     console.error('Errore durante il recupero delle recensioni:', error);
@@ -49,10 +35,6 @@ router.get('/recensioni', async (req, res) => {
 // Ricerca recensioni
 router.get('/recensioni/search', async (req, res) => {
   const query = req.query.q || '';
-  const success = req.session.success;
-  const error = req.session.error;
-  delete req.session.success;
-  delete req.session.error;
   
   try {
     let recensioni = [];
@@ -68,9 +50,7 @@ router.get('/recensioni/search', async (req, res) => {
       recensioni,
       query,
       user: req.user || null,
-      isAuth: req.isAuthenticated(),
-      success: success,
-      error: error
+      isAuth: req.isAuthenticated()
     });
   } catch (error) {
     console.error('Errore durante la ricerca delle recensioni:', error);
@@ -106,12 +86,7 @@ router.post('/contatti/invia', [
 
 // Pagina di errore
 router.get('/error', (req, res) => {
-  let error = req.session.error;
-  delete req.session.error;
-
-  if (!error) {
-    error = 'Si è verificato un errore imprevisto.';
-  }
+  let error = req.session.error || 'Si è verificato un errore imprevisto.';
   
   res.render('pages/error', { 
     title: 'NutriPlan - Errore',

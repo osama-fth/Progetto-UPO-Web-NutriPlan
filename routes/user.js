@@ -67,11 +67,6 @@ router.get('/dashboard/:section', async (req, res) => {
     req.session.error = "Impossibile caricare i piani alimentari";
   }
 
-  const success = req.session.success;
-  const error = req.session.error;
-  delete req.session.success;
-  delete req.session.error;
-
   try {
     res.render('pages/utente_dashboard', {
       title: 'NutriPlan - Dashboard',
@@ -80,8 +75,6 @@ router.get('/dashboard/:section', async (req, res) => {
       misurazioni: misurazioniFormattate,
       recensione: recensione,
       pianiAlimentari: pianiAlimentariFormattati,
-      success: success,
-      error: error,
       currentSection: section
     });
   } catch (err) {
