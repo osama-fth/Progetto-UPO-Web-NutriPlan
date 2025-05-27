@@ -28,31 +28,31 @@ router.post('/login', [
     ], (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        req.session.error = 'Completare tutti i campi correttamente.';
+        req.flash('error', 'Completare tutti i campi correttamente.');
         return res.redirect('/auth/login');
     }
 
     passport.authenticate("local", (err, utente, info) => {        
         if (err) {
             console.error('Errore durante l\'autenticazione:', err);
-            req.session.error = 'Si è verificato un errore durante l\'accesso.';
+            req.flash('error', 'Si è verificato un errore durante l\'accesso.');
             return res.redirect('/auth/login');
         }
         
         if (!utente) {
             if (info && info.message) {
                 if (info.message == 'Utente non trovato.' || 'Password errata.') {
-                    req.session.error = 'Email e/o password errata';
+                    req.flash('error', 'Email e/o password errata');
                 } 
             } else {
-                req.session.error = 'Si è verificato un errore durante l\'accesso.';
+                req.flash('error', 'Si è verificato un errore durante l\'accesso.');
             }
             return res.redirect('/auth/login');
         }
         
         req.login(utente, (err) => {
             if (err) {
-                req.session.error = 'Errore durante il login.';
+                req.flash('error', 'Errore durante il login.');
                 return res.redirect('/auth/login');
             }
              
@@ -73,10 +73,10 @@ router.get('/logout', (req, res) => {
     req.logout((err) => {
         if (err) {
             console.error('Errore durante il logout:', err);
-            req.session.error = 'Si è verificato un errore durante il logout.';
+            req.flash('error', 'Si è verificato un errore durante il logout.');
             return res.redirect('/auth/login');
         }
-        req.session.success = 'Logout effettuato con successo.';
+        req.flash('success', 'Logout effettuato con successo.');
         res.redirect('/auth/login');
     });
 });
@@ -114,7 +114,7 @@ router.post("/register", [
 ], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        req.session.error = errors.array()[0].msg;
+        req.flash('error', errors.array()[0].msg);
         return res.redirect('/auth/register');
     }
 
@@ -122,11 +122,11 @@ router.post("/register", [
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
         await utentiDAO.newUser(req.body, hashedPassword);
 
-        req.session.success = 'Registrazione completata con successo.';
+        req.flash('success', 'Registrazione completata con successo.');
         return res.redirect("/auth/login");
     } catch (error) {
         console.log("Errore durante la registrazione: ", error);
-        req.session.error = "Errore durante la registrazione.";
+        req.flash('error', "Errore durante la registrazione.");
         return res.redirect("/auth/register");
     }
 });

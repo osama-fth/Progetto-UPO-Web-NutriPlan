@@ -42,7 +42,7 @@ router.get('/dashboard/:section', async (req, res) => {
     });
   } catch (err) {
     console.error("Errore nel recupero delle misurazioni:", err);
-    req.session.error = "Impossibile caricare le misurazioni";
+    req.flash('error', "Impossibile caricare le misurazioni");
   }
     
   try {
@@ -53,7 +53,7 @@ router.get('/dashboard/:section', async (req, res) => {
     }
   } catch (err) {
     console.error("Errore nel recupero delle recensioni:", err);
-    req.session.error = "Impossibile caricare la recensione";
+    req.flash('error', "Impossibile caricare la recensione");
   }
 
   try {
@@ -64,7 +64,7 @@ router.get('/dashboard/:section', async (req, res) => {
     });
   } catch (err) {
     console.error("Errore nel recupero dei piani alimentari:", err);
-    req.session.error = "Impossibile caricare i piani alimentari";
+    req.flash('error', "Impossibile caricare i piani alimentari");
   }
 
   try {
@@ -79,7 +79,7 @@ router.get('/dashboard/:section', async (req, res) => {
     });
   } catch (err) {
     console.log("Errore nel rendering della pagina:", err);
-    req.session.error = "Errore durante la visualizzazione della dashboard";
+    req.flash('error', "Errore durante la visualizzazione della dashboard");
     res.redirect("/error");
   }
 });
@@ -90,17 +90,17 @@ router.post('/misurazioni/nuova', async (req, res) => {
     const { peso, data } = req.body;
     
     if (!peso || !data || isNaN(parseFloat(peso)) || parseFloat(peso) <= 0) {
-      req.session.error = 'I dati inseriti non sono validi.';
+      req.flash('error', 'I dati inseriti non sono validi.');
       return res.redirect('/user/dashboard#misurazioni');
     }
     
     await misurazioniDAO.insertMisurazione(req.user.id, parseFloat(peso), data);
     
-    req.session.success = 'Misurazione aggiunta con successo.';
+    req.flash('success', 'Misurazione aggiunta con successo.');
     res.redirect('/user/dashboard#misurazioni');
   } catch (err) {
     console.error("Errore nell'inserimento della misurazione:", err);
-    req.session.error = 'Impossibile modificare la misurazione.';
+    req.flash('error', 'Impossibile modificare la misurazione.');
     res.redirect('/user/dashboard#misurazioni');
   }
 });
@@ -111,17 +111,17 @@ router.post('/misurazioni/modifica', async (req, res) => {
     const { misurazioneId, peso, data } = req.body;
     
     if (!peso || !data || isNaN(parseFloat(peso)) || parseFloat(peso) <= 0) {
-      req.session.error = 'I dati inseriti non sono validi.';
+      req.flash('error', 'I dati inseriti non sono validi.');
       return res.redirect('/user/dashboard#misurazioni');
     }
             
     await misurazioniDAO.updateMisurazione(misurazioneId, parseFloat(peso), data);
     
-    req.session.success = 'Misurazione aggiornata con successo.';
+    req.flash('success', 'Misurazione aggiornata con successo.');
     res.redirect('/user/dashboard#misurazioni');
   } catch (err) {
     console.error("Errore durante la modifica della misurazione:", err);
-    req.session.error = 'Si è verificato un errore durante la modifica della misurazione.';
+    req.flash('error', 'Si è verificato un errore durante la modifica della misurazione.');
     res.redirect('/user/dashboard#misurazioni');
   }
 });
@@ -133,17 +133,17 @@ router.get('/misurazioni/elimina/:id', async (req, res) => {
     
     const misurazione = await misurazioniDAO.getMisurazioneById(misurazioneId);
     if (!misurazione || misurazione.utente_id !== req.user.id) {
-      req.session.error = 'Misurazione non trovata o non autorizzata';
+      req.flash('error', 'Misurazione non trovata o non autorizzata');
       return res.redirect('/user/dashboard#misurazioni');
     }
     
     await misurazioniDAO.deleteMisurazione(misurazioneId);
     
-    req.session.success = 'Misurazione eliminata con successo.';
+    req.flash('success', 'Misurazione eliminata con successo.');
     res.redirect('/user/dashboard#misurazioni');
   } catch (err) {
     console.error("Errore durante l'eliminazione della misurazione:", err);
-    req.session.error = 'Si è verificato un errore durante l\'eliminazione della misurazione.';
+    req.flash('error', 'Si è verificato un errore durante l\'eliminazione della misurazione.');
     res.redirect('/user/dashboard#misurazioni');
   }
 });
@@ -154,23 +154,23 @@ router.post('/recensioni/nuova', async (req, res) => {
     const { commento, valutazione } = req.body;
     
     if (!commento || commento.trim() === '') {
-      req.session.error = 'Il testo della recensione non può essere vuoto.';
+      req.flash('error', 'Il testo della recensione non può essere vuoto.');
       return res.redirect('/user/dashboard#recensioni');
     }
     
     const voto = parseInt(valutazione) || 3;
     if (voto < 1 || voto > 5) {
-      req.session.error = 'La valutazione deve essere un numero da 1 a 5.';
+      req.flash('error', 'La valutazione deve essere un numero da 1 a 5.');
       return res.redirect('/user/dashboard#recensioni');
     }
 
     await recensioniDAO.insertRecensione(req.user.id, commento.trim(), voto);
     
-    req.session.success = 'Recensione pubblicata con successo.';
+    req.flash('success', 'Recensione pubblicata con successo.');
     res.redirect('/user/dashboard#recensioni');
   } catch (error) {
     console.error('Errore durante l\'aggiunta della recensione:', error);
-    req.session.error = 'Errore durante la gestione della recensione.';
+    req.flash('error', 'Errore durante la gestione della recensione.');
     res.redirect('/user/dashboard#recensioni');
   }
 });
@@ -182,17 +182,17 @@ router.post('/recensioni/cancella', async (req, res) => {
     
     const recensione = await recensioniDAO.getRecensioneById(recensioneId);
     if (!recensione || recensione.utente_id !== req.user.id) {
-      req.session.error = 'Recensione non trovata o non autorizzata';
+      req.flash('error', 'Recensione non trovata o non autorizzata');
       return res.redirect('/user/dashboard#recensioni');
     }
     
     await recensioniDAO.deleteRecensione(recensioneId);
     
-    req.session.success = 'Recensione eliminata con successo.';
+    req.flash('success', 'Recensione eliminata con successo.');
     res.redirect('/user/dashboard#recensioni');
   } catch (error) {
     console.error('Errore durante l\'eliminazione della recensione:', error);
-    req.session.error = 'Errore durante la gestione della recensione.';
+    req.flash('error', 'Errore durante la gestione della recensione.');
     res.redirect('/user/dashboard#recensioni');
   }
 });
@@ -208,12 +208,12 @@ router.get('/account/elimina', async (req, res) => {
         console.error("Errore durante il logout:", err);
       }
       
-      req.session.success = 'Account eliminato con successo.';
+      req.flash('success', 'Account eliminato con successo.');
       res.redirect('/auth/login');
     });
   } catch (error) {
     console.error("Errore durante l'eliminazione dell'account:", error);
-    req.session.error = 'Impossibile eliminare l\'elemento selezionato.';
+    req.flash('error', 'Impossibile eliminare l\'elemento selezionato.');
     res.redirect('/user/dashboard');
   }
 });
@@ -227,7 +227,7 @@ router.post('/account/aggiorna-dati', [
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      req.session.error = errors.array()[0].msg;
+      req.flash('error', errors.array()[0].msg);
       return res.redirect('/user/dashboard#impostazioni');
     }
     
@@ -236,11 +236,11 @@ router.post('/account/aggiorna-dati', [
     
     await utentiDAO.updateUserData(userId, nome, cognome, data_di_nascita);
     
-    req.session.success = 'Dati aggiornati con successo';
+    req.flash('success', 'Dati aggiornati con successo');
     res.redirect('/user/dashboard#impostazioni');
   } catch (error) {
     console.error('Errore durante l\'aggiornamento dei dati:', error);
-    req.session.error = 'Si è verificato un errore durante l\'aggiornamento dei dati';
+    req.flash('error', 'Si è verificato un errore durante l\'aggiornamento dei dati');
     res.redirect('/user/dashboard#impostazioni');
   }
 });
@@ -258,7 +258,7 @@ router.post('/account/cambia-password', [
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      req.session.error = errors.array()[0].msg;
+      req.flash('error', errors.array()[0].msg);
       return res.redirect('/user/dashboard#impostazioni');
     }
     
@@ -269,7 +269,7 @@ router.post('/account/cambia-password', [
     const isMatch = await bcrypt.compare(password_attuale, user.password);
     
     if (!isMatch) {
-      req.session.error = 'La password attuale non è corretta';
+      req.flash('error', 'La password attuale non è corretta');
       return res.redirect('/user/dashboard#impostazioni');
     }
     
@@ -277,11 +277,11 @@ router.post('/account/cambia-password', [
     
     await utentiDAO.updatePassword(userId, hashedPassword);
     
-    req.session.success = 'Password aggiornata con successo';
+    req.flash('success', 'Password aggiornata con successo');
     res.redirect('/user/dashboard#impostazioni');
   } catch (error) {
     console.error('Errore durante il cambio password:', error);
-    req.session.error = 'Si è verificato un errore durante il cambio password';
+    req.flash('error', 'Si è verificato un errore durante il cambio password');
     res.redirect('/user/dashboard#impostazioni');
   }
 });

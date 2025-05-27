@@ -80,7 +80,7 @@ router.get('/dashboard/:section', async (req, res) => {
         });
     } catch (error) {
         console.error("Errore nel recupero dei pazienti:", error);
-        req.session.error = "Impossibile caricare la lista dei pazienti";
+        req.flash('error', "Impossibile caricare la lista dei pazienti");
     }
     
     try {
@@ -91,7 +91,7 @@ router.get('/dashboard/:section', async (req, res) => {
         });
     } catch (error) {
         console.error("Errore nel recupero delle recensioni:", error);
-        req.session.error = "Impossibile caricare le recensioni";
+        req.flash('error', "Impossibile caricare le recensioni");
     }
     
     try {
@@ -102,7 +102,7 @@ router.get('/dashboard/:section', async (req, res) => {
         });
     } catch (error) {
         console.error("Errore nel recupero delle richieste di contatto:", error);
-        req.session.error = "Impossibile caricare le richieste di contatto"; 
+        req.flash('error', "Impossibile caricare le richieste di contatto"); 
     }
 
     try {
@@ -119,7 +119,7 @@ router.get('/dashboard/:section', async (req, res) => {
         });
     } catch (err) {
         console.error("Errore nel rendering della pagina:", err);
-        req.session.error = "Errore durante la visualizzazione della dashboard";
+        req.flash('error', "Errore durante la visualizzazione della dashboard");
         res.redirect("/error");
     }
 });
@@ -131,11 +131,11 @@ router.post('/utenti/elimina', async (req, res) => {
     
     await utentiDAO.deleteAccount(utenteId);
     
-    req.session.success = 'Utente eliminato con successo';
+    req.flash('success', 'Utente eliminato con successo');
     res.redirect('/admin/dashboard#pazienti');
   } catch (error) {
     console.error("Errore durante l'eliminazione dell'utente:", error);
-    req.session.error = 'Impossibile eliminare l\'utente';
+    req.flash('error', 'Impossibile eliminare l\'utente');
     res.redirect('/admin/dashboard#pazienti');
   }
 });
@@ -156,7 +156,7 @@ router.get('/pazienti/:id/misurazioni', async (req, res) => {
     res.json(misurazioniFormattate);
   } catch (error) {
     console.error('Errore nel recupero delle misurazioni:', error);
-    req.session.error = 'Impossibile recuperare le misurazioni';
+    req.flash('error', 'Impossibile recuperare le misurazioni');
     res.redirect('/admin/dashboard#pazienti');
   }
 });
@@ -168,11 +168,11 @@ router.post('/recensioni/elimina', async (req, res) => {
     
     await recensioniDAO.deleteRecensione(recensioneId);
     
-    req.session.success = 'Recensione eliminata con successo.';
+    req.flash('success', 'Recensione eliminata con successo.');
     res.redirect('/admin/dashboard#recensioni');
   } catch (error) {
     console.error('Errore durante l\'eliminazione della recensione:', error);
-    req.session.error = 'Errore durante l\'eliminazione della recensione.';
+    req.flash('error', 'Errore durante l\'eliminazione della recensione.');
     res.redirect('/admin/dashboard#recensioni');
   }
 });
@@ -184,11 +184,11 @@ router.post('/contatti/elimina', async (req, res) => {
     
     await contattiDAO.deleteRichiestaContatto(richiestaId);
     
-    req.session.success = 'Richiesta di contatto eliminata con successo.';
+    req.flash('success', 'Richiesta di contatto eliminata con successo.');
     res.redirect('/admin/dashboard#richieste-contatto');
   } catch (error) {
     console.error('Errore durante l\'eliminazione della richiesta di contatto:', error);
-    req.session.error = 'Errore durante l\'eliminazione della richiesta di contatto.';
+    req.flash('error', 'Errore durante l\'eliminazione della richiesta di contatto.');
     res.redirect('/admin/dashboard#richieste-contatto');
   }
 });
@@ -210,7 +210,7 @@ router.get('/pazienti/:id/piani-alimentari', async (req, res) => {
     res.json(pianiFormattati);
   } catch (error) {
     console.error('Errore nel recupero dei piani alimentari:', error);
-    req.session.error = 'Impossibile recuperare i piani alimentari';
+    req.flash('error', 'Impossibile recuperare i piani alimentari');
     res.redirect('/admin/dashboard#pazienti');
   }
 });
@@ -224,7 +224,7 @@ router.get('/piani-alimentari/:id', async (req, res) => {
     res.json(piano);
   } catch (error) {
     console.error('Errore nel recupero del piano alimentare:', error);
-    req.session.error = 'Impossibile recuperare il piano alimentare';
+    req.flash('error', 'Impossibile recuperare il piano alimentare');
     res.redirect('/admin/dashboard#pazienti');
   }
 });
@@ -239,7 +239,7 @@ router.post('/piani-alimentari/nuovo', async (req, res) => {
     res.json({ success: true, pianoId });
   } catch (error) {
     console.error('Errore nella creazione del piano alimentare:', error);
-    req.session.error = 'Impossibile creare il piano alimentare';
+    req.flash('error', 'Impossibile creare il piano alimentare');
     res.redirect('/admin/dashboard#pazienti');
   }
 });
@@ -250,11 +250,11 @@ router.post('/piani-alimentari/elimina', async (req, res) => {
     const { pianoId } = req.body;
      
     await pianiAlimentariDAO.deletePianoAlimentare(pianoId);
-    req.session.success = 'Piano alimentare eliminato con successo';
+    req.flash('success', 'Piano alimentare eliminato con successo');
     res.redirect('/admin/dashboard#pazienti');
   } catch (error) {
     console.error('Errore nell\'eliminazione del piano alimentare:', error);
-    req.session.error = 'Impossibile eliminare il piano alimentare';
+    req.flash('error', 'Impossibile eliminare il piano alimentare');
     res.redirect('/admin/dashboard#pazienti');
   }
 });
@@ -266,7 +266,7 @@ router.get('/pazienti/:id/visualizza-piani', async (req, res) => {
         const paziente = await utentiDAO.getUserById(pazienteId);
         
         if (!paziente) {
-            req.session.error = 'Paziente non trovato';
+            req.flash('error', 'Paziente non trovato');
             return res.redirect('/admin/dashboard/pazienti');
         }
         
@@ -280,7 +280,7 @@ router.get('/pazienti/:id/visualizza-piani', async (req, res) => {
         res.redirect(`/admin/dashboard/pazienti?paziente_id=${pazienteId}`);
     } catch (error) {
         console.error('Errore nel recupero dei piani alimentari:', error);
-        req.session.error = 'Impossibile recuperare i piani alimentari';
+        req.flash('error', 'Impossibile recuperare i piani alimentari');
         res.redirect('/admin/dashboard/pazienti');
     }
 });
@@ -292,7 +292,7 @@ router.get('/piani-alimentari/:id/visualizza', async (req, res) => {
         const piano = await pianiAlimentariDAO.getPianoAlimentareById(pianoId);
         
         if (!piano) {
-            req.session.error = 'Piano alimentare non trovato';
+            req.flash('error', 'Piano alimentare non trovato');
             return res.redirect('/admin/dashboard/pazienti');
         }
         
@@ -336,7 +336,7 @@ router.get('/piani-alimentari/:id/visualizza', async (req, res) => {
         
     } catch (err) {
         console.error('Errore durante la visualizzazione del piano:', err);
-        req.session.error = 'Errore durante la visualizzazione del piano';
+        req.flash('error', 'Errore durante la visualizzazione del piano');
         res.redirect('/admin/dashboard/pazienti');
     }
 });

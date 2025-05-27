@@ -5,14 +5,14 @@ exports.isLoggedIn = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
   }
-  req.session.error = 'Effettuare il login per accedere a questa pagina.';
+  req.flash('error', 'Effettuare il login per accedere a questa pagina.');
   res.redirect('/auth/login');
 };
 
 // Middleware per verificare se l'utente è un admin
 exports.isAdmin = (req, res, next) => {
   if (!req.isAuthenticated()) {
-    req.session.error = 'Effettuare il login per accedere a questa pagina.';
+    req.flash('error', 'Effettuare il login per accedere a questa pagina.');
     return res.redirect('/auth/login');
   }
 
@@ -20,14 +20,14 @@ exports.isAdmin = (req, res, next) => {
     return next();
   }
 
-  req.session.error = 'Non hai i permessi necessari per accedere a questa pagina.';
-  res.redirect('/index/error');
+  req.flash('error', 'Non hai i permessi necessari per accedere a questa pagina.');
+  res.redirect('/error');
 };
 
 // Middleware per verificare se l'utente è un paziente
 exports.isPaziente = (req, res, next) => {
   if (!req.isAuthenticated()) {
-    req.session.error = 'Effettuare il login per accedere a questa pagina.';
+    req.flash('error', 'Effettuare il login per accedere a questa pagina.');
     return res.redirect('/auth/login');
   }
 
@@ -35,6 +35,6 @@ exports.isPaziente = (req, res, next) => {
     return next();
   }
 
-  req.session.error = 'Non hai i permessi necessari per accedere a questa pagina.';
-  res.redirect('/index/error');
+  req.flash('error', 'Non hai i permessi necessari per accedere a questa pagina.');
+  res.redirect('/error');
 };

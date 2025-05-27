@@ -27,7 +27,7 @@ router.get('/recensioni', async (req, res) => {
     });
   } catch (error) {
     console.error('Errore durante il recupero delle recensioni:', error);
-    req.session.error = "Errore durante il recupero delle recensioni";
+    req.flash('error', "Errore durante il recupero delle recensioni");
     res.redirect("/error");
   }
 });
@@ -54,7 +54,7 @@ router.get('/recensioni/search', async (req, res) => {
     });
   } catch (error) {
     console.error('Errore durante la ricerca delle recensioni:', error);
-    req.session.error = "Errore durante la ricerca delle recensioni";
+    req.flash('error', "Errore durante la ricerca delle recensioni");
     res.redirect("/recensioni");
   }
 });
@@ -68,31 +68,31 @@ router.post('/contatti/invia', [
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      req.session.error = 'Completare tutti i campi correttamente.';
+      req.flash('error', 'Completare tutti i campi correttamente.');
       return res.redirect('/#contatti');
     }
     
     const { nome, email, messaggio } = req.body;
     await contattiDAO.inserisciRichiestaContatto(nome, email, messaggio);
     
-    req.session.success = 'Il tuo messaggio è stato inviato correttamente.';
+    req.flash('success', 'Il tuo messaggio è stato inviato correttamente.');
     res.redirect('/#contatti');
   } catch (error) {
     console.error('Errore durante l\'invio del messaggio di contatto:', error);
-    req.session.error = 'Si è verificato un errore durante l\'invio del messaggio.';
+    req.flash('error', 'Si è verificato un errore durante l\'invio del messaggio.');
     res.redirect('/#contatti');
   }
 });
 
 // Pagina di errore
 router.get('/error', (req, res) => {
-  let error = req.session.error || 'Si è verificato un errore imprevisto.';
+  let errorMsg = res.locals.error || 'Si è verificato un errore imprevisto.';
   
   res.render('pages/error', { 
     title: 'NutriPlan - Errore',
     user: req.user || null,
     isAuth: req.isAuthenticated(),
-    error: error  
+    error: errorMsg
   });
 });
 

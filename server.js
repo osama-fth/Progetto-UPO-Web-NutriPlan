@@ -3,6 +3,7 @@ const express = require("express");
 const session = require("express-session");
 const passport = require("passport");
 const morgan = require("morgan");
+const flash = require('connect-flash');
 const flashMessages = require('./middleware/messaggi');
 
 const PORT = 3000;
@@ -26,6 +27,9 @@ app.use(session({
   resave: false,
   saveUninitialized: false
 }));
+
+// Inizializzazione di connect-flash
+app.use(flash());
 
 // Middleware per i messaggi flash
 app.use(flashMessages);
