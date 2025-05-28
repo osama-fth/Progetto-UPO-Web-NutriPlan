@@ -8,6 +8,8 @@ const contattiDAO = require("../models/daos/contattiDAO");
 const misurazioniDAO = require("../models/daos/misurazioniDAO");
 const pianiAlimentariDAO = require("../models/daos/pianiAlimentariDAO");
 const middleware = require("../middleware/permessi");
+const PDFDocument = require('pdfkit');
+const PianoPDF  = require("../models/pdfGenerator");
 
 router.use(middleware.isAdmin);
 
@@ -136,7 +138,7 @@ router.post('/utenti/elimina', async (req, res) => {
   } catch (error) {
     console.error("Errore durante l'eliminazione dell'utente:", error);
     req.flash('error', 'Impossibile eliminare l\'utente');
-    res.redirect('/admin/dashboard#pazienti');
+    res.redirect('/admin/dashboard/pazienti');
   }
 });
 
@@ -157,7 +159,7 @@ router.get('/pazienti/:id/misurazioni', async (req, res) => {
   } catch (error) {
     console.error('Errore nel recupero delle misurazioni:', error);
     req.flash('error', 'Impossibile recuperare le misurazioni');
-    res.redirect('/admin/dashboard#pazienti');
+    res.redirect('/admin/dashboard/pazienti');
   }
 });
 
@@ -173,7 +175,7 @@ router.post('/recensioni/elimina', async (req, res) => {
   } catch (error) {
     console.error('Errore durante l\'eliminazione della recensione:', error);
     req.flash('error', 'Errore durante l\'eliminazione della recensione.');
-    res.redirect('/admin/dashboard#recensioni');
+    res.redirect('/admin/dashboard/recensioni');
   }
 });
 
@@ -185,11 +187,11 @@ router.post('/contatti/elimina', async (req, res) => {
     await contattiDAO.deleteRichiestaContatto(richiestaId);
     
     req.flash('success', 'Richiesta di contatto eliminata con successo.');
-    res.redirect('/admin/dashboard#richieste-contatto');
+    res.redirect('/admin/dashboard/richieste-contatto');
   } catch (error) {
     console.error('Errore durante l\'eliminazione della richiesta di contatto:', error);
     req.flash('error', 'Errore durante l\'eliminazione della richiesta di contatto.');
-    res.redirect('/admin/dashboard#richieste-contatto');
+    res.redirect('/admin/dashboard/richieste-contatto');
   }
 });
 
@@ -211,7 +213,7 @@ router.get('/pazienti/:id/piani-alimentari', async (req, res) => {
   } catch (error) {
     console.error('Errore nel recupero dei piani alimentari:', error);
     req.flash('error', 'Impossibile recuperare i piani alimentari');
-    res.redirect('/admin/dashboard#pazienti');
+    res.redirect('/admin/dashboard/pazienti');
   }
 });
 
@@ -225,7 +227,7 @@ router.get('/piani-alimentari/:id', async (req, res) => {
   } catch (error) {
     console.error('Errore nel recupero del piano alimentare:', error);
     req.flash('error', 'Impossibile recuperare il piano alimentare');
-    res.redirect('/admin/dashboard#pazienti');
+    res.redirect('/admin/dashboard/pazienti');
   }
 });
 
@@ -240,7 +242,7 @@ router.post('/piani-alimentari/nuovo', async (req, res) => {
   } catch (error) {
     console.error('Errore nella creazione del piano alimentare:', error);
     req.flash('error', 'Impossibile creare il piano alimentare');
-    res.redirect('/admin/dashboard#pazienti');
+    res.redirect('/admin/dashboard/pazienti');
   }
 });
 
@@ -255,7 +257,7 @@ router.post('/piani-alimentari/elimina', async (req, res) => {
   } catch (error) {
     console.error('Errore nell\'eliminazione del piano alimentare:', error);
     req.flash('error', 'Impossibile eliminare il piano alimentare');
-    res.redirect('/admin/dashboard#pazienti');
+    res.redirect('/admin/dashboard/pazienti');
   }
 });
 
@@ -339,6 +341,48 @@ router.get('/piani-alimentari/:id/visualizza', async (req, res) => {
         req.flash('error', 'Errore durante la visualizzazione del piano');
         res.redirect('/admin/dashboard/pazienti');
     }
+});
+
+// Aggiunta della route di download per l'admin
+router.get('/piani-alimentari/download/:id', async (req, res) => {
+  try {
+    const pianoId = req.params.id;
+    const piano = await pianiAlimentariDAO.getPianoAlimentareById(pianoId);
+    
+    if (!piano) {
+      req.flash('error', 'Piano alimentare non trovato');
+      return res.redirect('/admin/dashboard/pazienti');
+    }
+
+    const doc = new PDFDocument({
+      size: 'A4',
+      margin: 50
+    });
+    
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename=piano_alimentare_${pianoId}.pdf`);
+    
+    doc.pipe(res);
+    
+    try {
+      const success = await PianoPDF.generaPianoPDF(doc, piano);
+      
+      if (!success) {
+        throw new Error('Errore nella generazione del PDF');
+      }
+      
+      doc.end();
+    } catch (pdfError) {
+      console.error('Errore durante la generazione del PDF:', pdfError);
+      doc.end();
+      throw pdfError;
+    }
+    
+  } catch (error) {
+    console.error('Errore durante il download del piano:', error);
+    req.flash('error', 'Errore durante il download del piano alimentare');
+    res.redirect('/admin/dashboard/pazienti');
+  }
 });
 
 module.exports = router

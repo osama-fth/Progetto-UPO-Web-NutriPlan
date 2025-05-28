@@ -2,55 +2,53 @@
 
 function generaPianoPDF(doc, piano) {
   try {
-    doc.fontSize(16).text(`Piano Alimentare: ${piano.titolo || 'Senza titolo'}`, {
-      align: 'center'
-    });
+    // Aggiungi header con logo o titolo
+    doc.fontSize(20).font('Helvetica-Bold').text('NutriPlan', { align: 'center' });
+    doc.moveDown();
+    
+    // Titolo del piano
+    doc.fontSize(16).font('Helvetica-Bold')
+      .text(`Piano Alimentare: ${piano.titolo || 'Senza titolo'}`, { align: 'center' });
     doc.moveDown();
 
-    doc.fontSize(12)
-      .text(`Data creazione: ${piano.data_creazione}`)
-      .text(piano.descrizione || null)
+    // Data e descrizione
+    doc.fontSize(12).font('Helvetica')
+      .text(`Data creazione: ${new Date(piano.data_creazione).toLocaleDateString('it-IT')}`)
+      .text(piano.descrizione || 'Nessuna descrizione disponibile')
       .moveDown();
 
-    let pianoData;
-    try {
-      pianoData = typeof piano.contenuto === 'string' ?
-        JSON.parse(piano.contenuto) : piano.contenuto;
-    } catch (error) {
-      console.error('Errore nel parsing del contenuto del piano:', error);
-      pianoData = {};
-    }
-
-    const giorni = ['lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato', 'domenica'];
-
-    function renderPasto(pasto, label) {
-      if (!pasto) return;
-
-      doc.text(`${label.toUpperCase()}:`);
-
-      if (Array.isArray(pasto)) {
-        pasto.forEach(alimento => {
-          doc.text(`- ${alimento}`);
-        });
-      } else if (typeof pasto === 'string' && pasto.trim() !== '') {
-        doc.text(`- ${pasto}`);
-      } else {
-        doc.text('- Non specificato');
+    // Gestione del contenuto del piano
+    let contenuto = piano.contenuto;
+    if (typeof contenuto === 'string') {
+      try {
+        contenuto = JSON.parse(contenuto);
+      } catch (err) {
+        console.error('Errore parsing contenuto:', err);
+        contenuto = {};
       }
-
-      doc.moveDown(0.5);
     }
 
+    // Giorni della settimana
+    const giorni = ['lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato', 'domenica'];
+    
     giorni.forEach(giorno => {
-      if (pianoData[giorno]) {
-        doc.fontSize(12).text(giorno.toUpperCase());
-        doc.moveDown(0.5);
+      if (contenuto[giorno]) {
+        // Intestazione giorno
+        doc.fontSize(14).font('Helvetica-Bold')
+          .text(giorno.toUpperCase())
+          .moveDown(0.5);
 
-        renderPasto(pianoData[giorno].colazione, 'Colazione');
-        renderPasto(pianoData[giorno].pranzo, 'Pranzo');
-        renderPasto(pianoData[giorno].cena, 'Cena');
-        renderPasto(pianoData[giorno].spuntini, 'Spuntini');
-
+        // Pasti
+        ['colazione', 'pranzo', 'cena'].forEach(pasto => {
+          if (contenuto[giorno][pasto]) {
+            doc.fontSize(12).font('Helvetica-Bold')
+              .text(`${pasto.toUpperCase()}:`)
+              .font('Helvetica')
+              .text(contenuto[giorno][pasto] || 'Non specificato')
+              .moveDown(0.5);
+          }
+        });
+        
         doc.moveDown();
       }
     });
