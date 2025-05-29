@@ -43,34 +43,37 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   
-  // Gestione piani alimentari paziente - Modificato per usare approccio server-side
-  document.querySelectorAll('.btn-piani-paziente').forEach(button => {
-    button.addEventListener('click', function() {
-      const pazienteId = this.getAttribute('data-paziente-id');
-      // Redirect alla nuova route che carica i piani del paziente
-      window.location.href = `/admin/pazienti/${pazienteId}/visualizza-piani`;
+  // Gestione creazione nuovo piano alimentare per pulsante inline
+  if (document.getElementById('btn-nuovo-piano-inline')) {
+    document.getElementById('btn-nuovo-piano-inline').addEventListener('click', function() {
+      // Imposta l'ID paziente per il form del nuovo piano
+      const pazienteId = window.location.pathname.split('/')[3]; // Estrai l'ID del paziente dall'URL
+      
+      // Imposta la data corrente nel campo data
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('piano-data').value = today;
+      
+      // Imposta l'ID del paziente nel form
+      document.getElementById('piano-utente-id').value = pazienteId;
+      
+      // Apre il modal
+      const modalNuovoPiano = new bootstrap.Modal(document.getElementById('nuovoPianoModal'));
+      modalNuovoPiano.show();
     });
-  });
+  }
   
-  // Modificato il click sul pulsante "Visualizza piano"
-  document.querySelectorAll('.btn-visualizza-piano').forEach(button => {
-    button.addEventListener('click', function() {
-      const pianoId = this.getAttribute('data-piano-id');
-      // Redirect alla nuova route che mostra il piano
-      window.location.href = `/admin/piani-alimentari/${pianoId}/visualizza`;
+  // Gestione creazione nuovo piano alimentare (per il pulsante originale se esiste)
+  if (document.getElementById('btn-nuovo-piano')) {
+    document.getElementById('btn-nuovo-piano').addEventListener('click', function() {
+      // Imposta la data corrente nel campo data
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('piano-data').value = today;
+      
+      // Apre il modal
+      const modalNuovoPiano = new bootstrap.Modal(document.getElementById('nuovoPianoModal'));
+      modalNuovoPiano.show();
     });
-  });
-  
-  // Gestione creazione nuovo piano alimentare
-  document.getElementById('btn-nuovo-piano').addEventListener('click', function() {
-    // Imposta la data corrente nel campo data
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('piano-data').value = today;
-    
-    // Apre il modal
-    const modalNuovoPiano = new bootstrap.Modal(document.getElementById('nuovoPianoModal'));
-    modalNuovoPiano.show();
-  });
+  }
   
   // Salvataggio nuovo piano alimentare
   document.getElementById('salva-piano-btn').addEventListener('click', function() {
@@ -118,21 +121,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const modalNuovoPiano = bootstrap.Modal.getInstance(document.getElementById('nuovoPianoModal'));
         modalNuovoPiano.hide();
         
-        // Riapri il modal dei piani e ricarica la lista
-        document.querySelector(`.btn-piani-paziente[data-paziente-id="${utenteId}"]`).click();
+        // Reindirizza alla pagina dei piani del paziente
+        window.location.href = `/admin/pazienti/${utenteId}/visualizza-piani`;
       }
     })
     .catch(error => console.error('Errore nella creazione del piano alimentare:', error));
   });
   
-  // Funzione per aggiungere event listener ai pulsanti di visualizzazione piano
-  // La funzione addPianoViewListeners è stata modificata per usare il nuovo approccio server-side
-  function addPianoViewListeners() {
-    document.querySelectorAll('.btn-visualizza-piano').forEach(button => {
-      button.addEventListener('click', function() {
-        const pianoId = this.getAttribute('data-piano-id');
-        window.location.href = `/admin/piani-alimentari/${pianoId}/visualizza`;
-      });
-    });
-  }
 });

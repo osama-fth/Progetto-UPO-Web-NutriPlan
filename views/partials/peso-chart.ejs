@@ -2,8 +2,12 @@
 <div class="chart-container" style="position: relative; height: 300px;">
   <canvas id="<%= canvasId %>"></canvas>
 </div>
-<div class="text-center mt-2" id="no-chart-data" style="display: none;">
-  <p class="text-muted">Nessuna misurazione disponibile</p>
+<div class="text-center py-4" id="no-chart-data" style="display: none;">
+  <div class="bg-light rounded py-4 px-3 mx-auto" style="max-width: 400px;">
+    <i class="fas fa-weight text-primary mb-3" style="font-size: 2rem;"></i>
+    <h5 class="fw-semibold mb-2">Nessuna misurazione disponibile</h5>
+    <p class="text-muted mb-0">Aggiungi la tua prima misurazione per visualizzare il grafico</p>
+  </div>
 </div>
 
 <!-- Dati per il grafico (nascosti) -->

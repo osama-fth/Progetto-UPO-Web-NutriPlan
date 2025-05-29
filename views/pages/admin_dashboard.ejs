@@ -90,7 +90,7 @@
       </div>
 
       <!-- Sezione Pazienti -->
-      <div id="sezione-pazienti" class="sezione-contenuto <%= currentSection !== 'pazienti' ? 'd-none' : '' %>">
+      <div id="sezione-pazienti" class="sezione-contenuto <%= currentSection !== 'pazienti' || (typeof activeView !== 'undefined' && activeView === 'piani-paziente') ? 'd-none' : '' %>">
         <section class="row mt-4">
           <div class="col-lg-10 mx-auto">
             <div class="card mx-2">
@@ -125,12 +125,9 @@
                                         data-paziente-email="<%= paziente.email %>">
                                   <i class="fas fa-eye me-1"></i> Dettagli
                                 </button>
-                                <button type="button" class="btn btn-sm btn-outline-success me-2 btn-piani-paziente"
-                                        data-paziente-id="<%= paziente.id %>"
-                                        data-paziente-nome="<%= paziente.nome %>"
-                                        data-paziente-cognome="<%= paziente.cognome %>">
+                                <a href="/admin/pazienti/<%= paziente.id %>/visualizza-piani" class="btn btn-sm btn-outline-success me-2">
                                   <i class="fas fa-utensils me-1"></i> Piani
-                                </button>
+                                </a>
                                 <button type="button" class="btn btn-sm btn-outline-danger"
                                         data-elimina="utente" data-item-id="<%= paziente.id %>">
                                   <i class="fas fa-trash me-1"></i> Elimina
@@ -154,6 +151,89 @@
             </div>
           </div>
         </section>
+      </div>
+
+      <!-- Sezione Piani Alimentari Paziente -->
+      <div id="sezione-piani-paziente" class="sezione-contenuto <%= typeof activeView === 'undefined' || activeView !== 'piani-paziente' ? 'd-none' : '' %>">
+        <% if (typeof pazienteSelezionato !== 'undefined' && pazienteSelezionato) { %>
+          <section class="row mt-4">
+            <div class="col-lg-10 mx-auto">
+              <div class="card mx-2">
+                <header class="card-header bg-white d-flex justify-content-between align-items-center">
+                  <div>
+                    <a href="/admin/dashboard/pazienti" class="btn btn-sm btn-outline-primary me-3">
+                      <i class="fas fa-arrow-left"></i> Torna ai pazienti
+                    </a>
+                    <span class="py-1 h5 mb-0">Piani Alimentari - <%= pazienteSelezionato.nome %> <%= pazienteSelezionato.cognome %></span>
+                  </div>
+                  <button type="button" id="btn-nuovo-piano-inline" class="btn btn-success btn-sm">
+                    <i class="fas fa-plus me-1"></i> Nuovo Piano Alimentare
+                  </button>
+                </header>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                      <thead>
+                        <tr>
+                          <th scope="col" class="text-center">Titolo</th>
+                          <th scope="col" class="text-center">Data</th>
+                          <th scope="col" class="text-center">Azioni</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% if (pazienteSelezionato.pianiAlimentari && pazienteSelezionato.pianiAlimentari.length > 0) { %>
+                          <% pazienteSelezionato.pianiAlimentari.forEach(piano => { %>
+                            <tr>
+                              <td class="text-center"><%= piano.titolo %></td>
+                              <td class="text-center"><%= piano.dataFormattata %></td>
+                              <td class="text-center">
+                                <div class="d-flex justify-content-center">
+                                  <a href="/admin/piani-alimentari/<%= piano.id %>/visualizza" class="btn btn-sm btn-outline-primary me-2">
+                                    <i class="fas fa-eye me-1"></i> Visualizza
+                                  </a>
+                                  <a href="/admin/piani-alimentari/download/<%= piano.id %>" class="btn btn-sm btn-outline-success me-2" title="Scarica PDF">
+                                    <i class="fas fa-download"></i> Scarica PDF
+                                  </a>
+                                  <button type="button" class="btn btn-sm btn-outline-danger"
+                                    data-elimina="piano" data-item-id="<%= piano.id %>">
+                                    <i class="fas fa-trash"></i>
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          <% }); %>
+                        <% } else { %>
+                          <tr>
+                            <td colspan="3" class="text-center py-4">
+                              <i class="fas fa-utensils text-muted mb-3" style="font-size: 3rem;"></i>
+                              <p class="text-muted mb-0">Nessun piano alimentare disponibile</p>
+                            </td>
+                          </tr>
+                        <% } %>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        <% } else { %>
+          <section class="row mt-4">
+            <div class="col-lg-10 mx-auto">
+              <div class="card mx-2">
+                <header class="card-header bg-white">
+                  <a href="/admin/dashboard/pazienti" class="btn btn-sm btn-outline-primary">
+                    <i class="fas fa-arrow-left"></i> Torna ai pazienti
+                  </a>
+                </header>
+                <div class="card-body text-center py-5">
+                  <i class="fas fa-user-slash text-muted mb-3" style="font-size: 3rem;"></i>
+                  <p class="text-muted mb-0">Nessun paziente selezionato</p>
+                </div>
+              </div>
+            </div>
+          </section>
+        <% } %>
       </div>
 
       <!-- Sezione Recensioni -->
@@ -256,19 +336,7 @@
                               <label class="form-label fw-bold">Messaggio:</label>
                               <div class="border p-3 rounded bg-light"><%= richiesta.messaggio %></div>
                             </div>
-                            
-                            <!-- Informazioni aggiuntive -->
-                            <div class="row mb-3">
-                              <div class="col-md-6">
-                                <label class="form-label fw-bold">Email:</label>
-                                <p><a href="mailto:<%= richiesta.email %>"><%= richiesta.email %></a></p>
-                              </div>
-                              <div class="col-md-6">
-                                <label class="form-label fw-bold">Data:</label>
-                                <p><%= richiesta.dataFormattata %></p>
-                              </div>
-                            </div>
-                            
+
                             <!-- Pulsante per eliminare -->
                             <div class="d-flex justify-content-end mt-3">
                               <button type="button" class="btn btn-sm btn-outline-danger"
@@ -522,96 +590,26 @@
   </div>
 </div>
 
-<!-- Modal dettagli paziente con piani alimentari -->
-<% if (pazienteSelezionato) { %>
-<div class="modal fade show" id="pianiAlimentariModalPreloaded" tabindex="-1" aria-labelledby="pianiAlimentariModalLabel" aria-modal="true" style="display: block;">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="pianiAlimentariModalLabel">Piani Alimentari - <%= pazienteSelezionato.nome %> <%= pazienteSelezionato.cognome %></h5>
-        <a href="/admin/dashboard/pazienti" class="btn-close" aria-label="Close"></a>
-      </div>
-      <div class="modal-body">
-        <div class="d-flex justify-content-end mb-3">
-          <button type="button" id="btn-nuovo-piano" class="btn btn-success">
-            <i class="fas fa-plus me-1"></i> Nuovo Piano Alimentare
-          </button>
-        </div>
-
-        <div class="table-responsive">
-          <table class="table table-hover align-middle">
-            <thead>
-              <tr>
-                <th scope="col" class="text-center">Titolo</th>
-                <th scope="col" class="text-center">Data</th>
-                <th scope="col" class="text-center">Azioni</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% if (pazienteSelezionato.pianiAlimentari && pazienteSelezionato.pianiAlimentari.length > 0) { %>
-                <% pazienteSelezionato.pianiAlimentari.forEach(piano => { %>
-                  <tr>
-                    <td class="text-center"><%= piano.titolo %></td>
-                    <td class="text-center"><%= piano.dataFormattata %></td>
-                    <td class="text-center">
-                      <div class="d-flex justify-content-center">
-                        <a href="/admin/piani-alimentari/<%= piano.id %>/visualizza" class="btn btn-sm btn-outline-primary me-2">
-                          <i class="fas fa-eye me-1"></i> Visualizza
-                        </a>
-                        <a href="/admin/piani-alimentari/download/<%= piano.id %>" class="btn btn-sm btn-outline-success me-2" title="Scarica PDF">
-                          <i class="fas fa-download"></i> Scarica PDF
-                        </a>
-                        <button type="button" class="btn btn-sm btn-outline-danger"
-                          data-elimina="piano" data-item-id="<%= piano.id %>">
-                          <i class="fas fa-trash"></i>
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                <% }); %>
-              <% } else { %>
-                <tr>
-                  <td colspan="3" class="text-center py-4">
-                    <i class="fas fa-utensils text-muted mb-3" style="font-size: 3rem;"></i>
-                    <p class="text-muted mb-0">Nessun piano alimentare disponibile</p>
-                  </td>
-                </tr>
-              <% } %>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <a href="/admin/dashboard/pazienti" class="btn btn-secondary">Chiudi</a>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="modal-backdrop fade show"></div>
-<% } %>
-
-<!-- Modal visualizza piano alimentare (precaricato) -->
-<% if (pianoSelezionato) { %>
-<div class="modal fade show" id="visualizzaPianoModalPreloaded" tabindex="-1" aria-labelledby="visualizzaPianoModalLabel" aria-modal="true" style="display: block;">
+<!-- Modal per visualizzare piano alimentare nella vista piani-paziente -->
+<% if (typeof pianoSelezionato !== 'undefined' && pianoSelezionato && typeof activeView !== 'undefined' && activeView === 'piani-paziente') { %>
+<div class="modal fade show" id="visualizzaPianoInlinePaziente" tabindex="-1" aria-labelledby="visualizzaPianoInlinePazienteLabel" aria-modal="true" style="display: block;">
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="visualizzaPianoModalLabel">Dettaglio Piano Alimentare</h5>
-        <a href="/admin/dashboard/pazienti" class="btn-close" aria-label="Close"></a>
+        <h5 class="modal-title" id="visualizzaPianoInlinePazienteLabel">Dettaglio Piano Alimentare</h5>
+        <a href="/admin/pazienti/<%= pianoSelezionato.utente_id %>/visualizza-piani" class="btn-close" aria-label="Close"></a>
       </div>
       <div class="modal-body">
         <div class="mb-4">
           <h5 class="mb-3"><%= pianoSelezionato.titolo %></h5>
           <div class="d-flex justify-content-between align-items-center">
-            <!-- Usa la data già formattata dal backend invece di dayjs -->
             <p class="text-muted mb-2">Data: <%= pianoSelezionato.data_formattata %></p>
             <p class="text-muted mb-2">Paziente: <%= pianoSelezionato.nome_paziente %> <%= pianoSelezionato.cognome_paziente %></p>
           </div>
           <p class="border-bottom pb-3"><%= pianoSelezionato.descrizione || 'Nessuna descrizione disponibile.' %></p>
         </div>
         
-        <div class="accordion" id="dettaglioPianoDieteticoAccordion">
-          <!-- I giorni della settimana -->
+        <div class="accordion" id="dettaglioPianoDieteticoAccordionInline">
           <% const giorni = [
             { id: 'lunedì', label: 'Lunedì' },
             { id: 'martedì', label: 'Martedì' },
@@ -625,15 +623,15 @@
           <% giorni.forEach((giorno, index) => { %>
             <% if (pianoSelezionato.contenuto && pianoSelezionato.contenuto[giorno.id]) { %>
               <div class="accordion-item">
-                <h2 class="accordion-header" id="dettaglio-heading-<%= giorno.id %>">
+                <h2 class="accordion-header" id="dettaglio-inline-heading-<%= giorno.id %>">
                   <button class="accordion-button <%= index > 0 ? 'collapsed' : '' %>" type="button" 
-                    data-bs-toggle="collapse" data-bs-target="#dettaglio-collapse-<%= giorno.id %>" 
-                    aria-expanded="<%= index === 0 ? 'true' : 'false' %>" aria-controls="dettaglio-collapse-<%= giorno.id %>">
+                    data-bs-toggle="collapse" data-bs-target="#dettaglio-inline-collapse-<%= giorno.id %>" 
+                    aria-expanded="<%= index === 0 ? 'true' : 'false' %>" aria-controls="dettaglio-inline-collapse-<%= giorno.id %>">
                     <%= giorno.label %>
                   </button>
                 </h2>
-                <div id="dettaglio-collapse-<%= giorno.id %>" class="accordion-collapse collapse <%= index === 0 ? 'show' : '' %>" 
-                  aria-labelledby="dettaglio-heading-<%= giorno.id %>">
+                <div id="dettaglio-inline-collapse-<%= giorno.id %>" class="accordion-collapse collapse <%= index === 0 ? 'show' : '' %>" 
+                  aria-labelledby="dettaglio-inline-heading-<%= giorno.id %>">
                   <div class="accordion-body">
                     <div class="mb-3">
                       <p class="fw-bold mb-1">Colazione:</p>
@@ -655,7 +653,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <a href="/admin/dashboard/pazienti" class="btn btn-secondary">Chiudi</a>
+        <a href="/admin/pazienti/<%= pianoSelezionato.utente_id %>/visualizza-piani" class="btn btn-secondary">Chiudi</a>
       </div>
     </div>
   </div>
@@ -663,7 +661,7 @@
 <div class="modal-backdrop fade show"></div>
 <% } %>
 
-<%- include('../partials/logout-modal') %>
+  <%- include('../partials/logout-modal') %>
   <%- include('../partials/visualizza-piano-modal', { isAdmin: true }) %>
   <%- include('../partials/conferma-eliminazione-modal') %>
   
