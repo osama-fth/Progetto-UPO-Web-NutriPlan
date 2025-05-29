@@ -26,13 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Usa la funzione createWeightChart invece di renderPesoChart
             window.createWeightChart('pazienteChart', labels, values);
           } else {
-            // Gestisci caso di nessuna misurazione
-            const canvas = document.getElementById('pazienteChart');
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.font = '16px Arial';
-            ctx.textAlign = 'center';
-            ctx.fillText('Nessuna misurazione disponibile', canvas.width/2, canvas.height/2);
+            window.createWeightChart('pazienteChart', [], []);
           }
         })
         .catch(error => console.error('Errore nel caricamento delle misurazioni:', error));
