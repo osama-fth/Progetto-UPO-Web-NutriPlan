@@ -1,5 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
   
+  // Variabile per memorizzare l'istanza del grafico
+  let pazienteGrafico = null;
+  
   // Gestione modal dettagli paziente
   document.querySelectorAll('.btn-dettagli-paziente').forEach(button => {
     button.addEventListener('click', function() {
@@ -9,10 +12,17 @@ document.addEventListener('DOMContentLoaded', function() {
       const dataNascita = this.getAttribute('data-paziente-data-nascita');
       const email = this.getAttribute('data-paziente-email');
       
+      // Aggiorna i campi del modal con i dati del paziente
       document.getElementById('paziente-nome').textContent = nome;
       document.getElementById('paziente-cognome').textContent = cognome;
       document.getElementById('paziente-data-nascita').textContent = dataNascita;
       document.getElementById('paziente-email').textContent = email;
+      
+      // Distruggi il grafico precedente se esiste
+      if (pazienteGrafico) {
+        pazienteGrafico.destroy();
+        pazienteGrafico = null;
+      }
       
       // Carica le misurazioni del paziente per il grafico
       fetch(`/admin/pazienti/${pazienteId}/misurazioni`)
@@ -23,10 +33,11 @@ document.addEventListener('DOMContentLoaded', function() {
             const labels = misurazioni.map(m => m.dataFormattata);
             const values = misurazioni.map(m => m.misura);
             
-            // Usa la funzione createWeightChart invece di renderPesoChart
-            window.createWeightChart('pazienteChart', labels, values);
+            // Crea il nuovo grafico e salva l'istanza nella variabile
+            pazienteGrafico = window.createWeightChart('pazienteChart', labels, values);
           } else {
-            window.createWeightChart('pazienteChart', [], []);
+            // Anche per un grafico vuoto, salva l'istanza
+            pazienteGrafico = window.createWeightChart('pazienteChart', [], []);
           }
         })
         .catch(error => console.error('Errore nel caricamento delle misurazioni:', error));
@@ -35,6 +46,14 @@ document.addEventListener('DOMContentLoaded', function() {
       const modalDettagliPaziente = new bootstrap.Modal(document.getElementById('pazienteDetailsModal'));
       modalDettagliPaziente.show();
     });
+  });
+  
+  // Aggiungi anche un listener per la chiusura del modal che distrugge il grafico
+  document.getElementById('pazienteDetailsModal').addEventListener('hidden.bs.modal', function() {
+    if (pazienteGrafico) {
+      pazienteGrafico.destroy();
+      pazienteGrafico = null;
+    }
   });
   
   // Gestione creazione nuovo piano alimentare per pulsante inline
