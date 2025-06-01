@@ -1,4 +1,5 @@
-'use strict'
+'use strict';
+
 const express = require("express");
 const router = express.Router();
 const { check, validationResult } = require("express-validator");
@@ -10,7 +11,7 @@ const pianiAlimentariDAO = require("../models/daos/pianiAlimentariDAO");
 const utentiDAO = require("../models/daos/utentiDAO");
 const middleware = require("../middleware/permessi");
 const PDFDocument = require('pdfkit');
-const PianoPDF  = require("../models/pdfGenerator");
+const PianoPDF = require("../models/pdfGenerator");
 
 router.use(middleware.isPaziente);
 
@@ -20,7 +21,7 @@ router.get('/dashboard', (req, res) => {
 });
 
 // Rotte specifiche per le diverse sezioni della dashboard
-router.get('/dashboard/:section', async (req, res) => {  
+router.get('/dashboard/:section', async (req, res) => {
   const section = req.params.section;
   const validSections = ['misurazioni', 'piani-alimentari', 'recensioni', 'impostazioni'];
   
@@ -31,10 +32,10 @@ router.get('/dashboard/:section', async (req, res) => {
   let misurazioniFormattate = [];
   let recensione = null;
   let pianiAlimentariFormattati = [];
-    
+  
   try {
     const misurazioni = await misurazioniDAO.getMisurazioniByUserId(req.user.id);
-        
+    
     misurazioniFormattate = misurazioni.map(m => {
       m.dataFormattata = dayjs(m.data).format('DD/MM/YYYY');
       m.data_iso = dayjs(m.data).format('YYYY-MM-DD');
@@ -44,7 +45,7 @@ router.get('/dashboard/:section', async (req, res) => {
     console.error("Errore nel recupero delle misurazioni:", err);
     req.flash('error', "Impossibile caricare le misurazioni");
   }
-    
+  
   try {
     recensione = await recensioniDAO.getRecensioneByUserId(req.user.id);
 
@@ -197,7 +198,6 @@ router.post('/recensioni/cancella', async (req, res) => {
   }
 });
 
-//Elimina account
 router.get('/account/elimina', async (req, res) => {
   try {
     const utenteId = req.user.id;
@@ -251,10 +251,12 @@ router.post('/account/cambia-password', [
   check('nuova_password').notEmpty().withMessage('La nuova password è obbligatoria').isLength({ min: 8 }).withMessage('La password deve essere lunga almeno 8 caratteri'),
   check('conferma_password').notEmpty().withMessage('La conferma password è obbligatoria')
     .custom((value, { req }) => {
-      if (value !== req.body.nuova_password) {throw new Error('Le password non coincidono');}
+      if (value !== req.body.nuova_password) {
+        throw new Error('Le password non coincidono');
+      }
       return true;
     })
-  ], async (req, res) => {
+], async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -292,39 +294,33 @@ router.get('/piani-alimentari/download/:id', async (req, res) => {
     const pianoId = req.params.id;
     const piano = await pianiAlimentariDAO.getPianoAlimentareById(pianoId);
     
-    // Verifica proprietà e autorizzazioni
     if (!piano || piano.utente_id !== req.user.id) {
       req.flash('error', 'Piano alimentare non trovato o non autorizzato');
       return res.redirect('/user/dashboard/piani-alimentari');
     }
 
-    // Crea il documento PDF
     const doc = new PDFDocument({
       size: 'A4',
       margin: 50
     });
     
-    // Imposta gli header per il download
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename=piano_alimentare_${pianoId}.pdf`);
     
-    // Pipe il PDF alla risposta
     doc.pipe(res);
     
     try {
-      // Genera il contenuto del PDF
       const success = await PianoPDF.generaPianoPDF(doc, piano);
       
       if (!success) {
         throw new Error('Errore nella generazione del PDF');
       }
       
-      // Finalizza e chiudi il documento
       doc.end();
     } catch (pdfError) {
       console.error('Errore durante la generazione del PDF:', pdfError);
-      doc.end(); // Assicurati di chiudere il documento anche in caso di errore
-      throw pdfError; // Rilancia l'errore per essere gestito dal catch esterno
+      doc.end();
+      throw pdfError;
     }
     
   } catch (error) {

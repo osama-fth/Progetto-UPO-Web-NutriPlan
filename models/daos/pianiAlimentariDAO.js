@@ -3,8 +3,8 @@
 const db = require('../db');
 
 class PianiAlimentariDAO {
-  constructor(databse) {
-    this.db = databse;
+  constructor(database) {
+    this.db = database;
   }
 
   async getPianiAlimentariByUserId(userId) {

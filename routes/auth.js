@@ -1,10 +1,11 @@
-'use strict'
-const express = require("express")
-const router = express.Router()
-const passport = require("../models/passport")
-const { check, validationResult } = require('express-validator')
-const bcrypt = require("bcrypt")
-const utentiDAO = require("../models/daos/utentiDAO")
+'use strict';
+
+const express = require("express");
+const router = express.Router();
+const passport = require("../models/passport");
+const { check, validationResult } = require('express-validator');
+const bcrypt = require("bcrypt");
+const utentiDAO = require("../models/daos/utentiDAO");
 
 // GET pagina login
 router.get("/login", (req, res) => {
@@ -41,7 +42,7 @@ router.post('/login', [
         
         if (!utente) {
             if (info && info.message) {
-                if (info.message == 'Utente non trovato.' || 'Password errata.') {
+                if (info.message === 'Utente non trovato.' || info.message === 'Password errata.') {
                     req.flash('error', 'Email e/o password errata');
                 } 
             } else {
@@ -98,7 +99,7 @@ router.get("/register", (req, res) => {
     });
 });
 
-// POST d ina registrazione
+// POST registrazione
 router.post("/register", [
     check('nome').notEmpty().withMessage("Il nome è obbligatorio").matches(/^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/).withMessage('Il nome deve contenere solo lettere'),
     check('cognome').notEmpty().withMessage("Il cognome è obbligatorio").matches(/^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/).withMessage('Il cognome deve contenere solo lettere'),

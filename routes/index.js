@@ -1,4 +1,5 @@
-'use strict'
+'use strict';
+
 const express = require('express');
 const router = express.Router();
 const recensioniDAO = require('../models/daos/recensioniDAO');
@@ -20,7 +21,7 @@ router.get('/recensioni', async (req, res) => {
     const recensioni = await recensioniDAO.getAllRecensioni();
     
     res.render('pages/recensioni', {
-      title: ' NutriPlan - Recensioni',
+      title: 'NutriPlan - Recensioni',
       recensioni,
       user: req.user || null,
       isAuth: req.isAuthenticated()  

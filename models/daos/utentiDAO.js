@@ -8,10 +8,9 @@ class UtentiDAO {
   }
 
   async getUser(email) {
-    let sql = `SELECT * FROM utenti WHERE email = ?`;
-
+    const sql = `SELECT * FROM utenti WHERE email = ?`;
     return new Promise((resolve, reject) => {
-      this.db.get(sql, [email], function(err, row) {
+      this.db.get(sql, [email], (err, row) => {
         if (err) reject(err);
         else resolve(row);
       });
@@ -19,10 +18,9 @@ class UtentiDAO {
   }
 
   async getUserById(id) {
-    let sql = `SELECT * FROM utenti WHERE id = ?`;
-
+    const sql = `SELECT * FROM utenti WHERE id = ?`;
     return new Promise((resolve, reject) => {
-      this.db.get(sql, [id], function(err, row) {
+      this.db.get(sql, [id], (err, row) => {
         if (err) reject(err);
         else resolve(row);
       });
@@ -30,8 +28,8 @@ class UtentiDAO {
   }
 
   async newUser(user, HashedPassword) {
-    let sql = `INSERT INTO utenti (nome, cognome, email, password, data_di_nascita, ruolo) VALUES (?, ?, ?, ?, ?, ?)`;
-    let params = [user.nome, user.cognome, user.email, HashedPassword, user.data_di_nascita, "paziente"];
+    const sql = `INSERT INTO utenti (nome, cognome, email, password, data_di_nascita, ruolo) VALUES (?, ?, ?, ?, ?, ?)`;
+    const params = [user.nome, user.cognome, user.email, HashedPassword, user.data_di_nascita, "paziente"];
     
     return new Promise((resolve, reject) => {
       this.db.run(sql, params, function(err) {
@@ -57,7 +55,6 @@ class UtentiDAO {
 
   async deleteAccount(utenteId) {
     const sql = `DELETE FROM utenti WHERE id = ?`;
-    
     return new Promise((resolve, reject) => {
       this.db.run(sql, [utenteId], function(err) {
         if (err) reject(err);

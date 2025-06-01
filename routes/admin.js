@@ -1,6 +1,7 @@
-'use strict'
-const express = require("express")
-const router = express.Router()
+'use strict';
+
+const express = require("express");
+const router = express.Router();
 const dayjs = require("dayjs");
 const utentiDAO = require("../models/daos/utentiDAO");
 const recensioniDAO = require("../models/daos/recensioniDAO");
@@ -9,7 +10,7 @@ const misurazioniDAO = require("../models/daos/misurazioniDAO");
 const pianiAlimentariDAO = require("../models/daos/pianiAlimentariDAO");
 const middleware = require("../middleware/permessi");
 const PDFDocument = require('pdfkit');
-const PianoPDF  = require("../models/pdfGenerator");
+const PianoPDF = require("../models/pdfGenerator");
 
 router.use(middleware.isAdmin);
 
@@ -20,110 +21,105 @@ router.get('/dashboard', (req, res) => {
 
 // Rotte specifiche per le diverse sezioni della dashboard
 router.get('/dashboard/:section', async (req, res) => {
-    const section = req.params.section;
-    const validSections = ['pazienti', 'recensioni', 'richieste-contatto'];
-    
-    if (!validSections.includes(section)) {
-        return res.redirect('/admin/dashboard/pazienti');
-    }
-    
-    let pazientiFormattati = [];
-    let recensioniFormattate = [];
-    let richiesteFormattate = [];
-    // Aggiungiamo una variabile per il piano selezionato (se presente)
-    let pianoSelezionato = null;
-    let pazienteSelezionato = null;
+  const section = req.params.section;
+  const validSections = ['pazienti', 'recensioni', 'richieste-contatto'];
+  
+  if (!validSections.includes(section)) {
+    return res.redirect('/admin/dashboard/pazienti');
+  }
+  
+  let pazientiFormattati = [];
+  let recensioniFormattate = [];
+  let richiesteFormattate = [];
+  let pianoSelezionato = null;
+  let pazienteSelezionato = null;
 
-    // Verifichiamo se è stato richiesto un piano specifico
-    const pianoId = req.query.piano_id;
-    const pazienteId = req.query.paziente_id;
+  const pianoId = req.query.piano_id;
+  const pazienteId = req.query.paziente_id;
     
-    if (pianoId) {
-        try {
-            pianoSelezionato = await pianiAlimentariDAO.getPianoAlimentareById(pianoId);
-            if (pianoSelezionato && pianoSelezionato.contenuto) {
-                // Convertiamo il contenuto JSON in oggetto se è una stringa
-                if (typeof pianoSelezionato.contenuto === 'string') {
-                    pianoSelezionato.contenuto = JSON.parse(pianoSelezionato.contenuto);
-                }
-                // Otteniamo anche i dettagli del paziente associato
-                const paziente = await utentiDAO.getUserById(pianoSelezionato.utente_id);
-                if (paziente) {
-                    pianoSelezionato.nome_paziente = paziente.nome;
-                    pianoSelezionato.cognome_paziente = paziente.cognome;
-                }
-            }
-        } catch (err) {
-            console.error("Errore nel caricamento del piano alimentare:", err);
+  if (pianoId) {
+    try {
+      pianoSelezionato = await pianiAlimentariDAO.getPianoAlimentareById(pianoId);
+      if (pianoSelezionato && pianoSelezionato.contenuto) {
+        if (typeof pianoSelezionato.contenuto === 'string') {
+          pianoSelezionato.contenuto = JSON.parse(pianoSelezionato.contenuto);
         }
-    }
-    
-    // Se è stato richiesto un paziente specifico, carica i suoi piani
-    if (pazienteId) {
-        try {
-            pazienteSelezionato = await utentiDAO.getUserById(pazienteId);
-            if (pazienteSelezionato) {
-                const pianiAlimentari = await pianiAlimentariDAO.getPianiAlimentariByUserId(pazienteId);
-                pazienteSelezionato.pianiAlimentari = pianiAlimentari.map(p => {
-                    p.dataFormattata = dayjs(p.data_creazione).format('DD/MM/YYYY');
-                    return p;
-                });
-            }
-        } catch (err) {
-            console.error("Errore nel caricamento del paziente:", err);
+        const paziente = await utentiDAO.getUserById(pianoSelezionato.utente_id);
+        if (paziente) {
+          pianoSelezionato.nome_paziente = paziente.nome;
+          pianoSelezionato.cognome_paziente = paziente.cognome;
         }
-    }
-
-    try {
-        const pazienti = await utentiDAO.getAllPazienti();
-        pazientiFormattati = pazienti.map(paziente => {
-            paziente.data_formattata = dayjs(paziente.data_di_nascita).format('DD/MM/YYYY');
-            return paziente;
-        });
-    } catch (error) {
-        console.error("Errore nel recupero dei pazienti:", error);
-        req.flash('error', "Impossibile caricare la lista dei pazienti");
-    }
-    
-    try {
-        const recensioni = await recensioniDAO.getAllRecensioniWithUserInfo();
-        recensioniFormattate = recensioni.map(recensione => {
-            recensione.dataFormattata = dayjs(recensione.data_creazione).format('DD/MM/YYYY');
-            return recensione;
-        });
-    } catch (error) {
-        console.error("Errore nel recupero delle recensioni:", error);
-        req.flash('error', "Impossibile caricare le recensioni");
-    }
-    
-    try {
-        const richieste = await contattiDAO.getAllRichiesteContatto();
-        richiesteFormattate = richieste.map(richiesta => {
-            richiesta.dataFormattata = dayjs(richiesta.data_creazione).format('DD/MM/YYYY');
-            return richiesta;
-        });
-    } catch (error) {
-        console.error("Errore nel recupero delle richieste di contatto:", error);
-        req.flash('error', "Impossibile caricare le richieste di contatto"); 
-    }
-
-    try {
-        res.render("pages/admin_dashboard", { 
-            title: 'Dashboard Admin - NutriPlan',
-            user: req.user, 
-            pazienti: pazientiFormattati,
-            recensioni: recensioniFormattate,
-            richieste: richiesteFormattate,
-            pianoSelezionato: pianoSelezionato,
-            pazienteSelezionato: pazienteSelezionato,
-            isAuth: req.isAuthenticated(),
-            currentSection: section
-        });
+      }
     } catch (err) {
-        console.error("Errore nel rendering della pagina:", err);
-        req.flash('error', "Errore durante la visualizzazione della dashboard");
-        res.redirect("/error");
+      console.error("Errore nel caricamento del piano alimentare:", err);
     }
+  }
+    
+  if (pazienteId) {
+    try {
+      pazienteSelezionato = await utentiDAO.getUserById(pazienteId);
+      if (pazienteSelezionato) {
+        const pianiAlimentari = await pianiAlimentariDAO.getPianiAlimentariByUserId(pazienteId);
+        pazienteSelezionato.pianiAlimentari = pianiAlimentari.map(p => {
+          p.dataFormattata = dayjs(p.data_creazione).format('DD/MM/YYYY');
+          return p;
+        });
+      }
+    } catch (err) {
+      console.error("Errore nel caricamento del paziente:", err);
+    }
+  }
+
+  try {
+    const pazienti = await utentiDAO.getAllPazienti();
+    pazientiFormattati = pazienti.map(paziente => {
+      paziente.data_formattata = dayjs(paziente.data_di_nascita).format('DD/MM/YYYY');
+      return paziente;
+    });
+  } catch (error) {
+    console.error("Errore nel recupero dei pazienti:", error);
+    req.flash('error', "Impossibile caricare la lista dei pazienti");
+  }
+    
+  try {
+    const recensioni = await recensioniDAO.getAllRecensioniWithUserInfo();
+    recensioniFormattate = recensioni.map(recensione => {
+      recensione.dataFormattata = dayjs(recensione.data_creazione).format('DD/MM/YYYY');
+      return recensione;
+    });
+  } catch (error) {
+    console.error("Errore nel recupero delle recensioni:", error);
+    req.flash('error', "Impossibile caricare le recensioni");
+  }
+    
+  try {
+    const richieste = await contattiDAO.getAllRichiesteContatto();
+    richiesteFormattate = richieste.map(richiesta => {
+      richiesta.dataFormattata = dayjs(richiesta.data_creazione).format('DD/MM/YYYY');
+      return richiesta;
+    });
+  } catch (error) {
+    console.error("Errore nel recupero delle richieste di contatto:", error);
+    req.flash('error', "Impossibile caricare le richieste di contatto");
+  }
+
+  try {
+    res.render("pages/admin_dashboard", {
+      title: 'Dashboard Admin - NutriPlan',
+      user: req.user,
+      pazienti: pazientiFormattati,
+      recensioni: recensioniFormattate,
+      richieste: richiesteFormattate,
+      pianoSelezionato: pianoSelezionato,
+      pazienteSelezionato: pazienteSelezionato,
+      isAuth: req.isAuthenticated(),
+      currentSection: section
+    });
+  } catch (err) {
+    console.error("Errore nel rendering della pagina:", err);
+    req.flash('error', "Errore durante la visualizzazione della dashboard");
+    res.redirect("/error");
+  }
 });
 
 // Eliminazione utente
@@ -250,7 +246,7 @@ router.post('/piani-alimentari/nuovo', async (req, res) => {
 router.post('/piani-alimentari/elimina', async (req, res) => {
   try {
     const { pianoId } = req.body;
-     
+    
     await pianiAlimentariDAO.deletePianoAlimentare(pianoId);
     req.flash('success', 'Piano alimentare eliminato con successo');
     res.redirect('/admin/dashboard#pazienti');
@@ -261,31 +257,25 @@ router.post('/piani-alimentari/elimina', async (req, res) => {
   }
 });
 
-
-
-// Nuova route per visualizzare un piano alimentare specifico
 router.get('/piani-alimentari/:id/visualizza', async (req, res) => {
-    try {
-        const pianoId = req.params.id;
-        const piano = await pianiAlimentariDAO.getPianoAlimentareById(pianoId);
-        
-        if (!piano) {
-            req.flash('error', 'Piano alimentare non trovato');
-            return res.redirect('/admin/dashboard/pazienti');
-        }
-        
-        // Invece di mostrare il modal, reindirizza alla pagina dei piani del paziente
-        // con un parametro per indicare quale piano visualizzare
-        res.redirect(`/admin/pazienti/${piano.utente_id}/visualizza-piani?piano_id=${pianoId}`);
-        
-    } catch (err) {
-        console.error('Errore durante la visualizzazione del piano:', err);
-        req.flash('error', 'Errore durante la visualizzazione del piano');
-        res.redirect('/admin/dashboard/pazienti');
+  try {
+    const pianoId = req.params.id;
+    const piano = await pianiAlimentariDAO.getPianoAlimentareById(pianoId);
+    
+    if (!piano) {
+      req.flash('error', 'Piano alimentare non trovato');
+      return res.redirect('/admin/dashboard/pazienti');
     }
+    
+    res.redirect(`/admin/pazienti/${piano.utente_id}/visualizza-piani?piano_id=${pianoId}`);
+    
+  } catch (err) {
+    console.error('Errore durante la visualizzazione del piano:', err);
+    req.flash('error', 'Errore durante la visualizzazione del piano');
+    res.redirect('/admin/dashboard/pazienti');
+  }
 });
 
-// Aggiunta della route di download per l'admin
 router.get('/piani-alimentari/download/:id', async (req, res) => {
   try {
     const pianoId = req.params.id;
@@ -329,84 +319,77 @@ router.get('/piani-alimentari/download/:id', async (req, res) => {
 
 // Route per visualizzare i piani alimentari di un paziente
 router.get('/pazienti/:id/visualizza-piani', async (req, res) => {
-    try {
-        const pazienteId = req.params.id;
-        const pianoIdDaVisualizzare = req.query.piano_id; // Parametro opzionale per visualizzare un piano specifico
-        
-        const paziente = await utentiDAO.getUserById(pazienteId);
-        
-        if (!paziente) {
-            req.flash('error', 'Paziente non trovato');
-            return res.redirect('/admin/dashboard/pazienti');
-        }
-        
-        const pianiAlimentari = await pianiAlimentariDAO.getPianiAlimentariByUserId(pazienteId);
-        const pianiFormattati = pianiAlimentari.map(p => {
-            p.dataFormattata = dayjs(p.data_creazione).format('DD/MM/YYYY');
-            return p;
-        });
-        
-        // Se è richiesto un piano specifico, lo caricaimo
-        let pianoSelezionato = null;
-        if (pianoIdDaVisualizzare) {
-            try {
-                pianoSelezionato = await pianiAlimentariDAO.getPianoAlimentareById(pianoIdDaVisualizzare);
-                if (pianoSelezionato) {
-                    // Formatta la data
-                    if (pianoSelezionato.data_creazione) {
-                        pianoSelezionato.data_formattata = dayjs(pianoSelezionato.data_creazione).format('DD/MM/YYYY');
-                    }
-                    
-                    // Convertiamo il contenuto JSON in oggetto se è una stringa
-                    if (pianoSelezionato.contenuto && typeof pianoSelezionato.contenuto === 'string') {
-                        pianoSelezionato.contenuto = JSON.parse(pianoSelezionato.contenuto);
-                    }
-                    
-                    // Aggiungi i dettagli del paziente
-                    pianoSelezionato.nome_paziente = paziente.nome;
-                    pianoSelezionato.cognome_paziente = paziente.cognome;
-                }
-            } catch (error) {
-                console.error('Errore nel caricamento del piano specifico:', error);
-            }
-        }
-        
-        // Carica tutti i dati necessari per la dashboard
-        let pazientiFormattati = [];
-        let recensioniFormattate = [];
-        let richiesteFormattate = [];
-        
-        try {
-            const pazienti = await utentiDAO.getAllPazienti();
-            pazientiFormattati = pazienti.map(paziente => {
-                paziente.data_formattata = dayjs(paziente.data_di_nascita).format('DD/MM/YYYY');
-                return paziente;
-            });
-        } catch (error) {
-            console.error("Errore nel recupero dei pazienti:", error);
-        }
-        
-        // Renderizza la dashboard con la vista dei piani del paziente
-        res.render("pages/admin_dashboard", { 
-            title: 'Dashboard Admin - Piani alimentari paziente - NutriPlan',
-            user: req.user, 
-            pazienti: pazientiFormattati,
-            recensioni: recensioniFormattate,
-            richieste: richiesteFormattate,
-            pazienteSelezionato: {
-                ...paziente,
-                pianiAlimentari: pianiFormattati
-            },
-            pianoSelezionato: pianoSelezionato, // Ora può essere null o il piano selezionato
-            isAuth: req.isAuthenticated(),
-            currentSection: 'pazienti',
-            activeView: 'piani-paziente'  // Nuovo parametro per indicare la vista attiva
-        });
-    } catch (error) {
-        console.error('Errore nel recupero dei piani alimentari:', error);
-        req.flash('error', 'Impossibile recuperare i piani alimentari');
-        res.redirect('/admin/dashboard/pazienti');
+  try {
+    const pazienteId = req.params.id;
+    const pianoIdDaVisualizzare = req.query.piano_id;
+    
+    const paziente = await utentiDAO.getUserById(pazienteId);
+    
+    if (!paziente) {
+      req.flash('error', 'Paziente non trovato');
+      return res.redirect('/admin/dashboard/pazienti');
     }
+    
+    const pianiAlimentari = await pianiAlimentariDAO.getPianiAlimentariByUserId(pazienteId);
+    const pianiFormattati = pianiAlimentari.map(p => {
+      p.dataFormattata = dayjs(p.data_creazione).format('DD/MM/YYYY');
+      return p;
+    });
+    
+    let pianoSelezionato = null;
+    if (pianoIdDaVisualizzare) {
+      try {
+        pianoSelezionato = await pianiAlimentariDAO.getPianoAlimentareById(pianoIdDaVisualizzare);
+        if (pianoSelezionato) {
+          if (pianoSelezionato.data_creazione) {
+            pianoSelezionato.data_formattata = dayjs(pianoSelezionato.data_creazione).format('DD/MM/YYYY');
+          }
+          
+          if (pianoSelezionato.contenuto && typeof pianoSelezionato.contenuto === 'string') {
+            pianoSelezionato.contenuto = JSON.parse(pianoSelezionato.contenuto);
+          }
+          
+          pianoSelezionato.nome_paziente = paziente.nome;
+          pianoSelezionato.cognome_paziente = paziente.cognome;
+        }
+      } catch (error) {
+        console.error('Errore nel caricamento del piano specifico:', error);
+      }
+    }
+    let pazientiFormattati = [];
+    let recensioniFormattate = [];
+    let richiesteFormattate = [];
+    
+    try {
+      const pazienti = await utentiDAO.getAllPazienti();
+      pazientiFormattati = pazienti.map(paziente => {
+        paziente.data_formattata = dayjs(paziente.data_di_nascita).format('DD/MM/YYYY');
+        return paziente;
+      });
+    } catch (error) {
+      console.error("Errore nel recupero dei pazienti:", error);
+    }
+    
+    res.render("pages/admin_dashboard", {
+      title: 'Dashboard Admin - Piani alimentari paziente - NutriPlan',
+      user: req.user,
+      pazienti: pazientiFormattati,
+      recensioni: recensioniFormattate,
+      richieste: richiesteFormattate,
+      pazienteSelezionato: {
+        ...paziente,
+        pianiAlimentari: pianiFormattati
+      },
+      pianoSelezionato: pianoSelezionato,
+      isAuth: req.isAuthenticated(),
+      currentSection: 'pazienti',
+      activeView: 'piani-paziente'
+    });
+  } catch (error) {
+    console.error('Errore nel recupero dei piani alimentari:', error);
+    req.flash('error', 'Impossibile recuperare i piani alimentari');
+    res.redirect('/admin/dashboard/pazienti');
+  }
 });
 
-module.exports = router
+module.exports = router;

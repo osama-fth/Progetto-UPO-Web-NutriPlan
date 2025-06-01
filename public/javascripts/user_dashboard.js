@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-  // ===== Utility per UI =====
   const uiUtils = {
     showModal(modalId) {
       const modal = new bootstrap.Modal(document.getElementById(modalId));
@@ -22,7 +21,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   };
 
-  // ===== Gestione misurazioni =====
   const misurazioniManager = {
     init() {
       this.setupDateInputDefault();
@@ -57,8 +55,6 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }
   };
-  
-  // ===== Gestione piani alimentari =====
   const pianiAlimentariManager = {
     init() {
       this.setupPianiButtons();
@@ -98,7 +94,6 @@ document.addEventListener('DOMContentLoaded', function() {
     renderDettaglioPiano(contenutoJSON) {
       const contenuto = typeof contenutoJSON === 'string' ? JSON.parse(contenutoJSON) : contenutoJSON;
       
-      // Prima nasconde tutti gli elementi giorno
       const giorni = ['lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato', 'domenica'];
       giorni.forEach(giorno => {
         const elementoGiorno = document.getElementById(`dettaglio-giorno-${giorno}`);
@@ -107,7 +102,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       });
       
-      // Poi mostra solo quelli con contenuto
       for (const giorno of giorni) {
         if (contenuto[giorno]) {
           const elementoGiorno = document.getElementById(`dettaglio-giorno-${giorno}`);

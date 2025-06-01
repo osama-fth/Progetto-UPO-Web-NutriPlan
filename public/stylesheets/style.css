@@ -1,18 +1,18 @@
 :root {
-    --dark-blue: #03045E;
-    --deep-blue: #023e8a;
-    --medium-blue: #0077B6;
-    --bright-cyan: #0096c7;
-    --bright-blue: #00B4D8;
-    --light-blue: #90E0EF;
-    --azure-blue: #48cae4;
-    --pastel-blue: #CAF0F8;
-    --pale-blue: #ADE8F4;
-    --white: #ffffff;
-    --black: #000000;
+  --dark-blue: #03045E;
+  --deep-blue: #023e8a;
+  --medium-blue: #0077B6;
+  --bright-cyan: #0096c7;
+  --bright-blue: #00B4D8;
+  --light-blue: #90E0EF;
+  --azure-blue: #48cae4;
+  --pastel-blue: #CAF0F8;
+  --pale-blue: #ADE8F4;
+  --white: #ffffff;
+  --black: #000000;
 }
 
-/* ----------Stili base----------*/
+/* Stili base */
 html, body {
   height: 100%;
   margin: 0;
@@ -30,8 +30,8 @@ body {
   overflow-x: hidden;
 }
 
-.error-section{
-    height: 90vh;
+.error-section {
+  height: 90vh;
 }
 
 .chart-scroll-container {
@@ -57,64 +57,52 @@ h1 {
 
 h2,
 h3 {
-    color: var(--deep-blue);
-    font-weight: 600;
+  color: var(--deep-blue);
+  font-weight: 600;
 }
 
 h4,
 h5,
 h6 {
-    color: var(--medium-blue);
-    font-weight: 600;
+  color: var(--medium-blue);
+  font-weight: 600;
 }
 
 section {
-    scroll-margin-top: 66px;
-    margin-top: auto !important;
+  scroll-margin-top: 66px;
+  margin-top: auto !important;
 }
 
-.form-control:focus {
-    box-shadow: none;
+textArea {
+  resize: none;
 }
 
-footer {
-  margin-top: auto;
-}
-
-.icon-3x {
-  font-size: 3rem;
-}
-
-textArea{
-    resize: none;
-}
-
-/* ----------Navbar----------*/
+/* Navbar */
 .navbar {
-    background-color: var(--deep-blue);
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  background-color: var(--deep-blue);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .navbar-brand {
-    color: var(--pale-blue);
-    font-weight: 700;
+  color: var(--pale-blue);
+  font-weight: 700;
 }
 
 .navbar-dark .navbar-nav .nav-link {
-    color: var(--pale-blue);
+  color: var(--pale-blue);
 }
 
 .navbar-dark .navbar-nav .nav-link:hover,
 .navbar-dark .navbar-nav .nav-link.active {
-    color: var(--azure-blue);
+  color: var(--azure-blue);
 }
 
-/* ----------Bottoni----------*/
+/* Bottoni */
 .btn-primary {
     background-color: var(--bright-cyan);
     border-color: var(--bright-cyan);
@@ -170,11 +158,11 @@ textArea{
     border-color: var(--azure-blue);
 }
 
-/* ----------Footer----------*/
+/* Footer */
 .footer {
-    background-color: var(--deep-blue);
-    color: var(--pale-blue);
-    padding: 1.5rem 0 1.5rem;
+  background-color: var(--deep-blue);
+  color: var(--pale-blue);
+  padding: 1.5rem 0 1.5rem;
 }
 
 .footer p,
@@ -399,17 +387,15 @@ textArea{
 }
 
 .contact-form .form-control {
-    background-color: rgba(255, 255, 255, 0.9);
-    border: 1px solid #e0e0e0;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid #e0e0e0;
 }
 
-
-
 .contact-form .btn-primary {
-    background-color: var(--bright-cyan);
-    border: none;
-    padding: 0.6rem 1.5rem;
-    transition: all 0.3s ease;
+  background-color: var(--bright-cyan);
+  border: none;
+  padding: 0.6rem 1.5rem;
+  transition: all 0.3s ease;
 }
 
 #contactMessage {

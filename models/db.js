@@ -1,4 +1,5 @@
 'use strict';
+
 const sqlite = require('sqlite3');
 const NOME_DB = "Nutriplan.db";
 
