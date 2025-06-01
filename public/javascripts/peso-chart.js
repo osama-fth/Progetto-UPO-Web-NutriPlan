@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const chartData = JSON.parse(chartDataElement.textContent);
       createWeightChart(canvasId, chartData.labels || [], chartData.values || []);
       
-      const noChartData = document.getElementById('no-chart-data');
+      const noChartData = document.getElementById(`no-chart-data-${canvasId}`);
       if (noChartData) {
         noChartData.style.display = 'none';
       }

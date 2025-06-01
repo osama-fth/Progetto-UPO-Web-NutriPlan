@@ -59,13 +59,8 @@ document.addEventListener('DOMContentLoaded', function() {
   // Gestione creazione nuovo piano alimentare per pulsante inline
   if (document.getElementById('btn-nuovo-piano-inline')) {
     document.getElementById('btn-nuovo-piano-inline').addEventListener('click', function() {
-      // Ottiene l'ID paziente direttamente dall'attributo data del pulsante
-      const pazienteId = this.getAttribute('data-paziente-id');
-      
-      if (!pazienteId) {
-        alert('Errore: impossibile identificare il paziente. Riprova dalla pagina del paziente.');
-        return;
-      }
+      // Imposta l'ID paziente per il form del nuovo piano
+      const pazienteId = window.location.pathname.split('/')[3]; // Estrai l'ID del paziente dall'URL
       
       // Imposta la data corrente nel campo data
       const today = new Date().toISOString().split('T')[0];

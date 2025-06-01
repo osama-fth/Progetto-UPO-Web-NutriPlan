@@ -76,7 +76,7 @@ class RecensioniDAO {
     const sql = 'INSERT INTO recensioni (utente_id, commento, valutazione, data_creazione) VALUES (?, ?, ?, datetime("now"))';
     
     return new Promise((resolve, reject) => {
-      this.db.run(sql, [id_utente, commento, valutazione], function(err) {
+      this.db.run(sql, [id_utente, commento, valutazione], (err) => {
         if (err) reject(err);
         else resolve(this.lastID);
       });
@@ -87,7 +87,7 @@ class RecensioniDAO {
     const sql = 'DELETE FROM recensioni WHERE id = ?';
     
     return new Promise((resolve, reject) => {
-      this.db.run(sql, [id], function(err) {
+      this.db.run(sql, [id], (err) => {
         if (err) reject(err);
         else resolve(this.changes);
       });

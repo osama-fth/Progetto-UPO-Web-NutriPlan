@@ -2,7 +2,7 @@
 <div class="chart-container" style="position: relative; height: 300px;">
   <canvas id="<%= canvasId %>"></canvas>
 </div>
-<div class="text-center py-4" id="no-chart-data" style="display: none;">
+<div class="text-center py-4" id="no-chart-data-<%= canvasId %>" style="display: none;">
   <div class="bg-light rounded py-4 px-3 mx-auto" style="max-width: 400px;">
     <i class="fas fa-weight text-primary mb-3" style="font-size: 2rem;"></i>
     <h5 class="fw-semibold mb-2">Nessuna misurazione disponibile</h5>
@@ -10,7 +10,7 @@
   </div>
 </div>
 
-<!-- Dati per il grafico (nascosti) -->
+<!-- Dati per il grafico  -->
 <% if (typeof misurazioni !== 'undefined') { %>
   <script id="chart-data-<%= canvasId %>" type="application/json">
     <%- JSON.stringify({

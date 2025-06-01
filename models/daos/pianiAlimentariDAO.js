@@ -38,7 +38,7 @@ class PianiAlimentariDAO {
     const sql = `INSERT INTO piano_alimentare (utente_id, titolo, descrizione, contenuto, data_creazione) VALUES (?, ?, ?, ?, ?)`;
                  
     return new Promise((resolve, reject) => {
-      this.db.run(sql, [utenteId, titolo, descrizione, contenuto, dataCreazione], function(err) {
+      this.db.run(sql, [utenteId, titolo, descrizione, contenuto, dataCreazione], (err) => {
         if (err) reject(err);
         else resolve(this.lastID);
       });
@@ -49,7 +49,7 @@ class PianiAlimentariDAO {
     const sql = `DELETE FROM piano_alimentare WHERE id = ?`;
     
     return new Promise((resolve, reject) => {
-      this.db.run(sql, [pianoId], function(err) {
+      this.db.run(sql, [pianoId], (err) => {
         if (err) reject(err);
         else resolve();
       });

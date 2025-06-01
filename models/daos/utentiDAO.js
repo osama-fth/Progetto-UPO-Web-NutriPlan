@@ -32,7 +32,7 @@ class UtentiDAO {
     const params = [user.nome, user.cognome, user.email, HashedPassword, user.data_di_nascita, "paziente"];
     
     return new Promise((resolve, reject) => {
-      this.db.run(sql, params, function(err) {
+      this.db.run(sql, params, (err) => {
         if (err) reject(err);
         else resolve({id: this.lastID});
       });
@@ -56,7 +56,7 @@ class UtentiDAO {
   async deleteAccount(utenteId) {
     const sql = `DELETE FROM utenti WHERE id = ?`;
     return new Promise((resolve, reject) => {
-      this.db.run(sql, [utenteId], function(err) {
+      this.db.run(sql, [utenteId], (err) => {
         if (err) reject(err);
         else resolve();
       });
@@ -70,7 +70,7 @@ class UtentiDAO {
     const params = [nome, cognome, data_di_nascita, userId];
     
     return new Promise((resolve, reject) => {
-      this.db.run(sql, params, function(err) {
+      this.db.run(sql, params, (err) => {
         if (err) reject(err);
         else resolve(this.changes);
       });
@@ -83,7 +83,7 @@ class UtentiDAO {
                  WHERE id = ?`;
     
     return new Promise((resolve, reject) => {
-      this.db.run(sql, [newPassword, userId], function(err) {
+      this.db.run(sql, [newPassword, userId], (err) => {
         if (err) reject(err);
         else resolve(this.changes);
       });

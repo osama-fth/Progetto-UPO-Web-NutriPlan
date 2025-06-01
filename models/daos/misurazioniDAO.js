@@ -11,12 +11,9 @@ class MisurazioniDAO {
     const sql = `INSERT INTO misurazioni (utente_id, misura, data) VALUES (?, ?, ?)`;
 
     return new Promise((resolve, reject) => {
-      this.db.run(sql, [utenteId, peso, data], function(err) {
-        if (err) {
-          reject(err);
-        } else {
-          resolve({ id: this.lastID });
-        }
+      this.db.run(sql, [utenteId, peso, data], (err) => {
+        if (err) reject(err);
+        else resolve({ id: this.lastID });
       });
     });
   }
@@ -29,11 +26,8 @@ class MisurazioniDAO {
 
     return new Promise((resolve, reject) => {
       this.db.all(sql, [utenteId], (err, rows) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(rows);
-        }
+        if (err) reject(err);
+        else resolve(rows);
       });
     });
   }
@@ -45,11 +39,8 @@ class MisurazioniDAO {
 
     return new Promise((resolve, reject) => {
       this.db.get(sql, [misurazioneId], (err, row) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(row || null);
-        }
+        if (err) reject(err);
+        else resolve(row);
       });
     });
   }
@@ -60,12 +51,9 @@ class MisurazioniDAO {
                  WHERE id = ?`;
 
     return new Promise((resolve, reject) => {
-      this.db.run(sql, [peso, data, misurazioneId], function(err) {
-        if (err) {
-          reject(err);
-        } else {
-          resolve();
-        }
+      this.db.run(sql, [peso, data, misurazioneId], (err) => {
+        if (err) reject(err);
+        else resolve();
       });
     });
   }
@@ -74,12 +62,9 @@ class MisurazioniDAO {
     const sql = `DELETE FROM misurazioni WHERE id = ?`;
 
     return new Promise((resolve, reject) => {
-      this.db.run(sql, [misurazioneId], function(err) {
-        if (err) {
-          reject(err);
-        } else {
-          resolve();
-        }
+      this.db.run(sql, [misurazioneId], (err) => {
+        if (err) reject(err);
+        else resolve();
       });
     });
   }
