@@ -59,8 +59,13 @@ document.addEventListener('DOMContentLoaded', function() {
   // Gestione creazione nuovo piano alimentare per pulsante inline
   if (document.getElementById('btn-nuovo-piano-inline')) {
     document.getElementById('btn-nuovo-piano-inline').addEventListener('click', function() {
-      // Imposta l'ID paziente per il form del nuovo piano
-      const pazienteId = window.location.pathname.split('/')[3]; // Estrai l'ID del paziente dall'URL
+      // Ottiene l'ID paziente direttamente dall'attributo data del pulsante
+      const pazienteId = this.getAttribute('data-paziente-id');
+      
+      if (!pazienteId) {
+        alert('Errore: impossibile identificare il paziente. Riprova dalla pagina del paziente.');
+        return;
+      }
       
       // Imposta la data corrente nel campo data
       const today = new Date().toISOString().split('T')[0];
@@ -134,11 +139,76 @@ document.addEventListener('DOMContentLoaded', function() {
         const modalNuovoPiano = bootstrap.Modal.getInstance(document.getElementById('nuovoPianoModal'));
         modalNuovoPiano.hide();
         
-        // Reindirizza alla pagina dei piani del paziente
-        window.location.href = `/admin/pazienti/${utenteId}/visualizza-piani`;
+        // Modifica qui: reindirizza alla nuova URL
+        window.location.href = `/admin/dashboard/pazienti/${utenteId}/piani`;
       }
     })
     .catch(error => console.error('Errore nella creazione del piano alimentare:', error));
   });
+  
+  // Gestione visualizzazione piani alimentari in modal
+  document.querySelectorAll('.btn-visualizza-piano-admin').forEach(button => {
+    button.addEventListener('click', function() {
+      const pianoId = this.getAttribute('data-piano-id');
+      const titolo = this.getAttribute('data-piano-titolo');
+      const data = this.getAttribute('data-piano-data');
+      const descrizione = this.getAttribute('data-piano-descrizione');
+      
+      // Imposta i dettagli base nel modal
+      document.getElementById('dettaglio-piano-titolo').textContent = titolo;
+      document.getElementById('dettaglio-piano-data').textContent = `Data: ${data}`;
+      document.getElementById('dettaglio-piano-descrizione').textContent = descrizione || 'Nessuna descrizione disponibile.';
+      
+      // Carica i dettagli completi dal server
+      fetch(`/admin/piani-alimentari/${pianoId}`)
+        .then(response => {
+          if (!response.ok) throw new Error(`Errore nella risposta: ${response.status}`);
+          return response.json();
+        })
+        .then(piano => {
+          // Renderizza il contenuto del piano
+          renderDettaglioPiano(piano.contenuto);
+          
+          // Mostra il modal
+          const visualizzaPianoModal = new bootstrap.Modal(document.getElementById('visualizzaPianoModal'));
+          visualizzaPianoModal.show();
+        })
+        .catch(error => {
+          console.error('Errore nel caricamento del piano:', error);
+          alert('Errore nel caricamento dei dettagli del piano alimentare');
+        });
+    });
+  });
+  
+  // Funzione per renderizzare il contenuto del piano nel modal
+  function renderDettaglioPiano(contenutoJSON) {
+    const contenuto = typeof contenutoJSON === 'string' ? JSON.parse(contenutoJSON) : contenutoJSON;
+    
+    const giorni = ['lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato', 'domenica'];
+    giorni.forEach(giorno => {
+      const elementoGiorno = document.getElementById(`dettaglio-giorno-${giorno}`);
+      if (elementoGiorno) {
+        elementoGiorno.style.display = 'none';
+      }
+    });
+    
+    for (const giorno of giorni) {
+      if (contenuto[giorno]) {
+        const elementoGiorno = document.getElementById(`dettaglio-giorno-${giorno}`);
+        if (elementoGiorno) {
+          elementoGiorno.style.display = 'block';
+          
+          // Aggiorna i contenuti dei pasti
+          const pasti = ['colazione', 'pranzo', 'cena'];
+          pasti.forEach(pasto => {
+            const elementoPasto = document.getElementById(`dettaglio-${giorno}-${pasto}`);
+            if (elementoPasto) {
+              elementoPasto.textContent = contenuto[giorno][pasto] || 'Non specificato';
+            }
+          });
+        }
+      }
+    }
+  }
   
 });

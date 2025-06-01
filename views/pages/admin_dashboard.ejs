@@ -90,7 +90,7 @@
       </div>
 
       <!-- Sezione Pazienti -->
-      <div id="sezione-pazienti" class="sezione-contenuto <%= currentSection !== 'pazienti' || (typeof activeView !== 'undefined' && activeView === 'piani-paziente') ? 'd-none' : '' %>">
+      <div id="sezione-pazienti" class="sezione-contenuto <%= currentSection !== 'pazienti' ? 'd-none' : '' %>">
         <section class="row mt-4">
           <div class="col-lg-10 mx-auto">
             <div class="card mx-2">
@@ -125,7 +125,7 @@
                                         data-paziente-email="<%= paziente.email %>">
                                   <i class="fas fa-eye me-1"></i> Dettagli
                                 </button>
-                                <a href="/admin/pazienti/<%= paziente.id %>/visualizza-piani" class="btn btn-sm btn-outline-success me-2">
+                                <a href="/admin/dashboard/pazienti/<%= paziente.id %>/piani" class="btn btn-sm btn-outline-success me-2">
                                   <i class="fas fa-utensils me-1"></i> Piani
                                 </a>
                                 <button type="button" class="btn btn-sm btn-outline-danger"
@@ -154,7 +154,7 @@
       </div>
 
       <!-- Sezione Piani Alimentari Paziente -->
-      <div id="sezione-piani-paziente" class="sezione-contenuto <%= typeof activeView === 'undefined' || activeView !== 'piani-paziente' ? 'd-none' : '' %>">
+      <div id="sezione-piani-paziente" class="sezione-contenuto <%= currentSection !== 'piani-paziente' ? 'd-none' : '' %>">
         <% if (typeof pazienteSelezionato !== 'undefined' && pazienteSelezionato) { %>
           <section class="row mt-4">
             <div class="col-lg-10 mx-auto">
@@ -166,7 +166,7 @@
                     </a>
                     <span class="py-1 h5 mb-0">Piani Alimentari - <%= pazienteSelezionato.nome %> <%= pazienteSelezionato.cognome %></span>
                   </div>
-                  <button type="button" id="btn-nuovo-piano-inline" class="btn btn-success btn-sm">
+                  <button type="button" id="btn-nuovo-piano-inline" class="btn btn-success btn-sm" data-paziente-id="<%= pazienteSelezionato.id %>">
                     <i class="fas fa-plus me-1"></i> Nuovo Piano Alimentare
                   </button>
                 </header>
@@ -188,11 +188,15 @@
                               <td class="text-center"><%= piano.dataFormattata %></td>
                               <td class="text-center">
                                 <div class="d-flex justify-content-center">
-                                  <a href="/admin/piani-alimentari/<%= piano.id %>/visualizza" class="btn btn-sm btn-outline-primary me-2">
+                                  <button type="button" class="btn btn-sm btn-outline-primary me-2 btn-visualizza-piano-admin"
+                                    data-piano-id="<%= piano.id %>"
+                                    data-piano-titolo="<%= piano.titolo %>"
+                                    data-piano-data="<%= piano.dataFormattata %>"
+                                    data-piano-descrizione="<%= piano.descrizione || '' %>">
                                     <i class="fas fa-eye me-1"></i> Visualizza
-                                  </a>
-                                  <a href="/admin/piani-alimentari/download/<%= piano.id %>" class="btn btn-sm btn-outline-success me-2" title="Scarica PDF">
-                                    <i class="fas fa-download"></i> Scarica PDF
+                                  </button>
+                                  <a href="/admin/piani-alimentari/<%= piano.id %>/download" class="btn btn-sm btn-outline-success me-2" target="_blank">
+                                    <i class="fas fa-download me-1"></i> Download
                                   </a>
                                   <button type="button" class="btn btn-sm btn-outline-danger"
                                     data-elimina="piano" data-item-id="<%= piano.id %>">
@@ -256,6 +260,7 @@
                             aria-controls="collapse-recensione-<%= recensione.id %>">
                             <div class="d-flex justify-content-between w-100 me-3">
                               <span><strong><%= recensione.cognome %> <%= recensione.nome %></strong></span>
+                              <span></span>
                               <span class="text-muted"><%= recensione.dataFormattata %></span>
                             </div>
                           </button>
