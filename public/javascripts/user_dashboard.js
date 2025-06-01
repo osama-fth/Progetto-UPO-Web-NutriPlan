@@ -107,8 +107,6 @@ document.addEventListener('DOMContentLoaded', function() {
           const elementoGiorno = document.getElementById(`dettaglio-giorno-${giorno}`);
           if (elementoGiorno) {
             elementoGiorno.style.display = 'block';
-            
-            // Aggiorna i contenuti dei pasti
             const pasti = ['colazione', 'pranzo', 'cena'];
             pasti.forEach(pasto => {
               const elementoPasto = document.getElementById(`dettaglio-${giorno}-${pasto}`);
