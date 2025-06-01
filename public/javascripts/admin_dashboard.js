@@ -59,8 +59,8 @@ document.addEventListener('DOMContentLoaded', function() {
   // Gestione creazione nuovo piano alimentare per pulsante inline
   if (document.getElementById('btn-nuovo-piano-inline')) {
     document.getElementById('btn-nuovo-piano-inline').addEventListener('click', function() {
-      // Imposta l'ID paziente per il form del nuovo piano
-      const pazienteId = window.location.pathname.split('/')[3]; // Estrai l'ID del paziente dall'URL
+      // Correzione: usa l'attributo data-paziente-id invece di estrarre dall'URL
+      const pazienteId = this.getAttribute('data-paziente-id');
       
       // Imposta la data corrente nel campo data
       const today = new Date().toISOString().split('T')[0];
@@ -134,8 +134,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const modalNuovoPiano = bootstrap.Modal.getInstance(document.getElementById('nuovoPianoModal'));
         modalNuovoPiano.hide();
         
-        // Modifica qui: reindirizza alla nuova URL
+        // Correzione: usa l'URL corretto per il reindirizzamento
         window.location.href = `/admin/dashboard/pazienti/${utenteId}/piani`;
+      } else {
+        console.error('Errore nella creazione del piano:', data.error);
+        alert('Errore nella creazione del piano alimentare');
       }
     })
     .catch(error => console.error('Errore nella creazione del piano alimentare:', error));
