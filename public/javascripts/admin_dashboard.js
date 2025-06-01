@@ -47,71 +47,87 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // Gestione creazione nuovo piano alimentare per pulsante inline
-  document.getElementById('btn-nuovo-piano-inline').addEventListener('click', function () {
-    const pazienteId = this.getAttribute('data-paziente-id');
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('piano-utente-id').value = pazienteId;
-    document.getElementById('piano-data').value = today;
-    const modalNuovoPiano = new bootstrap.Modal(document.getElementById('nuovoPianoModal'));
-    modalNuovoPiano.show();
-  });
-
-  // Gestione creazione nuovo piano alimentare (per il pulsante originale se esiste)
-  document.getElementById('btn-nuovo-piano').addEventListener('click', function () {
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('piano-data').value = today;
-    const modalNuovoPiano = new bootstrap.Modal(document.getElementById('nuovoPianoModal'));
-    modalNuovoPiano.show();
-  });
-
+  const btnNuovoPianoInline = document.getElementById('btn-nuovo-piano-inline');
+  if (btnNuovoPianoInline) {
+    btnNuovoPianoInline.addEventListener('click', function () {
+      const pazienteId = this.getAttribute('data-paziente-id');
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('piano-utente-id').value = pazienteId;
+      document.getElementById('piano-data').value = today;
+      const modalNuovoPiano = new bootstrap.Modal(document.getElementById('nuovoPianoModal'));
+      modalNuovoPiano.show();
+    });
+  }
 
   // Salvataggio nuovo piano alimentare
-  document.getElementById('salva-piano-btn').addEventListener('click', function () {
-    const utenteId = document.getElementById('piano-utente-id').value;
-    const titolo = document.getElementById('piano-titolo').value;
-    const descrizione = document.getElementById('piano-descrizione').value;
-    const data = document.getElementById('piano-data').value;
-    const giorni = ['lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato', 'domenica'];
-    const pasti = ['colazione', 'pranzo', 'cena'];
+  const salvaPianoBtn = document.getElementById('salva-piano-btn');
+  if (salvaPianoBtn) {
+    salvaPianoBtn.addEventListener('click', function () {
+      const utenteId = document.getElementById('piano-utente-id').value;
+      const titolo = document.getElementById('piano-titolo').value.trim();
+      const descrizione = document.getElementById('piano-descrizione').value.trim();
+      const data = document.getElementById('piano-data').value;
 
-    let contenuto = {};
+      if (!utenteId || !titolo || !data || !descrizione) {
+        alert('Per favore, compila tutti i campi obbligatori (Titolo, Data, Descrizione).');
+        return;
+      }
 
-    giorni.forEach(giorno => {
-      contenuto[giorno] = {};
-      pasti.forEach(pasto => {
-        const fieldName = `${giorno}_${pasto}`;
-        contenuto[giorno][pasto] = document.getElementsByName(fieldName)[0].value;
+      const giorni = ['lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato', 'domenica'];
+      const pasti = ['colazione', 'pranzo', 'cena'];
+
+      let contenuto = {};
+
+      giorni.forEach(giorno => {
+        contenuto[giorno] = {};
+        pasti.forEach(pasto => {
+          const fieldName = `${giorno}_${pasto}`;
+          const field = document.getElementsByName(fieldName)[0];
+          contenuto[giorno][pasto] = field ? field.value.trim() : '';
+        });
       });
-    });
 
-    const pianoData = {
-      utenteId,
-      titolo,
-      descrizione,
-      data,
-      contenuto: JSON.stringify(contenuto)
-    };
+      const pianoData = {
+        utenteId,
+        titolo,
+        descrizione,
+        data,
+        contenuto: JSON.stringify(contenuto)
+      };
 
-    fetch('/admin/piani-alimentari/nuovo', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(pianoData)
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          const modalNuovoPiano = bootstrap.Modal.getInstance(document.getElementById('nuovoPianoModal'));
-          modalNuovoPiano.hide();
-          window.location.href = `/admin/dashboard/pazienti/${utenteId}/piani`;
-        } else {
-          console.error('Errore nella creazione del piano:', data.error);
-          alert('Errore nella creazione del piano alimentare');
-        }
+      // Disabilita il pulsante durante l'invio
+      salvaPianoBtn.disabled = true;
+      salvaPianoBtn.textContent = 'Salvataggio...';
+
+      fetch('/admin/piani-alimentari/nuovo', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(pianoData)
       })
-      .catch(error => console.error('Errore nella creazione del piano alimentare:', error));
-  });
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            const modalNuovoPiano = bootstrap.Modal.getInstance(document.getElementById('nuovoPianoModal'));
+            modalNuovoPiano.hide();
+            window.location.reload();
+          } else {
+            console.error('Errore nella creazione del piano:', data);
+            alert('Errore nella creazione del piano alimentare: ' + (data.error || 'Errore sconosciuto'));
+          }
+        })
+        .catch(error => {
+          console.error('Errore nella creazione del piano alimentare:', error);
+          alert('Errore di connessione durante la creazione del piano alimentare');
+        })
+        .finally(() => {
+          // Riabilita il pulsante
+          salvaPianoBtn.disabled = false;
+          salvaPianoBtn.textContent = 'Salva Piano Alimentare';
+        });
+    });
+  }
 
   // Gestione visualizzazione piani alimentari in modal
   document.querySelectorAll('.btn-visualizza-piano-admin').forEach(button => {
@@ -120,6 +136,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const titolo = this.getAttribute('data-piano-titolo');
       const data = this.getAttribute('data-piano-data');
       const descrizione = this.getAttribute('data-piano-descrizione');
+
       document.getElementById('dettaglio-piano-titolo').textContent = titolo;
       document.getElementById('dettaglio-piano-data').textContent = `Data: ${data}`;
       document.getElementById('dettaglio-piano-descrizione').textContent = descrizione || 'Nessuna descrizione disponibile.';
@@ -145,6 +162,7 @@ document.addEventListener('DOMContentLoaded', function () {
   function renderDettaglioPiano(contenutoJSON) {
     const contenuto = typeof contenutoJSON === 'string' ? JSON.parse(contenutoJSON) : contenutoJSON;
     const giorni = ['lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato', 'domenica'];
+
     giorni.forEach(giorno => {
       const elementoGiorno = document.getElementById(`dettaglio-giorno-${giorno}`);
       if (elementoGiorno) {
