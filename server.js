@@ -1,6 +1,7 @@
 "use strict";
 
 const express = require("express");
+const dotenv = require("dotenv").config();
 const session = require("express-session");
 const passport = require("passport");
 const morgan = require("morgan");
@@ -12,7 +13,7 @@ const authRouter = require('./routes/auth');
 const userRouter = require('./routes/user');
 const adminRouter = require('./routes/admin');
 
-const PORT = 3000;
+const PORT = process.env.PORT;
 const app = express();
 
 app.use(morgan("dev"));
@@ -21,9 +22,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(session({
-  secret: "chiave-super-segreta",
+  secret: process.env.SECRET_SESSION,
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: 'lax',   
+    maxAge: 60 * 60 * 1000
+  }
 }));
 
 app.use(flash());

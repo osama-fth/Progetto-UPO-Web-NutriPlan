@@ -1,4 +1,4 @@
-window.createWeightChart = function(canvasId, labels, values) {
+window.createWeightChart = function (canvasId, labels, values) {
   const canvas = document.getElementById(canvasId);
   if (!canvas) return null;
   const ctx = canvas.getContext('2d');
@@ -9,9 +9,9 @@ window.createWeightChart = function(canvasId, labels, values) {
   const gradient = ctx.createLinearGradient(0, 0, 0, 400);
   gradient.addColorStop(0, 'rgba(144, 224, 239, 0.7)');
   gradient.addColorStop(1, 'rgba(202, 240, 248, 0.1)');
-  
+
   const hasData = Array.isArray(labels) && Array.isArray(values) && labels.length > 0 && values.length > 0;
-  
+
   const datasetOptions = hasData ? {
     label: 'Peso (kg)',
     data: values,
@@ -81,7 +81,7 @@ window.createWeightChart = function(canvasId, labels, values) {
           cornerRadius: 8,
           padding: 12,
           callbacks: {
-            label: function(context) {
+            label: function (context) {
               return `Peso: ${context.parsed.y} kg`;
             }
           }
@@ -89,7 +89,7 @@ window.createWeightChart = function(canvasId, labels, values) {
         legend: { display: false },
         noDataMessage: {
           id: 'noDataMessage',
-          afterDraw: function(chart) {
+          afterDraw: function (chart) {
             if (chart.data.datasets[0].data.length === 0) {
               const width = chart.width;
               const height = chart.height;
@@ -110,14 +110,14 @@ window.createWeightChart = function(canvasId, labels, values) {
   });
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   const initChart = (canvasId) => {
     const chartDataElement = document.getElementById(`chart-data-${canvasId}`);
     if (!chartDataElement) return;
     try {
       const chartData = JSON.parse(chartDataElement.textContent);
       createWeightChart(canvasId, chartData.labels || [], chartData.values || []);
-      
+
       const noChartData = document.getElementById(`no-chart-data-${canvasId}`);
       if (noChartData) {
         noChartData.style.display = 'none';
@@ -126,6 +126,6 @@ document.addEventListener('DOMContentLoaded', function() {
       console.error(`Errore nel parsing dei dati del grafico ${canvasId}:`, e);
     }
   };
-  
+
   initChart('myChart');
 });

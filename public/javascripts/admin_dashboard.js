@@ -95,10 +95,6 @@ document.addEventListener('DOMContentLoaded', function () {
         contenuto: JSON.stringify(contenuto)
       };
 
-      // Disabilita il pulsante durante l'invio
-      salvaPianoBtn.disabled = true;
-      salvaPianoBtn.textContent = 'Salvataggio...';
-
       fetch('/admin/piani-alimentari/nuovo', {
         method: 'POST',
         headers: {
@@ -121,11 +117,6 @@ document.addEventListener('DOMContentLoaded', function () {
           console.error('Errore nella creazione del piano alimentare:', error);
           alert('Errore di connessione durante la creazione del piano alimentare');
         })
-        .finally(() => {
-          // Riabilita il pulsante
-          salvaPianoBtn.disabled = false;
-          salvaPianoBtn.textContent = 'Salva Piano Alimentare';
-        });
     });
   }
 
