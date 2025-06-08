@@ -100,16 +100,24 @@ router.get('/piani-alimentari/:id', async (req, res) => {
 });
 
 // POST nuova misurazione
-router.post('/misurazioni/nuova', async (req, res) => {
+router.post('/misurazioni/nuova', [
+  check('peso').notEmpty().withMessage('Il peso è obbligatorio')
+    .isFloat({ min: 0.1 }).withMessage('Il peso deve essere un numero positivo'),
+  check('data').notEmpty().withMessage('La data è obbligatoria')
+    .isDate().withMessage('La data deve essere in un formato valido')
+], async (req, res) => {
   const { peso, data } = req.body;
+  const errors = validationResult(req);
+  
   try {
-      if (!peso || !data || isNaN(parseFloat(peso)) || parseFloat(peso) <= 0) {
-        req.flash('error', 'I dati inseriti non sono validi.');
-        return res.redirect('/user/dashboard/misurazioni');
-      }
-      await misurazioniDAO.insertMisurazione(req.user.id, parseFloat(peso), data);
-      req.flash('success', 'Misurazione aggiunta con successo.');
-      res.redirect('/user/dashboard/misurazioni');
+    if (!errors.isEmpty()) {
+      req.flash('error', errors.array()[0].msg);
+      return res.redirect('/user/dashboard/misurazioni');
+    }
+      
+    await misurazioniDAO.insertMisurazione(req.user.id, parseFloat(peso), data);
+    req.flash('success', 'Misurazione aggiunta con successo.');
+    res.redirect('/user/dashboard/misurazioni');
   } catch (err) {
     console.error("Errore nell'inserimento della misurazione:", err);
     req.flash('error', 'Impossibile aggiungere la misurazione.');
@@ -118,13 +126,22 @@ router.post('/misurazioni/nuova', async (req, res) => {
 });
 
 // POST modifica misurazione
-router.post('/misurazioni/modifica', async (req, res) => {
+router.post('/misurazioni/modifica', [
+  check('peso').notEmpty().withMessage('Il peso è obbligatorio')
+    .isFloat({ min: 0.1 }).withMessage('Il peso deve essere un numero positivo'),
+  check('data').notEmpty().withMessage('La data è obbligatoria')
+    .isDate().withMessage('La data deve essere in un formato valido'),
+  check('misurazioneId').notEmpty().withMessage('ID misurazione mancante')
+], async (req, res) => {
   const { misurazioneId, peso, data } = req.body;
+  const errors = validationResult(req);
+  
   try {
-    if (!peso || !data || isNaN(parseFloat(peso)) || parseFloat(peso) <= 0) {
-      req.flash('error', 'I dati inseriti non sono validi.');
+    if (!errors.isEmpty()) {
+      req.flash('error', errors.array()[0].msg);
       return res.redirect('/user/dashboard/misurazioni');
-    }     
+    }
+    
     await misurazioniDAO.updateMisurazione(misurazioneId, parseFloat(peso), data);
     req.flash('success', 'Misurazione aggiornata con successo.');
     res.redirect('/user/dashboard/misurazioni');
@@ -155,18 +172,20 @@ router.get('/misurazioni/elimina/:id', async (req, res) => {
 });
 
 // POST nuova recensione
-router.post('/recensioni/nuova', async (req, res) => {
+router.post('/recensioni/nuova', [
+  check('commento').notEmpty().withMessage('Il testo della recensione non può essere vuoto'),
+  check('valutazione').isInt({ min: 1, max: 5 }).withMessage('La valutazione deve essere un numero da 1 a 5')
+], async (req, res) => {
   const { commento, valutazione } = req.body;
-  try {  
-    if (!commento || commento.trim() === '') {
-      req.flash('error', 'Il testo della recensione non può essere vuoto.');
+  const errors = validationResult(req);
+  
+  try {
+    if (!errors.isEmpty()) {
+      req.flash('error', errors.array()[0].msg);
       return res.redirect('/user/dashboard/recensioni');
     }
-    const voto = parseInt(valutazione) || 3;
-    if (voto < 1 || voto > 5) {
-      req.flash('error', 'La valutazione deve essere un numero da 1 a 5.');
-      return res.redirect('/user/dashboard/recensioni');
-    }
+    
+    const voto = parseInt(valutazione);
     await recensioniDAO.insertRecensione(req.user.id, commento.trim(), voto);
     req.flash('success', 'Recensione pubblicata con successo.');
     res.redirect('/user/dashboard/recensioni');

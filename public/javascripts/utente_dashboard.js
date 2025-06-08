@@ -111,4 +111,39 @@ document.addEventListener('DOMContentLoaded', function() {
       document.body.focus();
     });
   }
+
+  // Gestione eliminazione misurazioni
+  const btnEliminaMisurazioni = document.querySelectorAll('#btnEliminaMisurazione');
+  if (btnEliminaMisurazioni.length > 0) {
+    btnEliminaMisurazioni.forEach(btn => {
+      btn.addEventListener('click', function() {
+        const misurazioneId = this.dataset.itemId;
+        const linkEliminazione = document.getElementById('eliminaMisurazioneLink');
+        linkEliminazione.href = `/user/misurazioni/elimina/${misurazioneId}`;
+        const modal = new bootstrap.Modal(document.getElementById('eliminaMisurazioneModal'));
+        modal.show();
+      });
+    });
+  }
+
+  // Gestione eliminazione recensione
+  const btnEliminaRecensione = document.querySelector('[data-elimina="recensione"]');
+  if (btnEliminaRecensione) {
+    btnEliminaRecensione.addEventListener('click', function() {
+      const recensioneId = this.dataset.itemId;
+      document.getElementById('recensioneId').value = recensioneId;
+      document.getElementById('eliminaRecensioneForm').action = '/user/recensioni/cancella';
+      const modal = new bootstrap.Modal(document.getElementById('eliminaRecensioneModal'));
+      modal.show();
+    });
+  }
+
+  // Gestione eliminazione account
+  const btnEliminaAccount = document.getElementById('btnEliminaAccount');
+  if (btnEliminaAccount) {
+    btnEliminaAccount.addEventListener('click', function() {
+      const modal = new bootstrap.Modal(document.getElementById('eliminaAccountModal'));
+      modal.show();
+    });
+  }
 });

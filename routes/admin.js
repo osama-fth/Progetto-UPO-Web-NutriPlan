@@ -2,6 +2,7 @@
 
 const express = require("express");
 const router = express.Router();
+const { check, validationResult } = require("express-validator");
 const dayjs = require("dayjs");
 const utentiDAO = require("../models/daos/utentiDAO");
 const recensioniDAO = require("../models/daos/recensioniDAO");
@@ -235,9 +236,21 @@ router.get('/piani-alimentari/:id', async (req, res) => {
 });
 
 // Creare un nuovo piano alimentare
-router.post('/piani-alimentari/nuovo', async (req, res) => {
+router.post('/piani-alimentari/nuovo', [
+  check('utenteId').notEmpty().withMessage('ID utente obbligatorio'),
+  check('titolo').notEmpty().withMessage('Il titolo è obbligatorio'),
+  check('descrizione').notEmpty().withMessage('La descrizione è obbligatoria'),
+  check('data').isDate().withMessage('Data non valida'),
+  check('contenuto').notEmpty().withMessage('Il contenuto del piano è obbligatorio')
+], async (req, res) => {
   const { utenteId, titolo, descrizione, data, contenuto } = req.body;
+  const errors = validationResult(req);
+  
   try {
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    
     const pianoId = await pianiAlimentariDAO.insertPianoAlimentare(utenteId, titolo, descrizione, contenuto, data);
     res.json({ success: true, pianoId });
   } catch (error) {

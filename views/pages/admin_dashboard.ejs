@@ -443,7 +443,7 @@
               <div class="card-body">
                 <div class="chart-scroll-container">
                   <div class="chart-inner-container">
-                    <%- include('../partials/peso-chart', { canvasId: 'pazienteChart' }) %>
+                    <%- include('../partials/graficoPeso', { canvasId: 'pazienteChart' }) %>
                   </div>
                 </div>
               </div>
@@ -529,17 +529,20 @@
       </div>
     </div>
 
-    <%- include('../partials/logout-modal') %>
-      <%- include('../partials/visualizza-piano-modal', { isAdmin: true }) %>
-        <%- include('../partials/conferma-eliminazione-modal') %>
+    <!-- Modali specifici per eliminazioni -->
+    <%- include('../partials/modals/elimina-utente-modal') %>
+    <%- include('../partials/modals/elimina-piano-modal') %>
+    <%- include('../partials/modals/elimina-recensione-modal') %>
+    <%- include('../partials/modals/elimina-richiesta-modal') %>
+    <%- include('../partials/modals/logout-modal') %>
+    <%- include('../partials/visualizza-piano-modal', { isAdmin: true }) %>
 
-          <!-- Aggiunta della libreria dayjs prima degli altri script -->
-          <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.7/dayjs.min.js"></script>
-          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-          <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-          <script src="/javascripts/peso-chart.js"></script>
-          <script src="/javascripts/conferma-eliminazione.js"></script>
-          <script src="/javascripts/admin_dashboard.js"></script>
+    <!-- Aggiunta della libreria dayjs prima degli altri script -->
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.7/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/javascripts/graficoPeso.js"></script>
+    <script src="/javascripts/admin_dashboard.js"></script>
   </body>
 
 </html>

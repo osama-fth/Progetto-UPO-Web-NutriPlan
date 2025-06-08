@@ -177,4 +177,45 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     }
   }
+
+  // Gestione eliminazione utenti
+  document.querySelectorAll('[data-elimina="utente"]').forEach(btn => {
+    btn.addEventListener('click', function () {
+      const utenteId = this.dataset.itemId;
+      document.getElementById('utenteId').value = utenteId;
+      const modal = new bootstrap.Modal(document.getElementById('eliminaUtenteModal'));
+      modal.show();
+    });
+  });
+
+  // Gestione eliminazione piani alimentari
+  document.querySelectorAll('[data-elimina="piano"]').forEach(btn => {
+    btn.addEventListener('click', function () {
+      const pianoId = this.dataset.itemId;
+      document.getElementById('pianoId').value = pianoId;
+      const modal = new bootstrap.Modal(document.getElementById('eliminaPianoModal'));
+      modal.show();
+    });
+  });
+
+  // Gestione eliminazione recensioni (admin)
+  document.querySelectorAll('[data-elimina="recensione"]').forEach(btn => {
+    btn.addEventListener('click', function () {
+      const recensioneId = this.dataset.itemId;
+      document.getElementById('recensioneId').value = recensioneId;
+      document.getElementById('eliminaRecensioneForm').action = '/admin/recensioni/elimina';
+      const modal = new bootstrap.Modal(document.getElementById('eliminaRecensioneModal'));
+      modal.show();
+    });
+  });
+
+  // Gestione eliminazione richieste contatto
+  document.querySelectorAll('[data-elimina="richiesta"]').forEach(btn => {
+    btn.addEventListener('click', function () {
+      const richiestaId = this.dataset.itemId;
+      document.getElementById('richiestaId').value = richiestaId;
+      const modal = new bootstrap.Modal(document.getElementById('eliminaRichiestaModal'));
+      modal.show();
+    });
+  });
 });

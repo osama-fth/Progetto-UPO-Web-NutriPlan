@@ -46,7 +46,7 @@ class ContattiDAO {
     return new Promise((resolve, reject) => {
       this.db.run(sql, [id], (err) => {
         if (err) reject(err);
-        else resolve(this.changes);
+        else resolve();
       });
     });
   }
