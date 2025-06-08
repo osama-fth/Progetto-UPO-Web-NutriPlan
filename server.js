@@ -5,7 +5,7 @@ const dotenv = require("dotenv").config();
 const session = require("express-session");
 const passport = require("passport");
 const morgan = require("morgan");
-const flash = require('connect-flash');
+const flash = require('express-flash');
 const flashMessages = require('./middleware/messaggi');
 
 const indexRouter = require('./routes/index');

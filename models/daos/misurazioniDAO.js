@@ -13,7 +13,7 @@ class MisurazioniDAO {
     return new Promise((resolve, reject) => {
       this.db.run(sql, [utenteId, peso, data], (err) => {
         if (err) reject(err);
-        else resolve({ id: this.lastID });
+        else resolve();
       });
     });
   }
