@@ -21,14 +21,17 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const isProduction = process.env.NODE_ENV === "production";
+app.set('trust proxy', 1);
+
 app.use(session({
   secret: process.env.SECRET_SESSION,
   resave: false,
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: 'strict',   
+    secure: isProduction,
+    sameSite:'lax',
     maxAge: 60 * 60 * 1000
   }
 }));
