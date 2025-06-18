@@ -197,7 +197,7 @@ router.post('/recensioni/nuova', [
 });
 
 // POST elimina recensione
-router.post('/recensioni/cancella', async (req, res) => {
+router.post('/recensioni/elimina', async (req, res) => {
   const { recensioneId } = req.body;
   try {
     const recensione = await recensioniDAO.getRecensioneById(recensioneId);

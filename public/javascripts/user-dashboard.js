@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function() {
     btnEliminaRecensione.addEventListener('click', function() {
       const recensioneId = this.dataset.itemId;
       document.getElementById('recensioneId').value = recensioneId;
-      document.getElementById('eliminaRecensioneForm').action = '/user/recensioni/cancella';
+      document.getElementById('eliminaRecensioneForm').action = '/user/recensioni/elimina';
       const modal = new bootstrap.Modal(document.getElementById('eliminaRecensioneModal'));
       modal.show();
     });

@@ -6,7 +6,7 @@ const session = require("express-session");
 const passport = require("passport");
 const morgan = require("morgan");
 const flash = require('express-flash');
-const flashMessages = require('./middleware/messaggi');
+const Messaggi = require('./middleware/messaggi');
 
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
@@ -37,7 +37,7 @@ app.use(session({
 }));
 
 app.use(flash());
-app.use(flashMessages);
+app.use(Messaggi);
 app.set("view engine", "ejs");
 
 app.use(passport.initialize());
