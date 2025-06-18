@@ -4,14 +4,14 @@ const express = require("express");
 const router = express.Router();
 const { check, validationResult } = require("express-validator");
 const dayjs = require("dayjs");
-const utentiDAO = require("../models/daos/utentiDAO");
-const recensioniDAO = require("../models/daos/recensioniDAO");
-const contattiDAO = require("../models/daos/contattiDAO");
-const misurazioniDAO = require("../models/daos/misurazioniDAO");
-const pianiAlimentariDAO = require("../models/daos/pianiAlimentariDAO");
+const utentiDAO = require("../models/dao/utenti-dao");
+const recensioniDAO = require("../models/dao/recensioni-dao");
+const contattiDAO = require("../models/dao/contatti-dao");
+const misurazioniDAO = require("../models/dao/misurazioni-dao");
+const pianiAlimentariDAO = require("../models/dao/piani-alimentari-dao");
 const middleware = require("../middleware/permessi");
 const PDFDocument = require('pdfkit');
-const PianoPDF = require("../models/pdfGenerator");
+const PianoPDF = require("../models/pdf-generator");
 
 router.use(middleware.isAdmin);
 
@@ -56,7 +56,7 @@ router.get('/dashboard/:section', async (req, res) => {
       });
     }
 
-    res.render("pages/admin_dashboard", {
+    res.render("pages/admin-dashboard", {
       title: 'Dashboard Admin - NutriPlan',
       user: req.user,
       pazienti: pazientiFormattati,
@@ -91,7 +91,7 @@ router.get('/dashboard/pazienti/:utenteId/piani', async (req, res) => {
       return p;
     });
 
-    res.render("pages/admin_dashboard", {
+    res.render("pages/admin-dashboard", {
       title: 'Dashboard Admin - Piani alimentari paziente - NutriPlan',
       user: req.user,
       pazienti: [],
@@ -142,7 +142,7 @@ router.get('/dashboard/pazienti/:utenteId/piani/:pianoId', async (req, res) => {
     pianoSelezionato.nome_paziente = pazienteSelezionato.nome;
     pianoSelezionato.cognome_paziente = pazienteSelezionato.cognome;
 
-    res.render("pages/admin_dashboard", {
+    res.render("pages/admin-dashboard", {
       title: 'Dashboard Admin - Visualizza piano alimentare - NutriPlan',
       user: req.user,
       pazienti: [],
@@ -285,8 +285,9 @@ router.get('/piani-alimentari/:id/download', async (req, res) => {
     doc.pipe(res);
     
     const pdf = await PianoPDF.generaPianoPDF(doc, piano);
-    if (!pdf) 
-      {throw new Error('Errore nella generazione del PDF');}
+    if (!pdf) {
+      throw new Error('Errore nella generazione del PDF');
+    }
   } catch (error) {
     console.error('Errore durante il download del piano:', error);
     req.flash('error', 'Errore durante il download del piano alimentare');

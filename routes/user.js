@@ -5,13 +5,13 @@ const router = express.Router();
 const { check, validationResult } = require("express-validator");
 const dayjs = require("dayjs");
 const bcrypt = require("bcrypt");
-const misurazioniDAO = require("../models/daos/misurazioniDAO");
-const recensioniDAO = require("../models/daos/recensioniDAO");
-const pianiAlimentariDAO = require("../models/daos/pianiAlimentariDAO");
-const utentiDAO = require("../models/daos/utentiDAO");
+const misurazioniDAO = require("../models/dao/misurazioni-dao");
+const recensioniDAO = require("../models/dao/recensioni-dao");
+const pianiAlimentariDAO = require("../models/dao/piani-alimentari-dao");
+const utentiDAO = require("../models/dao/utenti-dao");
 const middleware = require("../middleware/permessi");
 const PDFDocument = require('pdfkit');
-const PianoPDF = require("../models/pdfGenerator");
+const PianoPDF = require("../models/pdf-generator");
 
 router.use(middleware.isPaziente);
 
@@ -61,7 +61,7 @@ router.get('/dashboard/:section', async (req, res) => {
       });
     }
 
-    res.render('pages/utente_dashboard', {
+    res.render('pages/utente-dashboard', {
       title: 'NutriPlan - Dashboard',
       user: req.user,
       isAuth: req.isAuthenticated(),

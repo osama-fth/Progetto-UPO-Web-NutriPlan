@@ -3,7 +3,7 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
-const utentiDao = require('./daos/utentiDAO');
+const utentiDao = require('./dao/utenti-dao');
 
 passport.use(new LocalStrategy({
   usernameField: 'email',

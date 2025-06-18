@@ -121,23 +121,23 @@ L'applicazione sarà disponibile su `http://localhost:3000`
 ```
 NutriPlan/
 ├── 📁 models/                        # Layer dati e business logic
-│   ├── 📁 daos/                      # Data Access Objects
-│   │   ├── utentiDAO.js              # Gestione utenti e autenticazione
-│   │   ├── misurazioniDAO.js         # Operazioni misurazioni peso
-│   │   ├── pianiAlimentariDAO.js     # Gestione piani nutrizionali
-│   │   ├── recensioniDAO.js          # Sistema recensioni
-│   │   └── contattiDAO.js            # Richieste di contatto
+│   ├── 📁 dao/                      # Data Access Objects
+│   │   ├── utenti-dao.js             # Gestione utenti e autenticazione
+│   │   ├── misurazioni-dao.js        # Operazioni misurazioni peso
+│   │   ├── piani-alimentari-dao.js   # Gestione piani nutrizionali
+│   │   ├── recensioni-dao.js         # Sistema recensioni
+│   │   └── contatti-dao.js           # Richieste di contatto
 │   ├── db.js                         # Configurazione database SQLite
 │   ├── passport.js                   # Strategia autenticazione
-│   └── pdfGenerator.js               # Generazione PDF piani alimentari
+│   └── pdf-generator.js              # Generazione PDF piani alimentari
 ├── 📁 middleware/                    # Middleware Express personalizzati
 │   └── permessi.js                   # Controllo autorizzazioni e ruoli
 ├── 📁 public/                        # Asset statici
 │   ├── 📁 images/                    # Immagini e logo
 │   ├── 📁 javascripts/               # Script client-side
-│   │   ├── admin_dashboard.js        # Logica dashboard admin
-│   │   ├── user_dashboard.js         # Logica dashboard utente
-│   │   ├── peso-chart.js             # Gestione grafici Chart.js
+│   │   ├── admin-dashboard.js        # Logica dashboard admin
+│   │   ├── user-dashboard.js         # Logica dashboard utente
+│   │   ├── grafico-peso.js           # Gestione grafici Chart.js
 │   │   └── conferma-eliminazione.js  # Modal conferme
 │   └── 📁 stylesheets/               # Fogli di stile CSS
 │       └── style.css                 # Stili personalizzati
@@ -151,8 +151,8 @@ NutriPlan/
 │   │   ├── home.ejs                  # Homepage pubblica
 │   │   ├── login.ejs                 # Pagina di accesso
 │   │   ├── register.ejs              # Registrazione utente
-│   │   ├── utente_dashboard.ejs      # Dashboard paziente
-│   │   ├── admin_dashboard.ejs       # Dashboard amministratore
+│   │   ├── utente-dashboard.ejs      # Dashboard paziente
+│   │   ├── admin-dashboard.ejs       # Dashboard amministratore
 │   │   └── recensioni.ejs            # Pagina recensioni pubblica
 │   └── 📁 partials/                  # Componenti riutilizzabili
 │       ├── header.ejs                # Meta tag e CSS

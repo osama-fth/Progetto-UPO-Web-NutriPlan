@@ -2,8 +2,8 @@
 
 const express = require('express');
 const router = express.Router();
-const recensioniDAO = require('../models/daos/recensioniDAO');
-const contattiDAO = require('../models/daos/contattiDAO');
+const recensioniDAO = require('../models/dao/recensioni-dao');
+const contattiDAO = require('../models/dao/contatti-dao');
 const { check, validationResult } = require('express-validator');
 
 // Home page

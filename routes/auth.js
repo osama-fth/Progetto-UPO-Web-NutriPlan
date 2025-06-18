@@ -5,7 +5,7 @@ const router = express.Router();
 const passport = require("../models/passport");
 const { check, validationResult } = require('express-validator');
 const bcrypt = require("bcrypt");
-const utentiDAO = require("../models/daos/utentiDAO");
+const utentiDAO = require("../models/dao/utenti-dao");
 
 // GET pagina login
 router.get("/login", (req, res) => {
