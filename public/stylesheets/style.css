@@ -77,6 +77,10 @@ textArea {
   resize: none;
 }
 
+*:focus{
+  outline: none !important;
+  box-shadow: none !important;
+}
 /* Navbar */
 .navbar {
   background-color: var(--deep-blue);
