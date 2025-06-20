@@ -7,7 +7,7 @@ const db = new sqlite.Database('./' + DB_NAME, sqlite.OPEN_READWRITE, (err) => {
   if (err) {
     console.log('Errore nella connessione: ', err.message);
   } else {
-    console.log('Connesso al database ' + DB_NAME);
+    console.log('Connessione al database avvenuta con successo...');
   }
 });
 

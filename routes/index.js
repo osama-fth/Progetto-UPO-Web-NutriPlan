@@ -85,6 +85,15 @@ router.post('/contatti/invia', [
   }
 });
 
+// Pagina privacy
+router.get('/privacy', (req, res) => {
+  res.render('pages/privacy', { 
+    title: 'NutriPlan - Privacy Policy',
+    user: req.user,
+    isAuth: req.isAuthenticated()
+  });
+});
+
 // Pagina di errore
 router.get('/error', (req, res) => {
   let errorMsg = res.locals.error || 'Si è verificato un errore imprevisto.';
