@@ -1,5 +1,27 @@
 document.addEventListener('DOMContentLoaded', function () {
   let pazienteGrafico = null;
+  
+  // Funzione per mostrare toast
+  function showToast(message, isError = false) {
+    const toastEl = document.getElementById('notificationToast');
+    const toastBody = toastEl.querySelector('.toast-body');
+    
+    toastBody.textContent = message;
+    
+    if (isError) {
+      toastEl.classList.remove('bg-success', 'text-white');
+      toastEl.classList.add('bg-danger', 'text-white');
+    } else {
+      toastEl.classList.remove('bg-danger', 'text-white');
+      toastEl.classList.add('bg-success', 'text-white');
+    }
+    
+    const toast = new bootstrap.Toast(toastEl, {
+      autohide: true,
+      delay: 5000
+    });
+    toast.show();
+  }
 
   // Gestione modal dettagli paziente
   document.querySelectorAll('.btn-dettagli-paziente').forEach(button => {
@@ -69,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const data = document.getElementById('piano-data').value;
 
       if (!utenteId || !titolo || !data || !descrizione) {
-        alert('Per favore, compila tutti i campi obbligatori (Titolo, Data, Descrizione).');
+        showToast('Per favore, compila tutti i campi obbligatori (Titolo, Data, Descrizione).', true);
         return;
       }
 
@@ -105,17 +127,18 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(response => response.json())
         .then(data => {
           if (data.success) {
+            showToast('Piano alimentare creato con successo!');
             const modalNuovoPiano = bootstrap.Modal.getInstance(document.getElementById('nuovoPianoModal'));
             modalNuovoPiano.hide();
-            window.location.reload();
+            setTimeout(() => window.location.reload(), 2000);
           } else {
             console.error('Errore nella creazione del piano:', data);
-            alert('Errore nella creazione del piano alimentare: ' + (data.error || 'Errore sconosciuto'));
+            showToast('Errore nella creazione del piano alimentare: ' + (data.error || 'Errore sconosciuto'), true);
           }
         })
         .catch(error => {
           console.error('Errore nella creazione del piano alimentare:', error);
-          alert('Errore di connessione durante la creazione del piano alimentare');
+          showToast('Errore di connessione durante la creazione del piano alimentare', true);
         })
     });
   }
@@ -144,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .catch(error => {
           console.error('Errore nel caricamento del piano:', error);
-          alert('Errore nel caricamento dei dettagli del piano alimentare');
+          showToast('Errore nel caricamento dei dettagli del piano alimentare', true);
         });
     });
   });
@@ -183,6 +206,7 @@ document.addEventListener('DOMContentLoaded', function () {
     btn.addEventListener('click', function () {
       const utenteId = this.dataset.itemId;
       document.getElementById('utenteId').value = utenteId;
+      document.getElementById('eliminaUtenteForm').action = `/admin/utenti/elimina?_method=DELETE`;
       const modal = new bootstrap.Modal(document.getElementById('eliminaUtenteModal'));
       modal.show();
     });
@@ -193,17 +217,18 @@ document.addEventListener('DOMContentLoaded', function () {
     btn.addEventListener('click', function () {
       const pianoId = this.dataset.itemId;
       document.getElementById('pianoId').value = pianoId;
+      document.getElementById('eliminaPianoForm').action = `/admin/piani-alimentari/elimina?_method=DELETE`;
       const modal = new bootstrap.Modal(document.getElementById('eliminaPianoModal'));
       modal.show();
     });
   });
 
-  // Gestione eliminazione recensioni (admin)
+  // Gestione eliminazione recensioni 
   document.querySelectorAll('[data-elimina="recensione"]').forEach(btn => {
     btn.addEventListener('click', function () {
       const recensioneId = this.dataset.itemId;
       document.getElementById('recensioneId').value = recensioneId;
-      document.getElementById('eliminaRecensioneForm').action = '/admin/recensioni/elimina';
+      document.getElementById('eliminaRecensioneForm').action = `/admin/recensioni/elimina?_method=DELETE`;
       const modal = new bootstrap.Modal(document.getElementById('eliminaRecensioneModal'));
       modal.show();
     });
@@ -214,6 +239,7 @@ document.addEventListener('DOMContentLoaded', function () {
     btn.addEventListener('click', function () {
       const richiestaId = this.dataset.itemId;
       document.getElementById('richiestaId').value = richiestaId;
+      document.getElementById('eliminaRichiestaForm').action = `/admin/contatti/elimina?_method=DELETE`;
       const modal = new bootstrap.Modal(document.getElementById('eliminaRichiestaModal'));
       modal.show();
     });

@@ -162,6 +162,11 @@ textArea {
     border-color: var(--azure-blue);
 }
 
+.toast{
+  min-width: 350px;
+  font-size: 1.1rem;
+}
+
 /* Footer */
 .footer {
   background-color: var(--deep-blue);

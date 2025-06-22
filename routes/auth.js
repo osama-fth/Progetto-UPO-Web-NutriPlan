@@ -56,7 +56,8 @@ router.post('/login', [
                 req.flash('error', 'Errore durante il login.');
                 return res.redirect('/auth/login');
             }
-             
+            
+            req.flash('success', 'Login effettuato con successo')
             if (utente.ruolo === 'admin') {
                 return res.redirect('/admin/dashboard/pazienti');
             } else {

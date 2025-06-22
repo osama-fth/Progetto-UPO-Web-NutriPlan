@@ -32,6 +32,12 @@
                 <span>Richieste di contatto</span>
               </a>
             </li>
+            <li class="sidebar-item <%= currentSection === 'impostazioni' ? 'active' : '' %>">
+              <a href="/admin/dashboard/impostazioni" class="sidebar-link d-flex align-items-center">
+                <i class="fas fa-cog me-2"></i>
+                <span>Impostazioni</span>
+              </a>
+            </li>
           </ul>
         </nav>
       </aside>
@@ -64,6 +70,12 @@
                 <a href="/admin/dashboard/richieste-contatto" class="sidebar-link d-flex align-items-center">
                   <i class="fas fa-envelope me-2"></i>
                   <span>Richieste di contatto</span>
+                </a>
+              </li>
+              <li class="sidebar-item <%= currentSection === 'impostazioni' ? 'active' : '' %>">
+                <a href="/admin/dashboard/impostazioni" class="sidebar-link d-flex align-items-center">
+                  <i class="fas fa-cog me-2"></i>
+                  <span>Impostazioni</span>
                 </a>
               </li>
             </ul>
@@ -396,6 +408,43 @@
             </div>
           </section>
         </div>
+
+        <!-- Sezione Impostazioni -->
+        <div id="sezione-impostazioni" class="sezione-contenuto <%= currentSection !== 'impostazioni' ? 'd-none' : '' %>">
+          <section class="row mt-4 justify-content-center">
+            <div class="col-md-10 mb-4">
+              <div class="card shadow-sm">
+                <div class="card-header bg-white">
+                  <h5 class="mb-0"><i class="fas fa-key me-2"></i> Cambia password</h5>
+                </div>
+                <div class="card-body">
+                  <!-- Form cambia password -->
+                  <form id="changePasswordForm" action="/admin/account/cambia-password?_method=PUT" method="POST">
+                    <div class="mb-3">
+                      <label for="password_attuale" class="form-label">Password attuale</label>
+                      <input type="password" class="form-control" id="password_attuale" name="password_attuale" 
+                        required autocomplete="off">
+                    </div>
+                    <div class="mb-3">
+                      <label for="nuova_password" class="form-label">Nuova password</label>
+                      <input type="password" class="form-control" id="nuova_password" name="nuova_password" 
+                        required autocomplete="off">
+                      <div class="form-text">La password deve essere lunga almeno 8 caratteri.</div>
+                    </div>
+                    <div class="mb-3">
+                      <label for="conferma_password" class="form-label">Conferma nuova password</label>
+                      <input type="password" class="form-control" id="conferma_password" name="conferma_password"
+                        required autocomplete="off">
+                    </div>
+                    <div class="text-center">
+                      <button type="submit" class="btn btn-primary px-4">Cambia password</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
       </main>
     </div>
 
@@ -535,7 +584,8 @@
     <%- include('../partials/modals/elimina-recensione-modal') %>
     <%- include('../partials/modals/elimina-richiesta-modal') %>
     <%- include('../partials/modals/logout-modal') %>
-    <%- include('../partials/visualizza-piano-modal', { isAdmin: true }) %>
+    <%- include('../partials/visualizza-piano-modal') %>
+    <%- include('../partials/toast') %>
 
     <!-- Aggiunta della libreria dayjs prima degli altri script -->
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.7/dayjs.min.js"></script>

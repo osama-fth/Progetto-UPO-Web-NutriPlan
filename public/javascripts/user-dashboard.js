@@ -118,8 +118,8 @@ document.addEventListener('DOMContentLoaded', function() {
     btnEliminaMisurazioni.forEach(btn => {
       btn.addEventListener('click', function() {
         const misurazioneId = this.dataset.itemId;
-        const linkEliminazione = document.getElementById('eliminaMisurazioneLink');
-        linkEliminazione.href = `/user/misurazioni/elimina/${misurazioneId}`;
+        const eliminaMisurazioneForm = document.getElementById('eliminaMisurazioneForm');
+        eliminaMisurazioneForm.action = `/user/misurazioni/elimina/${misurazioneId}?_method=DELETE`;
         const modal = new bootstrap.Modal(document.getElementById('eliminaMisurazioneModal'));
         modal.show();
       });
@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function() {
     btnEliminaRecensione.addEventListener('click', function() {
       const recensioneId = this.dataset.itemId;
       document.getElementById('recensioneId').value = recensioneId;
-      document.getElementById('eliminaRecensioneForm').action = '/user/recensioni/elimina';
+      document.getElementById('eliminaRecensioneForm').action = '/user/recensioni/elimina?_method=DELETE';
       const modal = new bootstrap.Modal(document.getElementById('eliminaRecensioneModal'));
       modal.show();
     });

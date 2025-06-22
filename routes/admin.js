@@ -4,6 +4,7 @@ const express = require("express");
 const router = express.Router();
 const { check, validationResult } = require("express-validator");
 const dayjs = require("dayjs");
+const bcrypt = require('bcrypt');
 const utentiDAO = require("../models/dao/utenti-dao");
 const recensioniDAO = require("../models/dao/recensioni-dao");
 const contattiDAO = require("../models/dao/contatti-dao");
@@ -21,7 +22,7 @@ router.get('/dashboard', (req, res) => {
 
 router.get('/dashboard/:section', async (req, res) => {
   const section = req.params.section;
-  const validSections = ['pazienti', 'recensioni', 'richieste-contatto', 'piani-paziente'];
+  const validSections = ['pazienti', 'recensioni', 'richieste-contatto', 'piani-paziente', 'impostazioni'];
 
   if (!validSections.includes(section)) {
     return res.redirect('/admin/dashboard/pazienti');
@@ -56,6 +57,7 @@ router.get('/dashboard/:section', async (req, res) => {
       });
     }
 
+    // Assicurati che la view abbia accesso a tutti i dati necessari
     res.render("pages/admin-dashboard", {
       title: 'Dashboard Admin - NutriPlan',
       user: req.user,
@@ -160,8 +162,8 @@ router.get('/dashboard/pazienti/:utenteId/piani/:pianoId', async (req, res) => {
   }
 });
 
-// Eliminazione utente
-router.post('/utenti/elimina', async (req, res) => {
+// DELETE Eliminazione utente
+router.delete('/utenti/elimina', async (req, res) => {
   try {
     const { utenteId } = req.body;
     await utentiDAO.deleteAccount(utenteId);
@@ -192,8 +194,8 @@ router.get('/pazienti/:id/misurazioni', async (req, res) => {
   }
 });
 
-// Elimina recensione
-router.post('/recensioni/elimina', async (req, res) => {
+// DELETE Elimina recensione
+router.delete('/recensioni/elimina', async (req, res) => {
   try {
     const { recensioneId } = req.body;
     await recensioniDAO.deleteRecensione(recensioneId);
@@ -206,8 +208,8 @@ router.post('/recensioni/elimina', async (req, res) => {
   }
 });
 
-// Elimina richiesta di contatto
-router.post('/contatti/elimina', async (req, res) => {
+// DELETE Elimina richiesta di contatto 
+router.delete('/contatti/elimina', async (req, res) => {
   try {
     const { richiestaId } = req.body;
     await contattiDAO.deleteRichiestaContatto(richiestaId);
@@ -259,14 +261,14 @@ router.post('/piani-alimentari/nuovo', [
   }
 });
 
-// Elimina un piano alimentare
-router.post('/piani-alimentari/elimina', async (req, res) => {
-    const { pianoId } = req.body;
-    try {
-      const piano = await pianiAlimentariDAO.getPianoAlimentareById(pianoId);
-      await pianiAlimentariDAO.deletePianoAlimentare(pianoId);
-      req.flash('success', 'Piano alimentare eliminato con successo');
-      res.redirect(`/admin/dashboard/pazienti/${piano.utente_id}/piani`);
+// DELETE Elimina un piano alimentare 
+router.delete('/piani-alimentari/elimina', async (req, res) => {
+  const { pianoId } = req.body;
+  try {
+    const piano = await pianiAlimentariDAO.getPianoAlimentareById(pianoId);
+    await pianiAlimentariDAO.deletePianoAlimentare(pianoId);
+    req.flash('success', 'Piano alimentare eliminato con successo');
+    res.redirect(`/admin/dashboard/pazienti/${piano.utente_id}/piani`);
   } catch (error) {
     console.error('Errore nell\'eliminazione del piano alimentare:', error);
     req.flash('error', 'Impossibile eliminare il piano alimentare');
@@ -294,6 +296,42 @@ router.get('/piani-alimentari/:id/download', async (req, res) => {
     res.redirect('/admin/dashboard/pazienti');
   }finally{
     doc.end();
+  }
+});
+
+// PUT cambia password admin
+router.put('/account/cambia-password', [
+  check('password_attuale').notEmpty().withMessage('La password attuale è obbligatoria'),
+  check('nuova_password').notEmpty().withMessage('La nuova password è obbligatoria').isLength({ min: 8 }).withMessage('La password deve essere lunga almeno 8 caratteri'),
+  check('conferma_password').notEmpty().withMessage('La conferma password è obbligatoria')
+    .custom((value, { req }) => {
+      if (value !== req.body.nuova_password) {
+        throw new Error('Le password non coincidono');
+      }
+      return true;
+    })
+], async (req, res) => {
+  const { password_attuale, nuova_password } = req.body;
+  const errors = validationResult(req);
+  try {  
+    if (!errors.isEmpty()) {
+      req.flash('error', errors.array()[0].msg);
+      return res.redirect('/admin/dashboard/impostazioni');
+    }
+    const user = await utentiDAO.getUserById(req.user.id);
+    const isMatch = await bcrypt.compare(password_attuale, user.password);
+    if (!isMatch) {
+      req.flash('error', 'La password attuale non è corretta');
+      return res.redirect('/admin/dashboard/impostazioni');
+    }
+    const hashedPassword = await bcrypt.hash(nuova_password, 10);
+    await utentiDAO.updatePassword(req.user.id, hashedPassword);
+    req.flash('success', 'Password aggiornata con successo');
+    res.redirect('/admin/dashboard/impostazioni');
+  } catch (error) {
+    console.error('Errore durante il cambio password:', error);
+    req.flash('error', 'Si è verificato un errore durante il cambio password');
+    res.redirect('/admin/dashboard/impostazioni');
   }
 });
 

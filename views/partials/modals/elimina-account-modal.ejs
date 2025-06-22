@@ -10,7 +10,9 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
-        <a href="/user/account/elimina" class="btn btn-danger">Elimina</a>
+        <form action="/user/account/elimina?_method=DELETE" method="POST">
+          <button type="submit" class="btn btn-danger">Elimina</button>
+        </form>
       </div>
     </div>
   </div>

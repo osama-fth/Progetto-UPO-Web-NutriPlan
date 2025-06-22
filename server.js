@@ -5,7 +5,7 @@ require("dotenv").config();
 const session = require("express-session");
 const passport = require("passport");
 const morgan = require("morgan");
-const flash = require('express-flash');
+const methodOverride = require('method-override');
 const Messaggi = require('./middleware/messaggi');
 
 const indexRouter = require('./routes/index');
@@ -20,6 +20,7 @@ app.use(morgan("dev"));
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride('_method'));
 
 const isProduction = process.env.NODE_ENV === "production";
 app.set('trust proxy', 1);
@@ -36,10 +37,9 @@ app.use(session({
   }
 }));
 
-app.use(flash());
-app.use(Messaggi);
 app.set("view engine", "ejs");
 
+app.use(Messaggi);
 app.use(passport.initialize());
 app.use(passport.session());
 

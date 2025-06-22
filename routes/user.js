@@ -125,8 +125,8 @@ router.post('/misurazioni/nuova', [
   }
 });
 
-// POST modifica misurazione
-router.post('/misurazioni/modifica', [
+// PUT modifica misurazione
+router.put('/misurazioni/modifica', [
   check('peso').notEmpty().withMessage('Il peso è obbligatorio')
     .isFloat({ min: 0.1 }).withMessage('Il peso deve essere un numero positivo'),
   check('data').notEmpty().withMessage('La data è obbligatoria')
@@ -152,8 +152,8 @@ router.post('/misurazioni/modifica', [
   }
 });
 
-// GET elimina misurazione
-router.get('/misurazioni/elimina/:id', async (req, res) => {
+// DELETE elimina misurazione
+router.delete('/misurazioni/elimina/:id', async (req, res) => {
   const misurazioneId = req.params.id;
   try {
     const misurazione = await misurazioniDAO.getMisurazioneById(misurazioneId);
@@ -196,8 +196,8 @@ router.post('/recensioni/nuova', [
   }
 });
 
-// POST elimina recensione
-router.post('/recensioni/elimina', async (req, res) => {
+// DELETE elimina recensione
+router.delete('/recensioni/elimina', async (req, res) => {
   const { recensioneId } = req.body;
   try {
     const recensione = await recensioniDAO.getRecensioneById(recensioneId);
@@ -215,8 +215,8 @@ router.post('/recensioni/elimina', async (req, res) => {
   }
 });
 
-// GET elimina account
-router.get('/account/elimina', async (req, res) => {
+// DELETE elimina account 
+router.delete('/account/elimina', async (req, res) => {
   const utenteId = req.user.id;
   try {   
     await utentiDAO.deleteAccount(utenteId);
@@ -232,8 +232,8 @@ router.get('/account/elimina', async (req, res) => {
   }
 });
 
-// POST aggiorna dati personali
-router.post('/account/aggiorna-dati', [
+// PUT aggiorna dati personali
+router.put('/account/aggiorna-dati', [
   check('nome').notEmpty().matches(/^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/).withMessage('Il nome può contenere solo lettere'),
   check('cognome').notEmpty().withMessage('Il cognome è obbligatorio').matches(/^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/).withMessage('Il cognome può contenere solo lettere'),
   check('data_di_nascita').notEmpty().withMessage('La data di nascita è obbligatoria').isDate().withMessage('Formato data non valido')
@@ -255,8 +255,8 @@ router.post('/account/aggiorna-dati', [
   }
 });
 
-// POST cambia password
-router.post('/account/cambia-password', [
+// PUT cambia password 
+router.put('/account/cambia-password', [
   check('password_attuale').notEmpty().withMessage('La password attuale è obbligatoria'),
   check('nuova_password').notEmpty().withMessage('La nuova password è obbligatoria').isLength({ min: 8 }).withMessage('La password deve essere lunga almeno 8 caratteri'),
   check('conferma_password').notEmpty().withMessage('La conferma password è obbligatoria')
