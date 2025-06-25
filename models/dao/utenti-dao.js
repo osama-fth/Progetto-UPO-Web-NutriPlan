@@ -1,5 +1,6 @@
 'use strict';
 
+const e = require('express');
 const db = require('../../db');
 
 class UtentiDAO {
@@ -89,6 +90,20 @@ class UtentiDAO {
       });
     });
   }
+
+  async searchPazienti(query) {
+  const sql = `SELECT id, nome, cognome, email, data_di_nascita
+               FROM utenti
+               WHERE ruolo = 'paziente' AND (nome LIKE ? OR cognome LIKE ?)
+               ORDER BY cognome, nome`;
+  
+  return new Promise((resolve, reject) => {
+    this.db.all(sql, [`%${query}%`, `%${query}%`], (err, rows) => {
+      if (err) reject(err);
+      else resolve(rows);
+    });
+  });
+}
 }
 
 module.exports = new UtentiDAO(db);

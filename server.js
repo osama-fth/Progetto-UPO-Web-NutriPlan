@@ -6,7 +6,7 @@ const session = require("express-session");
 const passport = require("passport");
 const morgan = require("morgan");
 const methodOverride = require('method-override');
-const Messaggi = require('./middleware/messaggi');
+const messaggi = require('./middleware/messaggi');
 
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
@@ -39,7 +39,7 @@ app.use(session({
 
 app.set("view engine", "ejs");
 
-app.use(Messaggi);
+app.use(messaggi);
 app.use(passport.initialize());
 app.use(passport.session());
 

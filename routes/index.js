@@ -96,13 +96,11 @@ router.get('/privacy', (req, res) => {
 
 // Pagina di errore
 router.get('/error', (req, res) => {
-  let errorMsg = res.locals.error || 'Si è verificato un errore imprevisto.';
-  
   res.render('pages/error', { 
     title: 'NutriPlan - Errore',
     user: req.user || null,
     isAuth: req.isAuthenticated(),
-    error: errorMsg
+    errorMessage: res.locals.error || 'Si è verificato un errore imprevisto.'
   });
 });
 

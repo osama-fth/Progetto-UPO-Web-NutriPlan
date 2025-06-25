@@ -11,7 +11,6 @@
           <div class="container">
             <h2 class="text-center">Cosa Dicono i Nostri Clienti</h2>
 
-            <!-- Form di ricerca -->
             <div class="row justify-content-center mb-5">
               <div class="col-md-6">
                 <form action="/recensioni/search" method="GET" class="d-flex">
@@ -42,7 +41,6 @@
                           <h5 class="mb-1">
                             <%= recensione.nome %>
                           </h5>
-                          <!-- Stelle -->
                           <div>
                             <% for(let i=1; i <=5; i++) { %>
                               <i
@@ -52,12 +50,10 @@
                         </div>
                       </div>
 
-                      <!-- Contenuto recensione -->
                       <div class="recensioni-content">
                         <p class="recensioni-text">"<%= recensione.commento %>"</p>
                       </div>
 
-                      <!-- Decorazione in basso -->
                       <div class="recensioni-gradient"></div>
                     </div>
                   </div>
@@ -65,7 +61,7 @@
               </div>
               <% } else { %>
                 <div class="text-center py-4">
-                  <i class="fas fa-comment-slash text-muted mb-3" style="font-size: 4rem;"></i>
+                  <i class="fas fa-comment-slash text-white mb-3" style="font-size: 5rem;"></i>
                   <% if(locals.query) { %>
                     <p class="text-muted">Nessuna recensione trovata per "<%= query %>".</p>
                     <a href="/recensioni" class="btn btn-outline-primary mt-3">Mostra tutte le recensioni</a>

@@ -299,6 +299,38 @@ router.get('/piani-alimentari/:id/download', async (req, res) => {
   }
 });
 
+// GET cerca pazienti
+router.get('/dashboard/pazienti/search', async (req, res) => {
+  const query = req.query.q || '';
+  
+  try {
+    let pazienti = [];
+    
+    if (query.trim() !== '') {
+      pazienti = await utentiDAO.searchPazienti(query);
+    } else {
+      pazienti = await utentiDAO.getAllPazienti();
+    }
+
+    let pazientiFormattati = pazienti.map(paziente => {
+        paziente.data_formattata = dayjs(paziente.data_di_nascita).format('DD/MM/YYYY');
+        return paziente;
+      })    
+    
+    res.render('pages/admin-dashboard', {
+      title: 'NutriPlan - Dashboard Admin',
+      currentSection: 'pazienti',
+      pazienti: pazientiFormattati,
+      query: query,
+      user: req.user || null
+    });
+  } catch (error) {
+    console.error('Errore durante la ricerca dei pazienti:', error);
+    req.flash('error', "Errore durante la ricerca dei pazienti");
+    res.redirect("/admin/dashboard/pazienti");
+  }
+});
+
 // PUT cambia password admin
 router.put('/account/cambia-password', [
   check('password_attuale').notEmpty().withMessage('La password attuale è obbligatoria'),
