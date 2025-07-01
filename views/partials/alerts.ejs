@@ -1,17 +1,17 @@
 <!-- Alert di successo -->
-<% if (locals.success) { %>
+<% if (messages.success) { %>
   <div class="alert alert-success alert-dismissible fade show" role="alert">
     <i class="fas fa-check-circle me-2"></i>
-    <%= success %>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      <%= messages.success %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
-  <% } %>
+<% } %>
 
-    <!-- Alert di errore -->
-    <% if (locals.error) { %>
-      <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <i class="fas fa-exclamation-circle me-2"></i>
-        <%= error %>
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-      <% } %>
+<!-- Alert di errore -->
+<% if (messages.error) { %>
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <i class="fas fa-exclamation-circle me-2"></i>
+      <%= messages.error %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+<% } %>

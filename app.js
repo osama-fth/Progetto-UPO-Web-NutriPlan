@@ -6,7 +6,7 @@ const session = require("express-session");
 const passport = require("passport");
 const morgan = require("morgan");
 const methodOverride = require('method-override');
-const messaggi = require('./middleware/messaggi');
+const flash = require('express-flash');
 
 // Importazione delle rotte
 const indexRouter = require('./routes/index');
@@ -44,10 +44,11 @@ app.use(session({
 // Configurazione del motore di template
 app.set("view engine", "ejs");
 
-// Configurazione middleware personalizzati e Passport
-app.use(messaggi);
+// Configurazione middleware flash e Passport
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
+
 
 // Configurazione delle rotte
 app.use('/', indexRouter);
@@ -57,5 +58,5 @@ app.use('/admin', adminRouter);
 
 // Avvio del server
 app.listen(PORT, () => {
-  console.log(`Server avviato sulla porta 3000 (http://localhost:${PORT})`);
+  console.log(`Server avviato sulla porta ${PORT} (http://localhost:${PORT})`);
 });
