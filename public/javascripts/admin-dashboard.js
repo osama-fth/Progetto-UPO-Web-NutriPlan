@@ -1,13 +1,13 @@
 document.addEventListener('DOMContentLoaded', function () {
   let pazienteGrafico = null;
-  
+
   // Funzione per mostrare toast
   function showToast(message, isError = false) {
     const toastEl = document.getElementById('notificationToast');
     const toastBody = toastEl.querySelector('.toast-body');
-    
+
     toastBody.textContent = message;
-    
+
     if (isError) {
       toastEl.classList.remove('bg-success', 'text-white');
       toastEl.classList.add('bg-danger', 'text-white');
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
       toastEl.classList.remove('bg-danger', 'text-white');
       toastEl.classList.add('bg-success', 'text-white');
     }
-    
+
     const toast = new bootstrap.Toast(toastEl, {
       autohide: true,
       delay: 5000

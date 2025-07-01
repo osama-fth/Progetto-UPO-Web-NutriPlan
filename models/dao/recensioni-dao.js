@@ -21,20 +21,6 @@ class RecensioniDAO {
     });
   }
 
-  async getAllRecensioniWithUserInfo() {
-    const sql = `SELECT r.*, u.nome, u.cognome 
-                 FROM recensioni r
-                 JOIN utenti u ON r.utente_id = u.id
-                 ORDER BY r.data_creazione DESC`;
-
-    return new Promise((resolve, reject) => {
-      this.db.all(sql, [], (err, rows) => {
-        if (err) reject(err);
-        else resolve(rows);
-      });
-    });
-  }
-  
   async searchRecensioni(parola) {
     const sql = `SELECT r.*, u.nome, u.cognome 
                  FROM recensioni r
@@ -74,7 +60,7 @@ class RecensioniDAO {
 
   async insertRecensione(id_utente, commento, valutazione) {
     const sql = 'INSERT INTO recensioni (utente_id, commento, valutazione, data_creazione) VALUES (?, ?, ?, datetime("now"))';
-    
+
     return new Promise((resolve, reject) => {
       this.db.run(sql, [id_utente, commento, valutazione], (err) => {
         if (err) reject(err);
@@ -85,7 +71,7 @@ class RecensioniDAO {
 
   async deleteRecensione(id) {
     const sql = 'DELETE FROM recensioni WHERE id = ?';
-    
+
     return new Promise((resolve, reject) => {
       this.db.run(sql, [id], (err) => {
         if (err) reject(err);

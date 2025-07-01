@@ -1,39 +1,40 @@
 <header>
-    <nav class="navbar navbar-expand-lg navbar-dark">
-      <div class="container-fluid mx-1">
-        <a class="navbar-brand" href="/">
-          <img src="/images/logo.webp" alt="NutriPlan Logo" height="50">
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav me-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="/">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/#chi-siamo">Chi Siamo</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/recensioni">Recensioni</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/#contatti">Contatti</a>
-            </li>
-          </ul>
-          <div class="d-flex">
-            <% if (typeof isAuth !== 'undefined' && isAuth) { %>
-              <% const dashboardUrl = (typeof user !== 'undefined' && user && user.ruolo === 'admin') ? '/admin/dashboard/pazienti' : '/user/dashboard/misurazioni'; %>
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid mx-1">
+      <a class="navbar-brand" href="/">
+        <img src="/images/logo.webp" alt="NutriPlan Logo" height="50">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/#chi-siamo">Chi Siamo</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/recensioni">Recensioni</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/#contatti">Contatti</a>
+          </li>
+        </ul>
+        <div class="d-flex">
+          <% if (typeof isAuth !=='undefined' && isAuth) { %>
+            <% const dashboardUrl=(typeof user !=='undefined' && user && user.ruolo==='admin' )
+              ? '/admin/dashboard/pazienti' : '/user/dashboard/misurazioni' ; %>
               <a href="<%= dashboardUrl %>" class="btn btn-primary">
                 <i class="fas fa-chart-line me-1"></i> Dashboard
               </a>
-            <% } else { %>
-              <a href="/auth/login" class="btn btn-outline-primary me-2">Accedi</a>
-              <a href="/auth/register" class="btn btn-primary">Registrati</a>
-            <% } %>
-          </div>
+              <% } else { %>
+                <a href="/auth/login" class="btn btn-outline-primary me-2">Accedi</a>
+                <a href="/auth/register" class="btn btn-primary">Registrati</a>
+                <% } %>
         </div>
       </div>
-    </nav>
-  </header>
+    </div>
+  </nav>
+</header>

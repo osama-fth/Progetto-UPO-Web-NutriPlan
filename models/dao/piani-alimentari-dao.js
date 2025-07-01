@@ -12,7 +12,7 @@ class PianiAlimentariDAO {
                  FROM piano_alimentare 
                  WHERE utente_id = ?
                  ORDER BY data_creazione DESC`;
-                 
+
     return new Promise((resolve, reject) => {
       this.db.all(sql, [userId], (err, rows) => {
         if (err) reject(err);
@@ -25,7 +25,7 @@ class PianiAlimentariDAO {
     const sql = `SELECT id, utente_id, titolo, descrizione, contenuto, data_creazione
                  FROM piano_alimentare 
                  WHERE id = ?`;
-                 
+
     return new Promise((resolve, reject) => {
       this.db.get(sql, [pianoId], (err, row) => {
         if (err) reject(err);
@@ -36,7 +36,7 @@ class PianiAlimentariDAO {
 
   async insertPianoAlimentare(utenteId, titolo, descrizione, contenuto, dataCreazione) {
     const sql = `INSERT INTO piano_alimentare (utente_id, titolo, descrizione, contenuto, data_creazione) VALUES (?, ?, ?, ?, ?)`;
-                 
+
     return new Promise((resolve, reject) => {
       this.db.run(sql, [utenteId, titolo, descrizione, contenuto, dataCreazione], (err) => {
         if (err) reject(err);
@@ -47,7 +47,7 @@ class PianiAlimentariDAO {
 
   async deletePianoAlimentare(pianoId) {
     const sql = `DELETE FROM piano_alimentare WHERE id = ?`;
-    
+
     return new Promise((resolve, reject) => {
       this.db.run(sql, [pianoId], (err) => {
         if (err) reject(err);

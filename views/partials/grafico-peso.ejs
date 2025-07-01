@@ -11,11 +11,11 @@
 </div>
 
 <!-- Dati per il grafico  -->
-<% if (typeof misurazioni !== 'undefined') { %>
+<% if (typeof misurazioni !=='undefined' ) { %>
   <script id="chart-data-<%= canvasId %>" type="application/json">
     <%- JSON.stringify({
       labels: misurazioni ? misurazioni.map(m => m.dataFormattata) : [],
       values: misurazioni ? misurazioni.map(m => m.misura) : []
     }) %>
   </script>
-<% } %>
+  <% } %>

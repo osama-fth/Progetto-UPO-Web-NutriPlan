@@ -4,7 +4,7 @@ function generaPianoPDF(doc, piano) {
   try {
     doc.fontSize(20).font('Helvetica-Bold').text('NutriPlan', { align: 'center' });
     doc.moveDown();
-    
+
     doc.fontSize(16).font('Helvetica-Bold')
       .text(`Piano Alimentare: ${piano.titolo || 'Senza titolo'}`, { align: 'center' });
     doc.moveDown();
@@ -25,7 +25,7 @@ function generaPianoPDF(doc, piano) {
     }
 
     const giorni = ['lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato', 'domenica'];
-    
+
     giorni.forEach(giorno => {
       if (contenuto[giorno]) {
         doc.fontSize(14).font('Helvetica-Bold')
@@ -41,7 +41,7 @@ function generaPianoPDF(doc, piano) {
               .moveDown(0.5);
           }
         });
-        
+
         doc.moveDown();
       }
     });

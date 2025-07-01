@@ -13,14 +13,15 @@ const middleware = require("../middleware/permessi");
 const PDFDocument = require('pdfkit');
 const PianoPDF = require("../models/pdf-generator");
 
+// Applica middleware di controllo permessi paziente
 router.use(middleware.isPaziente);
 
-// Redirect della dashboard principale
+// Rotta di redirect alla dashboard principale
 router.get('/dashboard', (req, res) => {
   res.redirect('/user/dashboard/misurazioni');
 });
 
-// Dashboard principale con sezioni
+// Visualizza dashboard utente con sezioni (misurazioni, piani, recensioni, impostazioni)
 router.get('/dashboard/:section', async (req, res) => {
   const section = req.params.section;
   const validSections = ['misurazioni', 'piani-alimentari', 'recensioni', 'impostazioni'];
@@ -77,7 +78,7 @@ router.get('/dashboard/:section', async (req, res) => {
   }
 });
 
-// GET piano alimentare specifico per API
+// Recupera piano alimentare specifico per API
 router.get('/piani-alimentari/:id', async (req, res) => {
   const pianoId = req.params.id;
   try {  
@@ -99,7 +100,7 @@ router.get('/piani-alimentari/:id', async (req, res) => {
   }
 });
 
-// POST nuova misurazione
+// Aggiunge nuova misurazione peso
 router.post('/misurazioni/nuova', [
   check('peso').notEmpty().withMessage('Il peso è obbligatorio')
     .isFloat({ min: 0.1 }).withMessage('Il peso deve essere un numero positivo'),
@@ -125,7 +126,7 @@ router.post('/misurazioni/nuova', [
   }
 });
 
-// PUT modifica misurazione
+// Modifica una misurazione esistente
 router.put('/misurazioni/modifica', [
   check('peso').notEmpty().withMessage('Il peso è obbligatorio')
     .isFloat({ min: 0.1 }).withMessage('Il peso deve essere un numero positivo'),
@@ -152,7 +153,7 @@ router.put('/misurazioni/modifica', [
   }
 });
 
-// DELETE elimina misurazione
+// Elimina una misurazione
 router.delete('/misurazioni/elimina/:id', async (req, res) => {
   const misurazioneId = req.params.id;
   try {
@@ -171,7 +172,7 @@ router.delete('/misurazioni/elimina/:id', async (req, res) => {
   }
 });
 
-// POST nuova recensione
+// Pubblica nuova recensione
 router.post('/recensioni/nuova', [
   check('commento').notEmpty().withMessage('Il testo della recensione non può essere vuoto'),
   check('valutazione').isInt({ min: 1, max: 5 }).withMessage('La valutazione deve essere un numero da 1 a 5')
@@ -196,7 +197,7 @@ router.post('/recensioni/nuova', [
   }
 });
 
-// DELETE elimina recensione
+// Elimina recensione utente
 router.delete('/recensioni/elimina', async (req, res) => {
   const { recensioneId } = req.body;
   try {
@@ -215,7 +216,7 @@ router.delete('/recensioni/elimina', async (req, res) => {
   }
 });
 
-// DELETE elimina account 
+// Elimina account utente
 router.delete('/account/elimina', async (req, res) => {
   const utenteId = req.user.id;
   try {   
@@ -232,7 +233,7 @@ router.delete('/account/elimina', async (req, res) => {
   }
 });
 
-// PUT aggiorna dati personali
+// Aggiorna dati personali utente
 router.put('/account/aggiorna-dati', [
   check('nome').notEmpty().matches(/^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/).withMessage('Il nome può contenere solo lettere'),
   check('cognome').notEmpty().withMessage('Il cognome è obbligatorio').matches(/^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/).withMessage('Il cognome può contenere solo lettere'),
@@ -255,7 +256,7 @@ router.put('/account/aggiorna-dati', [
   }
 });
 
-// PUT cambia password 
+// Cambio password utente
 router.put('/account/cambia-password', [
   check('password_attuale').notEmpty().withMessage('La password attuale è obbligatoria'),
   check('nuova_password').notEmpty().withMessage('La nuova password è obbligatoria').isLength({ min: 8 }).withMessage('La password deve essere lunga almeno 8 caratteri'),
@@ -291,7 +292,7 @@ router.put('/account/cambia-password', [
   }
 });
 
-// GET download piano alimentare
+// Download piano alimentare in formato PDF
 router.get('/piani-alimentari/download/:id', async (req, res) => {
   const pianoId = req.params.id;
   const doc = new PDFDocument({ size: 'A4', margin: 50 });

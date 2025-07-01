@@ -1,6 +1,5 @@
 'use strict';
 
-const e = require('express');
 const db = require('../../db');
 
 class UtentiDAO {
@@ -31,11 +30,11 @@ class UtentiDAO {
   async newUser(user, HashedPassword) {
     const sql = `INSERT INTO utenti (nome, cognome, email, password, data_di_nascita, ruolo) VALUES (?, ?, ?, ?, ?, ?)`;
     const params = [user.nome, user.cognome, user.email, HashedPassword, user.data_di_nascita, "paziente"];
-    
+
     return new Promise((resolve, reject) => {
       this.db.run(sql, params, (err) => {
         if (err) reject(err);
-        else resolve({id: this.lastID});
+        else resolve({ id: this.lastID });
       });
     });
   }
@@ -45,7 +44,7 @@ class UtentiDAO {
                  FROM utenti 
                  WHERE ruolo = 'paziente'
                  ORDER BY cognome, nome`;
-                 
+
     return new Promise((resolve, reject) => {
       this.db.all(sql, [], (err, rows) => {
         if (err) reject(err);
@@ -69,7 +68,7 @@ class UtentiDAO {
                  SET nome = ?, cognome = ?, data_di_nascita = ?
                  WHERE id = ?`;
     const params = [nome, cognome, data_di_nascita, userId];
-    
+
     return new Promise((resolve, reject) => {
       this.db.run(sql, params, (err) => {
         if (err) reject(err);
@@ -82,7 +81,7 @@ class UtentiDAO {
     const sql = `UPDATE utenti 
                  SET password = ?
                  WHERE id = ?`;
-    
+
     return new Promise((resolve, reject) => {
       this.db.run(sql, [newPassword, userId], (err) => {
         if (err) reject(err);
@@ -92,18 +91,18 @@ class UtentiDAO {
   }
 
   async searchPazienti(query) {
-  const sql = `SELECT id, nome, cognome, email, data_di_nascita
+    const sql = `SELECT id, nome, cognome, email, data_di_nascita
                FROM utenti
                WHERE ruolo = 'paziente' AND (nome LIKE ? OR cognome LIKE ?)
                ORDER BY cognome, nome`;
-  
-  return new Promise((resolve, reject) => {
-    this.db.all(sql, [`%${query}%`, `%${query}%`], (err, rows) => {
-      if (err) reject(err);
-      else resolve(rows);
+
+    return new Promise((resolve, reject) => {
+      this.db.all(sql, [`%${query}%`, `%${query}%`], (err, rows) => {
+        if (err) reject(err);
+        else resolve(rows);
+      });
     });
-  });
-}
+  }
 }
 
 module.exports = new UtentiDAO(db);

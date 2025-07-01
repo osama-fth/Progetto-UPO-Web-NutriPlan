@@ -7,7 +7,7 @@ const { check, validationResult } = require('express-validator');
 const bcrypt = require("bcrypt");
 const utentiDAO = require("../models/dao/utenti-dao");
 
-// GET pagina login
+// Visualizza pagina di login
 router.get("/login", (req, res) => {
     if (req.isAuthenticated()) {
         if (req.user.ruolo === 'admin') {
@@ -22,7 +22,7 @@ router.get("/login", (req, res) => {
     });
 });
 
-// POST login
+// Gestisce il processo di login con validazione
 router.post('/login', [
     check('email').notEmpty().isEmail(),
     check('password').notEmpty()
@@ -33,6 +33,7 @@ router.post('/login', [
         return res.redirect('/auth/login');
     }
 
+    // Autentica l'utente usando Passport
     passport.authenticate("local", (err, utente, info) => {        
         if (err) {
             console.error('Errore durante l\'autenticazione:', err);
@@ -51,6 +52,7 @@ router.post('/login', [
             return res.redirect('/auth/login');
         }
         
+        // Effettua il login e reindirizza in base al ruolo
         req.login(utente, (err) => {
             if (err) {
                 req.flash('error', 'Errore durante il login.');
@@ -67,7 +69,7 @@ router.post('/login', [
     })(req, res, next);
 });
 
-// LOGOUT
+// Gestisce il logout dell'utente
 router.get('/logout', (req, res) => {
     if (!req.isAuthenticated()) {
         return res.redirect('/auth/login');
@@ -83,7 +85,7 @@ router.get('/logout', (req, res) => {
     });
 });
 
-// GET pagina registrazione
+// Visualizza pagina di registrazione
 router.get("/register", (req, res) => {
     if (req.isAuthenticated()) {
         if (req.user.ruolo === 'admin') {
@@ -100,7 +102,7 @@ router.get("/register", (req, res) => {
     });
 });
 
-// POST registrazione
+// Gestisce la registrazione di nuovi utenti con validazione completa
 router.post("/register", [
     check('nome').notEmpty().withMessage("Il nome è obbligatorio").matches(/^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/).withMessage('Il nome deve contenere solo lettere'),
     check('cognome').notEmpty().withMessage("Il cognome è obbligatorio").matches(/^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/).withMessage('Il cognome deve contenere solo lettere'),

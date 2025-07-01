@@ -14,12 +14,15 @@ const middleware = require("../middleware/permessi");
 const PDFDocument = require('pdfkit');
 const PianoPDF = require("../models/pdf-generator");
 
+// Applica middleware di controllo permessi admin
 router.use(middleware.isAdmin);
 
+// Rotta di redirect alla dashboard principale
 router.get('/dashboard', (req, res) => {
   res.redirect('/admin/dashboard/pazienti');
 });
 
+// Visualizza dashboard admin con sezioni diverse (pazienti, recensioni, contatti, etc.)
 router.get('/dashboard/:section', async (req, res) => {
   const section = req.params.section;
   const validSections = ['pazienti', 'recensioni', 'richieste-contatto', 'piani-paziente', 'impostazioni'];
@@ -42,7 +45,7 @@ router.get('/dashboard/:section', async (req, res) => {
     }
 
     if (section === 'recensioni') {
-      const recensioni = await recensioniDAO.getAllRecensioniWithUserInfo();
+      const recensioni = await recensioniDAO.getAllRecensioni();
       recensioniFormattate = recensioni.map(recensione => {
         recensione.dataFormattata = dayjs(recensione.data_creazione).format('DD/MM/YYYY');
         return recensione;
@@ -75,7 +78,7 @@ router.get('/dashboard/:section', async (req, res) => {
   }
 });
 
-// Visualizza piani alimentari di un paziente
+// Visualizza piani alimentari di un paziente specifico
 router.get('/dashboard/pazienti/:utenteId/piani', async (req, res) => {
   const utenteId = req.params.utenteId;
 
@@ -110,7 +113,7 @@ router.get('/dashboard/pazienti/:utenteId/piani', async (req, res) => {
   }
 });
 
-// Visualizza un piano alimentare specifico di un paziente
+// Visualizza dettagli di un piano alimentare specifico
 router.get('/dashboard/pazienti/:utenteId/piani/:pianoId', async (req, res) => {
   const utenteId = req.params.utenteId;
   const pianoId = req.params.pianoId;
@@ -162,7 +165,7 @@ router.get('/dashboard/pazienti/:utenteId/piani/:pianoId', async (req, res) => {
   }
 });
 
-// DELETE Eliminazione utente
+// Elimina un utente paziente
 router.delete('/utenti/elimina', async (req, res) => {
   try {
     const { utenteId } = req.body;
@@ -176,7 +179,7 @@ router.delete('/utenti/elimina', async (req, res) => {
   }
 });
 
-// GET misurazioni di un paziente
+// Recupera misurazioni di un paziente
 router.get('/pazienti/:id/misurazioni', async (req, res) => {
   try {
     const utenteId = req.params.id;
@@ -194,7 +197,7 @@ router.get('/pazienti/:id/misurazioni', async (req, res) => {
   }
 });
 
-// DELETE Elimina recensione
+// Elimina una recensione
 router.delete('/recensioni/elimina', async (req, res) => {
   try {
     const { recensioneId } = req.body;
@@ -208,7 +211,7 @@ router.delete('/recensioni/elimina', async (req, res) => {
   }
 });
 
-// DELETE Elimina richiesta di contatto 
+// Elimina una richiesta di contatto
 router.delete('/contatti/elimina', async (req, res) => {
   try {
     const { richiestaId } = req.body;
@@ -222,7 +225,7 @@ router.delete('/contatti/elimina', async (req, res) => {
   }
 });
 
-// GET piano alimentare specifico dato id (per API)
+// Recupera piano alimentare per ID
 router.get('/piani-alimentari/:id', async (req, res) => {
     const pianoId = req.params.id;
     try {
@@ -237,7 +240,7 @@ router.get('/piani-alimentari/:id', async (req, res) => {
   }
 });
 
-// Creare un nuovo piano alimentare
+// Crea nuovo piano alimentare per un paziente
 router.post('/piani-alimentari/nuovo', [
   check('utenteId').notEmpty().withMessage('ID utente obbligatorio'),
   check('titolo').notEmpty().withMessage('Il titolo è obbligatorio'),
@@ -261,7 +264,7 @@ router.post('/piani-alimentari/nuovo', [
   }
 });
 
-// DELETE Elimina un piano alimentare 
+// Elimina un piano alimentare
 router.delete('/piani-alimentari/elimina', async (req, res) => {
   const { pianoId } = req.body;
   try {
@@ -276,7 +279,7 @@ router.delete('/piani-alimentari/elimina', async (req, res) => {
   }
 });
 
-// Download piano alimentare in PDF
+// Download piano alimentare in formato PDF
 router.get('/piani-alimentari/:id/download', async (req, res) => {
    const pianoId = req.params.id; 
    const doc = new PDFDocument({size: 'A4', margin: 50});
@@ -299,7 +302,7 @@ router.get('/piani-alimentari/:id/download', async (req, res) => {
   }
 });
 
-// GET cerca pazienti
+// Ricerca pazienti per nome/cognome
 router.get('/dashboard/pazienti/search', async (req, res) => {
   const query = req.query.q || '';
   
@@ -331,7 +334,7 @@ router.get('/dashboard/pazienti/search', async (req, res) => {
   }
 });
 
-// PUT cambia password admin
+// Cambio password dell'admin
 router.put('/account/cambia-password', [
   check('password_attuale').notEmpty().withMessage('La password attuale è obbligatoria'),
   check('nuova_password').notEmpty().withMessage('La nuova password è obbligatoria').isLength({ min: 8 }).withMessage('La password deve essere lunga almeno 8 caratteri'),

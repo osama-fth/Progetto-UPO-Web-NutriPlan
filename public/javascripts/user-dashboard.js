@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   function showModal(modalId) {
     const modal = new bootstrap.Modal(document.getElementById(modalId));
     modal.show();
@@ -20,20 +20,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Gestione pulsanti modifica misurazione
   document.querySelectorAll('.btn-modifica-misurazione').forEach(button => {
-    button.addEventListener('click', function() {
+    button.addEventListener('click', function () {
       const misurazioneId = this.getAttribute('data-misurazione-id');
       const peso = this.getAttribute('data-peso');
       const data = this.getAttribute('data-data');
-      
+
       document.getElementById('misurazioneId').value = misurazioneId;
       document.getElementById('pesoModifica').value = peso;
       document.getElementById('dataModifica').value = data;
-      
+
       const btnEliminaMisurazione = document.getElementById('btnEliminaMisurazione');
       if (btnEliminaMisurazione) {
         btnEliminaMisurazione.setAttribute('data-item-id', misurazioneId);
       }
-      
+
       showModal('misurazioneAzioniModal');
     });
   });
@@ -41,19 +41,19 @@ document.addEventListener('DOMContentLoaded', function() {
   // Gestione visualizzazione piani alimentari
   document.querySelectorAll('[data-piano-id]').forEach(button => {
     if (button.querySelector('i.fa-eye')) {
-      button.addEventListener('click', function() {
+      button.addEventListener('click', function () {
         const pianoId = this.getAttribute('data-piano-id');
         const titolo = this.getAttribute('data-piano-titolo');
         const data = this.getAttribute('data-piano-data');
         const descrizione = this.getAttribute('data-piano-descrizione');
-        
+
         document.getElementById('dettaglio-piano-titolo').textContent = titolo;
         document.getElementById('dettaglio-piano-data').textContent = `Data: ${data}`;
         document.getElementById('dettaglio-piano-descrizione').textContent = descrizione || 'Nessuna descrizione disponibile.';
-        
+
         fetch(`/user/piani-alimentari/${pianoId}`)
           .then(response => {
-            if (!response.ok) 
+            if (!response.ok)
               throw new Error(`Errore nella risposta: ${response.status}`);
             return response.json();
           })
@@ -72,14 +72,14 @@ document.addEventListener('DOMContentLoaded', function() {
   function renderDettaglioPiano(contenutoJSON) {
     const contenuto = typeof contenutoJSON === 'string' ? JSON.parse(contenutoJSON) : contenutoJSON;
     const giorni = ['lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato', 'domenica'];
-    
+
     giorni.forEach(giorno => {
       const elementoGiorno = document.getElementById(`dettaglio-giorno-${giorno}`);
       if (elementoGiorno) {
         elementoGiorno.style.display = 'none';
       }
     });
-    
+
     for (const giorno of giorni) {
       if (contenuto[giorno]) {
         const elementoGiorno = document.getElementById(`dettaglio-giorno-${giorno}`);
@@ -100,14 +100,14 @@ document.addEventListener('DOMContentLoaded', function() {
   // Gestione della chiusura dei modal per accessibilità
   const visualizzaPianoModal = document.getElementById('visualizzaPianoModal');
   if (visualizzaPianoModal) {
-    visualizzaPianoModal.addEventListener('hidden.bs.modal', function() {
+    visualizzaPianoModal.addEventListener('hidden.bs.modal', function () {
       document.body.focus();
     });
   }
 
   const misurazioneAzioniModal = document.getElementById('misurazioneAzioniModal');
   if (misurazioneAzioniModal) {
-    misurazioneAzioniModal.addEventListener('hidden.bs.modal', function() {
+    misurazioneAzioniModal.addEventListener('hidden.bs.modal', function () {
       document.body.focus();
     });
   }
@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const btnEliminaMisurazioni = document.querySelectorAll('#btnEliminaMisurazione');
   if (btnEliminaMisurazioni.length > 0) {
     btnEliminaMisurazioni.forEach(btn => {
-      btn.addEventListener('click', function() {
+      btn.addEventListener('click', function () {
         const misurazioneId = this.dataset.itemId;
         const eliminaMisurazioneForm = document.getElementById('eliminaMisurazioneForm');
         eliminaMisurazioneForm.action = `/user/misurazioni/elimina/${misurazioneId}?_method=DELETE`;
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Gestione eliminazione recensione
   const btnEliminaRecensione = document.querySelector('[data-elimina="recensione"]');
   if (btnEliminaRecensione) {
-    btnEliminaRecensione.addEventListener('click', function() {
+    btnEliminaRecensione.addEventListener('click', function () {
       const recensioneId = this.dataset.itemId;
       document.getElementById('recensioneId').value = recensioneId;
       document.getElementById('eliminaRecensioneForm').action = '/user/recensioni/elimina?_method=DELETE';
@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Gestione eliminazione account
   const btnEliminaAccount = document.getElementById('btnEliminaAccount');
   if (btnEliminaAccount) {
-    btnEliminaAccount.addEventListener('click', function() {
+    btnEliminaAccount.addEventListener('click', function () {
       const modal = new bootstrap.Modal(document.getElementById('eliminaAccountModal'));
       modal.show();
     });

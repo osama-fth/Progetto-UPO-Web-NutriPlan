@@ -6,7 +6,7 @@ const recensioniDAO = require('../models/dao/recensioni-dao');
 const contattiDAO = require('../models/dao/contatti-dao');
 const { check, validationResult } = require('express-validator');
 
-// Home page
+// Visualizza la pagina home del sito
 router.get('/', async (req, res) => {
   res.render('pages/home', {
     title: 'NutriPlan - Home',
@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
   });
 });
 
-// Pagina recensioni
+// Visualizza tutte le recensioni pubbliche
 router.get('/recensioni', async (req, res) => {
   try {
     const recensioni = await recensioniDAO.getAllRecensioni();
@@ -33,7 +33,7 @@ router.get('/recensioni', async (req, res) => {
   }
 });
 
-// Ricerca recensioni
+// Ricerca recensioni per query specifica
 router.get('/recensioni/search', async (req, res) => {
   const query = req.query.q || '';
   
@@ -60,7 +60,7 @@ router.get('/recensioni/search', async (req, res) => {
   }
 });
 
-// Invio messaggio di contatto
+// Gestisce l'invio di messaggi di contatto con validazione
 router.post('/contatti/invia', [
   check('nome').notEmpty(),
   check('email').notEmpty().isEmail(),
@@ -85,7 +85,7 @@ router.post('/contatti/invia', [
   }
 });
 
-// Pagina privacy
+// Visualizza la pagina privacy policy
 router.get('/privacy', (req, res) => {
   res.render('pages/privacy', { 
     title: 'NutriPlan - Privacy Policy',
@@ -94,7 +94,7 @@ router.get('/privacy', (req, res) => {
   });
 });
 
-// Pagina di errore
+// Visualizza pagina di errore generica
 router.get('/error', (req, res) => {
   res.render('pages/error', { 
     title: 'NutriPlan - Errore',
