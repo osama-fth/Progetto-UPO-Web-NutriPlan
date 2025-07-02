@@ -15,8 +15,11 @@ class RecensioniDAO {
 
     return new Promise((resolve, reject) => {
       this.db.all(sql, [], (err, rows) => {
-        if (err) reject(err);
-        else resolve(rows);
+        if (err) {
+          reject(err);
+        } else {
+          resolve(rows);
+        }
       });
     });
   }
@@ -30,8 +33,11 @@ class RecensioniDAO {
 
     return new Promise((resolve, reject) => {
       this.db.all(sql, [`%${parola}%`], (err, rows) => {
-        if (err) reject(err);
-        else resolve(rows);
+        if (err) {
+          reject(err);
+        } else {
+          resolve(rows);
+        }
       });
     });
   }
@@ -41,8 +47,11 @@ class RecensioniDAO {
 
     return new Promise((resolve, reject) => {
       this.db.get(sql, [id], (err, row) => {
-        if (err) reject(err);
-        else resolve(row);
+        if (err) {
+          reject(err);
+        } else {
+          resolve(row);
+        }
       });
     });
   }
@@ -52,19 +61,26 @@ class RecensioniDAO {
 
     return new Promise((resolve, reject) => {
       this.db.get(sql, [id_utente], (err, row) => {
-        if (err) reject(err);
-        else resolve(row);
+        if (err) {
+          reject(err);
+        } else {
+          resolve(row);
+        }
       });
     });
   }
 
   async insertRecensione(id_utente, commento, valutazione) {
-    const sql = 'INSERT INTO recensioni (utente_id, commento, valutazione, data_creazione) VALUES (?, ?, ?, datetime("now"))';
+    const sql =
+      'INSERT INTO recensioni (utente_id, commento, valutazione, data_creazione) VALUES (?, ?, ?, datetime("now"))';
 
     return new Promise((resolve, reject) => {
       this.db.run(sql, [id_utente, commento, valutazione], (err) => {
-        if (err) reject(err);
-        else resolve(this.lastID);
+        if (err) {
+          reject(err);
+        } else {
+          resolve(this.lastID);
+        }
       });
     });
   }
@@ -74,8 +90,11 @@ class RecensioniDAO {
 
     return new Promise((resolve, reject) => {
       this.db.run(sql, [id], (err) => {
-        if (err) reject(err);
-        else resolve(this.changes);
+        if (err) {
+          reject(err);
+        } else {
+          resolve(this.changes);
+        }
       });
     });
   }

@@ -1,13 +1,13 @@
 :root {
-  --dark-blue: #03045E;
+  --dark-blue: #03045e;
   --deep-blue: #023e8a;
-  --medium-blue: #0077B6;
+  --medium-blue: #0077b6;
   --bright-cyan: #0096c7;
-  --bright-blue: #00B4D8;
-  --light-blue: #90E0EF;
+  --bright-blue: #00b4d8;
+  --light-blue: #90e0ef;
   --azure-blue: #48cae4;
-  --pastel-blue: #CAF0F8;
-  --pale-blue: #ADE8F4;
+  --pastel-blue: #caf0f8;
+  --pale-blue: #ade8f4;
   --white: #ffffff;
   --black: #000000;
 }
@@ -231,7 +231,7 @@ textArea {
 }
 
 .hero::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
@@ -432,13 +432,12 @@ textArea {
 }
 
 @media (max-width: 767px) {
-
   .feature-row .order-md-1,
   .feature-row .order-md-2 {
     order: unset;
   }
 
-  .feature-row div[class*="text-md-"] {
+  .feature-row div[class*='text-md-'] {
     text-align: center !important;
   }
 
@@ -622,7 +621,9 @@ textArea {
 .privacy-section .card {
   background-color: var(--white);
   border-top: 3px solid var(--bright-cyan);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .privacy-section .card:hover {

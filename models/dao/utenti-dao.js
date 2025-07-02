@@ -8,33 +8,50 @@ class UtentiDAO {
   }
 
   async getUser(email) {
-    const sql = `SELECT * FROM utenti WHERE email = ?`;
+    const sql = 'SELECT * FROM utenti WHERE email = ?';
     return new Promise((resolve, reject) => {
       this.db.get(sql, [email], (err, row) => {
-        if (err) reject(err);
-        else resolve(row);
+        if (err) {
+          reject(err);
+        } else {
+          resolve(row);
+        }
       });
     });
   }
 
   async getUserById(id) {
-    const sql = `SELECT * FROM utenti WHERE id = ?`;
+    const sql = 'SELECT * FROM utenti WHERE id = ?';
     return new Promise((resolve, reject) => {
       this.db.get(sql, [id], (err, row) => {
-        if (err) reject(err);
-        else resolve(row);
+        if (err) {
+          reject(err);
+        } else {
+          resolve(row);
+        }
       });
     });
   }
 
   async newUser(user, HashedPassword) {
-    const sql = `INSERT INTO utenti (nome, cognome, email, password, data_di_nascita, ruolo) VALUES (?, ?, ?, ?, ?, ?)`;
-    const params = [user.nome, user.cognome, user.email, HashedPassword, user.data_di_nascita, "paziente"];
+    const sql =
+      'INSERT INTO utenti (nome, cognome, email, password, data_di_nascita, ruolo) VALUES (?, ?, ?, ?, ?, ?)';
+    const params = [
+      user.nome,
+      user.cognome,
+      user.email,
+      HashedPassword,
+      user.data_di_nascita,
+      'paziente',
+    ];
 
     return new Promise((resolve, reject) => {
       this.db.run(sql, params, (err) => {
-        if (err) reject(err);
-        else resolve({ id: this.lastID });
+        if (err) {
+          reject(err);
+        } else {
+          resolve({ id: this.lastID });
+        }
       });
     });
   }
@@ -47,18 +64,24 @@ class UtentiDAO {
 
     return new Promise((resolve, reject) => {
       this.db.all(sql, [], (err, rows) => {
-        if (err) reject(err);
-        else resolve(rows);
+        if (err) {
+          reject(err);
+        } else {
+          resolve(rows);
+        }
       });
     });
   }
 
   async deleteAccount(utenteId) {
-    const sql = `DELETE FROM utenti WHERE id = ?`;
+    const sql = 'DELETE FROM utenti WHERE id = ?';
     return new Promise((resolve, reject) => {
       this.db.run(sql, [utenteId], (err) => {
-        if (err) reject(err);
-        else resolve();
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
       });
     });
   }
@@ -71,8 +94,11 @@ class UtentiDAO {
 
     return new Promise((resolve, reject) => {
       this.db.run(sql, params, (err) => {
-        if (err) reject(err);
-        else resolve(this.changes);
+        if (err) {
+          reject(err);
+        } else {
+          resolve(this.changes);
+        }
       });
     });
   }
@@ -84,8 +110,11 @@ class UtentiDAO {
 
     return new Promise((resolve, reject) => {
       this.db.run(sql, [newPassword, userId], (err) => {
-        if (err) reject(err);
-        else resolve(this.changes);
+        if (err) {
+          reject(err);
+        } else {
+          resolve(this.changes);
+        }
       });
     });
   }
@@ -98,8 +127,11 @@ class UtentiDAO {
 
     return new Promise((resolve, reject) => {
       this.db.all(sql, [`%${query}%`, `%${query}%`], (err, rows) => {
-        if (err) reject(err);
-        else resolve(rows);
+        if (err) {
+          reject(err);
+        } else {
+          resolve(rows);
+        }
       });
     });
   }

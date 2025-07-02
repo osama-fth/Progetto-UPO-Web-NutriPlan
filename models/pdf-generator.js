@@ -5,11 +5,17 @@ function generaPianoPDF(doc, piano) {
     doc.fontSize(20).font('Helvetica-Bold').text('NutriPlan', { align: 'center' });
     doc.moveDown();
 
-    doc.fontSize(16).font('Helvetica-Bold')
-      .text(`Piano Alimentare: ${piano.titolo || 'Senza titolo'}`, { align: 'center' });
+    doc
+      .fontSize(16)
+      .font('Helvetica-Bold')
+      .text(`Piano Alimentare: ${piano.titolo || 'Senza titolo'}`, {
+        align: 'center',
+      });
     doc.moveDown();
 
-    doc.fontSize(12).font('Helvetica')
+    doc
+      .fontSize(12)
+      .font('Helvetica')
       .text(`Data creazione: ${new Date(piano.data_creazione).toLocaleDateString('it-IT')}`)
       .text(piano.descrizione || 'Nessuna descrizione disponibile')
       .moveDown();
@@ -26,15 +32,15 @@ function generaPianoPDF(doc, piano) {
 
     const giorni = ['lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato', 'domenica'];
 
-    giorni.forEach(giorno => {
+    giorni.forEach((giorno) => {
       if (contenuto[giorno]) {
-        doc.fontSize(14).font('Helvetica-Bold')
-          .text(giorno.toUpperCase())
-          .moveDown(0.5);
+        doc.fontSize(14).font('Helvetica-Bold').text(giorno.toUpperCase()).moveDown(0.5);
 
-        ['colazione', 'pranzo', 'cena'].forEach(pasto => {
+        ['colazione', 'pranzo', 'cena'].forEach((pasto) => {
           if (contenuto[giorno][pasto]) {
-            doc.fontSize(12).font('Helvetica-Bold')
+            doc
+              .fontSize(12)
+              .font('Helvetica-Bold')
               .text(`${pasto.toUpperCase()}:`)
               .font('Helvetica')
               .text(contenuto[giorno][pasto] || 'Non specificato')

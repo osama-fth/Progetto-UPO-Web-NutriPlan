@@ -16,6 +16,7 @@ Progetto sviluppato per il corso di **Metodologie di Programmazione Web** dell'*
 ## ✨ Funzionalità principali
 
 ### 👤 Per i pazienti:
+
 - Dashboard personalizzata
 - Monitoraggio del peso con grafici
 - Visualizzazione piani alimentari
@@ -24,6 +25,7 @@ Progetto sviluppato per il corso di **Metodologie di Programmazione Web** dell'*
 - Gestione profilo
 
 ### 👨‍⚕️ Per gli amministratori:
+
 - Gestione pazienti
 - Creazione piani alimentari
 - Monitoraggio progressi
@@ -60,10 +62,12 @@ L'applicazione sarà disponibile su `http://localhost:3000`
 ## 👨‍💻 Account di test
 
 **Amministratore:**
+
 - Email: `admin@gmail.com`
 - Password: `admin1234`
 
 **Paziente:**
+
 - Email: `mario@gmail.com`
 - Password: `mario1234`
 
@@ -73,4 +77,4 @@ L'applicazione sarà disponibile su `http://localhost:3000`
 
 ---
 
-*Progetto per il corso di Metodologie di Programmazione Web - A.A. 2024/2025*
+_Progetto per il corso di Metodologie di Programmazione Web - A.A. 2024/2025_

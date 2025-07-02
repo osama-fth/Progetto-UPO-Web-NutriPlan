@@ -8,12 +8,16 @@ class ContattiDAO {
   }
 
   async inserisciRichiestaContatto(nome, email, messaggio) {
-    const sql = 'INSERT INTO richieste_contatto (nome, email, messaggio, data_creazione) VALUES (?, ?, ?, datetime("now"))';
+    const sql =
+      'INSERT INTO richieste_contatto (nome, email, messaggio, data_creazione) VALUES (?, ?, ?, datetime("now"))';
 
     return new Promise((resolve, reject) => {
       this.db.run(sql, [nome, email, messaggio], (err) => {
-        if (err) reject(err);
-        else resolve(this.lastID);
+        if (err) {
+          reject(err);
+        } else {
+          resolve(this.lastID);
+        }
       });
     });
   }
@@ -23,8 +27,11 @@ class ContattiDAO {
 
     return new Promise((resolve, reject) => {
       this.db.all(sql, [], (err, rows) => {
-        if (err) reject(err);
-        else resolve(rows);
+        if (err) {
+          reject(err);
+        } else {
+          resolve(rows);
+        }
       });
     });
   }
@@ -34,8 +41,11 @@ class ContattiDAO {
 
     return new Promise((resolve, reject) => {
       this.db.get(sql, [id], (err, row) => {
-        if (err) reject(err);
-        else resolve(row);
+        if (err) {
+          reject(err);
+        } else {
+          resolve(row);
+        }
       });
     });
   }
@@ -45,8 +55,11 @@ class ContattiDAO {
 
     return new Promise((resolve, reject) => {
       this.db.run(sql, [id], (err) => {
-        if (err) reject(err);
-        else resolve();
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
       });
     });
   }

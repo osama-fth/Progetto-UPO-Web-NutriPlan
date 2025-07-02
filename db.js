@@ -13,7 +13,7 @@ const db = new sqlite.Database('./' + DB_NAME, (err) => {
     // Attiva i vincoli di chiave esterna per mantenere l'integrità referenziale
     db.run('PRAGMA foreign_keys = ON', (err) => {
       if (err) {
-        console.error('Errore nell\'attivazione dei vincoli di chiave esterna:', err.message);
+        console.error("Errore nell'attivazione dei vincoli di chiave esterna:", err.message);
       }
     });
   }

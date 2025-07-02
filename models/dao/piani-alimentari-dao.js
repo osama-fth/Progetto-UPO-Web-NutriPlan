@@ -15,8 +15,11 @@ class PianiAlimentariDAO {
 
     return new Promise((resolve, reject) => {
       this.db.all(sql, [userId], (err, rows) => {
-        if (err) reject(err);
-        else resolve(rows);
+        if (err) {
+          reject(err);
+        } else {
+          resolve(rows);
+        }
       });
     });
   }
@@ -28,34 +31,43 @@ class PianiAlimentariDAO {
 
     return new Promise((resolve, reject) => {
       this.db.get(sql, [pianoId], (err, row) => {
-        if (err) reject(err);
-        else resolve(row);
+        if (err) {
+          reject(err);
+        } else {
+          resolve(row);
+        }
       });
     });
   }
 
   async insertPianoAlimentare(utenteId, titolo, descrizione, contenuto, dataCreazione) {
-    const sql = `INSERT INTO piano_alimentare (utente_id, titolo, descrizione, contenuto, data_creazione) VALUES (?, ?, ?, ?, ?)`;
+    const sql =
+      'INSERT INTO piano_alimentare (utente_id, titolo, descrizione, contenuto, data_creazione) VALUES (?, ?, ?, ?, ?)';
 
     return new Promise((resolve, reject) => {
       this.db.run(sql, [utenteId, titolo, descrizione, contenuto, dataCreazione], (err) => {
-        if (err) reject(err);
-        else resolve(this.lastID);
+        if (err) {
+          reject(err);
+        } else {
+          resolve(this.lastID);
+        }
       });
     });
   }
 
   async deletePianoAlimentare(pianoId) {
-    const sql = `DELETE FROM piano_alimentare WHERE id = ?`;
+    const sql = 'DELETE FROM piano_alimentare WHERE id = ?';
 
     return new Promise((resolve, reject) => {
       this.db.run(sql, [pianoId], (err) => {
-        if (err) reject(err);
-        else resolve();
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
       });
     });
   }
 }
 
 module.exports = new PianiAlimentariDAO(db);
-

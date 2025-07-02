@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
   function showModal(modalId) {
     const modal = new bootstrap.Modal(document.getElementById(modalId));
     modal.show();
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // Gestione pulsanti modifica misurazione
-  document.querySelectorAll('.btn-modifica-misurazione').forEach(button => {
+  document.querySelectorAll('.btn-modifica-misurazione').forEach((button) => {
     button.addEventListener('click', function () {
       const misurazioneId = this.getAttribute('data-misurazione-id');
       const peso = this.getAttribute('data-peso');
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // Gestione visualizzazione piani alimentari
-  document.querySelectorAll('[data-piano-id]').forEach(button => {
+  document.querySelectorAll('[data-piano-id]').forEach((button) => {
     if (button.querySelector('i.fa-eye')) {
       button.addEventListener('click', function () {
         const pianoId = this.getAttribute('data-piano-id');
@@ -49,19 +49,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
         document.getElementById('dettaglio-piano-titolo').textContent = titolo;
         document.getElementById('dettaglio-piano-data').textContent = `Data: ${data}`;
-        document.getElementById('dettaglio-piano-descrizione').textContent = descrizione || 'Nessuna descrizione disponibile.';
+        document.getElementById('dettaglio-piano-descrizione').textContent =
+          descrizione || 'Nessuna descrizione disponibile.';
 
         fetch(`/user/piani-alimentari/${pianoId}`)
-          .then(response => {
-            if (!response.ok)
+          .then((response) => {
+            if (!response.ok) {
               throw new Error(`Errore nella risposta: ${response.status}`);
+            }
             return response.json();
           })
-          .then(piano => {
+          .then((piano) => {
             renderDettaglioPiano(piano.contenuto);
             showModal('visualizzaPianoModal');
           })
-          .catch(error => {
+          .catch((error) => {
             console.error('Errore nel caricamento del piano:', error);
           });
       });
@@ -73,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const contenuto = typeof contenutoJSON === 'string' ? JSON.parse(contenutoJSON) : contenutoJSON;
     const giorni = ['lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato', 'domenica'];
 
-    giorni.forEach(giorno => {
+    giorni.forEach((giorno) => {
       const elementoGiorno = document.getElementById(`dettaglio-giorno-${giorno}`);
       if (elementoGiorno) {
         elementoGiorno.style.display = 'none';
@@ -86,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (elementoGiorno) {
           elementoGiorno.style.display = 'block';
           const pasti = ['colazione', 'pranzo', 'cena'];
-          pasti.forEach(pasto => {
+          pasti.forEach((pasto) => {
             const elementoPasto = document.getElementById(`dettaglio-${giorno}-${pasto}`);
             if (elementoPasto) {
               elementoPasto.textContent = contenuto[giorno][pasto] || 'Non specificato';
@@ -100,14 +102,14 @@ document.addEventListener('DOMContentLoaded', function () {
   // Gestione della chiusura dei modal per accessibilità
   const visualizzaPianoModal = document.getElementById('visualizzaPianoModal');
   if (visualizzaPianoModal) {
-    visualizzaPianoModal.addEventListener('hidden.bs.modal', function () {
+    visualizzaPianoModal.addEventListener('hidden.bs.modal', () => {
       document.body.focus();
     });
   }
 
   const misurazioneAzioniModal = document.getElementById('misurazioneAzioniModal');
   if (misurazioneAzioniModal) {
-    misurazioneAzioniModal.addEventListener('hidden.bs.modal', function () {
+    misurazioneAzioniModal.addEventListener('hidden.bs.modal', () => {
       document.body.focus();
     });
   }
@@ -115,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Gestione eliminazione misurazioni
   const btnEliminaMisurazioni = document.querySelectorAll('#btnEliminaMisurazione');
   if (btnEliminaMisurazioni.length > 0) {
-    btnEliminaMisurazioni.forEach(btn => {
+    btnEliminaMisurazioni.forEach((btn) => {
       btn.addEventListener('click', function () {
         const misurazioneId = this.dataset.itemId;
         const eliminaMisurazioneForm = document.getElementById('eliminaMisurazioneForm');
@@ -132,7 +134,8 @@ document.addEventListener('DOMContentLoaded', function () {
     btnEliminaRecensione.addEventListener('click', function () {
       const recensioneId = this.dataset.itemId;
       document.getElementById('recensioneId').value = recensioneId;
-      document.getElementById('eliminaRecensioneForm').action = '/user/recensioni/elimina?_method=DELETE';
+      document.getElementById('eliminaRecensioneForm').action =
+        '/user/recensioni/elimina?_method=DELETE';
       const modal = new bootstrap.Modal(document.getElementById('eliminaRecensioneModal'));
       modal.show();
     });
@@ -141,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Gestione eliminazione account
   const btnEliminaAccount = document.getElementById('btnEliminaAccount');
   if (btnEliminaAccount) {
-    btnEliminaAccount.addEventListener('click', function () {
+    btnEliminaAccount.addEventListener('click', () => {
       const modal = new bootstrap.Modal(document.getElementById('eliminaAccountModal'));
       modal.show();
     });
