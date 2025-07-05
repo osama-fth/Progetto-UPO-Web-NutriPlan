@@ -10,12 +10,12 @@ const recensioniDAO = require('../models/dao/recensioni-dao');
 const contattiDAO = require('../models/dao/contatti-dao');
 const misurazioniDAO = require('../models/dao/misurazioni-dao');
 const pianiAlimentariDAO = require('../models/dao/piani-alimentari-dao');
-const middleware = require('../middleware/permessi');
+const authMiddleware = require('../middleware/autorizzazioni');
 const PDFDocument = require('pdfkit');
 const PianoPDF = require('../models/pdf-generator');
 
 // Applica middleware di controllo permessi admin
-router.use(middleware.isAdmin);
+router.use(authMiddleware.isAdmin);
 
 // Rotta di redirect alla dashboard principale
 router.get('/dashboard', (req, res) => {

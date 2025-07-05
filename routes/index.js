@@ -126,7 +126,7 @@ router.get('/error', (req, res) => {
     title: 'NutriPlan - Errore',
     user: req.user || null,
     isAuth: req.isAuthenticated(),
-    errorMessage: res.locals.error || 'Si è verificato un errore imprevisto.',
+    error: req.flash('error')
   });
 });
 

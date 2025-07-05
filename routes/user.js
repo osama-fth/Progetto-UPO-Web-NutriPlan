@@ -9,12 +9,12 @@ const misurazioniDAO = require('../models/dao/misurazioni-dao');
 const recensioniDAO = require('../models/dao/recensioni-dao');
 const pianiAlimentariDAO = require('../models/dao/piani-alimentari-dao');
 const utentiDAO = require('../models/dao/utenti-dao');
-const middleware = require('../middleware/permessi');
+const authMiddleware = require('../middleware/autorizzazioni');
 const PDFDocument = require('pdfkit');
 const PianoPDF = require('../models/pdf-generator');
 
 // Applica middleware di controllo permessi paziente
-router.use(middleware.isPaziente);
+router.use(authMiddleware.isPaziente);
 
 // Rotta di redirect alla dashboard principale
 router.get('/dashboard', (req, res) => {
