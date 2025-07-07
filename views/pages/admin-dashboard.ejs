@@ -118,8 +118,9 @@
                   <div class="row justify-content-center mb-4">
                     <div class="col-md-6">
                       <form action="/admin/dashboard/pazienti/search" method="GET" class="d-flex">
-                        <input type="text" name="q" class="form-control" placeholder="Cerca pazienti..."
-                          value="<%= locals.query || '' %>">
+                        <label for="search-pazienti" class="visually-hidden">Cerca pazienti</label>
+                        <input type="text" id="search-pazienti" name="q" class="form-control"
+                          placeholder="Cerca pazienti..." value="<%= locals.query || '' %>">
                         <button type="submit" class="btn btn-primary ms-2">Cerca</button>
                         <% if (locals.query && locals.query.trim() !=='' ) { %>
                           <a href="/admin/dashboard/pazienti" class="btn btn-secondary ms-2">Reset</a>
@@ -330,7 +331,7 @@
                             <div class="accordion-body">
                               <!-- Commento -->
                               <div class="mb-3">
-                                <label class="form-label fw-bold">Commento:</label>
+                                <span class="form-label fw-bold">Commento:</span>
                                 <div class="border p-3 rounded bg-light">
                                   <%= recensione.commento %>
                                 </div>
@@ -395,7 +396,7 @@
                             <div class="accordion-body">
                               <!-- Messaggio -->
                               <div class="mb-3">
-                                <label class="form-label fw-bold">Messaggio:</label>
+                                <span class="form-label fw-bold">Messaggio:</span>
                                 <div class="border p-3 rounded bg-light">
                                   <%= richiesta.messaggio %>
                                 </div>
@@ -483,19 +484,19 @@
               <div class="card-body">
                 <div class="row">
                   <div class="col-md-3 mb-2">
-                    <label class="form-label text-muted">Nome</label>
+                    <span class="form-span text-muted">Nome</span>
                     <p class="fs-5" id="paziente-nome"></p>
                   </div>
                   <div class="col-md-3 mb-2">
-                    <label class="form-label text-muted">Cognome</label>
+                    <span class="form-span text-muted">Cognome</span>
                     <p class="fs-5" id="paziente-cognome"></p>
                   </div>
                   <div class="col-md-3 mb-2">
-                    <label class="form-label text-muted">Data di nascita</label>
+                    <span class="form-span text-muted">Data di nascita</span>
                     <p class="fs-5" id="paziente-data-nascita"></p>
                   </div>
                   <div class="col-md-3 mb-2">
-                    <label class="form-label text-muted">Email</label>
+                    <span class="form-span text-muted">Email</span>
                     <p class="fs-5" id="paziente-email"></p>
                   </div>
                 </div>
@@ -567,18 +568,19 @@
                         aria-labelledby="heading<%= giorno %>" data-bs-parent="#pianoDieteticoAccordion">
                         <div class="accordion-body">
                           <div class="mb-3">
-                            <label class="form-label">Colazione</label>
-                            <textarea class="form-control" name="<%= giorno.toLowerCase() %>_colazione"
-                              rows="2"></textarea>
+                            <label for="<%= giorno.toLowerCase() %>_colazione" class="form-label">Colazione</label>
+                            <textarea class="form-control" id="<%= giorno.toLowerCase() %>_colazione"
+                              name="<%= giorno.toLowerCase() %>_colazione" rows="2"></textarea>
                           </div>
                           <div class="mb-3">
-                            <label class="form-label">Pranzo</label>
-                            <textarea class="form-control" name="<%= giorno.toLowerCase() %>_pranzo"
-                              rows="2"></textarea>
+                            <label for="<%= giorno.toLowerCase() %>_pranzo" class="form-label">Pranzo</label>
+                            <textarea class="form-control" id="<%= giorno.toLowerCase() %>_pranzo"
+                              name="<%= giorno.toLowerCase() %>_pranzo" rows="2"></textarea>
                           </div>
                           <div class="mb-3">
-                            <label class="form-label">Cena</label>
-                            <textarea class="form-control" name="<%= giorno.toLowerCase() %>_cena" rows="2"></textarea>
+                            <label for="<%= giorno.toLowerCase() %>_cena" class="form-label">Cena</label>
+                            <textarea class="form-control" id="<%= giorno.toLowerCase() %>_cena"
+                              name="<%= giorno.toLowerCase() %>_cena" rows="2"></textarea>
                           </div>
                         </div>
                       </div>

@@ -266,7 +266,7 @@
                             class="fas fa-star <%= i <= recensione.valutazione ? 'text-warning' : 'text-secondary opacity-25' %>"></i>
                           <% } %>
                       </div>
-                      <label class="form-label">Il tuo commento:</label>
+                      <span class="form-label">Il tuo commento:</span>
                       <div class="border p-3 rounded bg-light">
                         <%= recensione.commento %>
                       </div>
@@ -285,35 +285,37 @@
                       <!-- Se non c'è ancora una recensione, mostra il form per crearne una -->
                       <form id="recensioneForm" action="/user/recensioni/nuova" method="POST">
                         <div class="mb-3">
-                          <label for="valutazione" class="form-label">La tua valutazione</label>
-                          <div class="rating-input mb-2">
-                            <div class="form-check form-check-inline">
-                              <input class="form-check-input" type="radio" name="valutazione" id="rating1" value="1">
-                              <label class="form-check-label" for="rating1">1 <i
-                                  class="fa-solid fa-star text-warning"></i></label>
+                          <fieldset>
+                            <legend class="form-label mb-2">La tua valutazione</legend>
+                            <div class="rating-input mb-2">
+                              <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="valutazione" id="rating1" value="1">
+                                <label class="form-check-label" for="rating1">1 <i
+                                    class="fa-solid fa-star text-warning"></i></label>
+                              </div>
+                              <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="valutazione" id="rating2" value="2">
+                                <label class="form-check-label" for="rating2">2 <i
+                                    class="fa-solid fa-star text-warning"></i></label>
+                              </div>
+                              <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="valutazione" id="rating3" value="3">
+                                <label class="form-check-label" for="rating3">3 <i
+                                    class="fa-solid fa-star text-warning"></i></label>
+                              </div>
+                              <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="valutazione" id="rating4" value="4">
+                                <label class="form-check-label" for="rating4">4 <i
+                                    class="fa-solid fa-star text-warning"></i></label>
+                              </div>
+                              <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="valutazione" id="rating5" value="5"
+                                  checked>
+                                <label class="form-check-label" for="rating5">5 <i
+                                    class="fa-solid fa-star text-warning"></i></label>
+                              </div>
                             </div>
-                            <div class="form-check form-check-inline">
-                              <input class="form-check-input" type="radio" name="valutazione" id="rating2" value="2">
-                              <label class="form-check-label" for="rating2">2 <i
-                                  class="fa-solid fa-star text-warning"></i></label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                              <input class="form-check-input" type="radio" name="valutazione" id="rating3" value="3">
-                              <label class="form-check-label" for="rating3">3 <i
-                                  class="fa-solid fa-star text-warning"></i></label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                              <input class="form-check-input" type="radio" name="valutazione" id="rating4" value="4">
-                              <label class="form-check-label" for="rating4">4 <i
-                                  class="fa-solid fa-star text-warning"></i></label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                              <input class="form-check-input" type="radio" name="valutazione" id="rating5" value="5"
-                                checked>
-                              <label class="form-check-label" for="rating5">5 <i
-                                  class="fa-solid fa-star text-warning"></i></label>
-                            </div>
-                          </div>
+                          </fieldset>
                         </div>
                         <div class="mb-3">
                           <label for="commento" class="form-label">Il tuo commento</label>
@@ -400,12 +402,12 @@
             <div class="col-md-10 mb-4">
               <div class="card shadow-sm">
                 <div class="card-header bg-white">
-                  <h5 class="mb-0"><i class="fas fa-shield-alt me-2"></i>  Account</h5>
+                  <h5 class="mb-0"><i class="fas fa-shield-alt me-2"></i> Account</h5>
                 </div>
                 <div class="card-body">
                   <div class="row">
                     <div class="col-md-6 mb-3 mb-md-0">
-                      <label class="form-label text-muted">Email</label>
+                      <span class="form-label text-muted">Email</span>
                       <p class="fs-5">
                         <%= user.email %>
                       </p>

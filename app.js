@@ -14,7 +14,6 @@ const authRouter = require('./routes/auth');
 const userRouter = require('./routes/user');
 const adminRouter = require('./routes/admin');
 
-const PORT = process.env.PORT;
 const app = express();
 
 // Configurazione middleware di base
@@ -57,7 +56,9 @@ app.use('/auth', authRouter);
 app.use('/user', userRouter);
 app.use('/admin', adminRouter);
 
-// Avvio del server
-app.listen(PORT, () => {
-  console.log(`Server avviato sulla porta ${PORT} (http://localhost:${PORT})`);
+app.use((req, res, next) => {
+  req.flash('error', 'La pagina richiesta non è stata trovata.');
+  res.redirect('/error');
 });
+
+module.exports = app;
