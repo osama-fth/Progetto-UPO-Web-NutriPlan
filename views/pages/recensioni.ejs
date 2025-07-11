@@ -7,18 +7,43 @@
     <%- include('../partials/navbar') %>
 
       <main>
-        <section class="recensioni py-5">
+        <section class="recensioni pt-4 pb-5">
           <div class="container">
             <h2 class="text-center">Cosa Dicono i Nostri Clienti</h2>
 
-            <div class="row justify-content-center mb-5">
-              <div class="col-md-6">
-                <form action="/recensioni/search" method="GET" class="d-flex">
-                  <label for="search-recensioni" class="visually-hidden">Cerca recensioni</label>
-                  <input type="text" id="search-recensioni" name="q" class="form-control"
-                    placeholder="Cerca recensioni..." value="<%= locals.query || '' %>">
-                  <button type="submit" class="btn btn-primary ms-2">Cerca</button>
-                </form>
+            <div class="row justify-content-center mb-3">
+              <div class="col-md-10">
+                <div class="filter-container">
+                  <div class="text-center">
+                    <h5 class="mb-4">Filtra per valutazione:</h5>
+                    <div class="d-flex flex-wrap justify-content-center gap-3 mb-3">
+                      <a href="/recensioni"
+                        class="btn <%= !locals.valutazioneSelezionata ? 'btn-primary' : 'btn-outline-primary' %> px-4">
+                        <i class="fas fa-list me-2"></i>Tutte
+                      </a>
+                      <a href="/recensioni/filtra?valutazione=5"
+                        class="btn <%= locals.valutazioneSelezionata == '5' ? 'btn-primary' : 'btn-outline-primary' %> px-3">
+                        <i class="fas fa-star me-2"></i>5 stelle
+                      </a>
+                      <a href="/recensioni/filtra?valutazione=4"
+                        class="btn <%= locals.valutazioneSelezionata == '4' ? 'btn-primary' : 'btn-outline-primary' %> px-3">
+                        <i class="fas fa-star me-2"></i>4 stelle
+                      </a>
+                      <a href="/recensioni/filtra?valutazione=3"
+                        class="btn <%= locals.valutazioneSelezionata == '3' ? 'btn-primary' : 'btn-outline-primary' %> px-3">
+                        <i class="fas fa-star me-2"></i>3 stelle
+                      </a>
+                      <a href="/recensioni/filtra?valutazione=2"
+                        class="btn <%= locals.valutazioneSelezionata == '2' ? 'btn-primary' : 'btn-outline-primary' %> px-3">
+                        <i class="fas fa-star me-2"></i>2 stelle
+                      </a>
+                      <a href="/recensioni/filtra?valutazione=1"
+                        class="btn <%= locals.valutazioneSelezionata == '1' ? 'btn-primary' : 'btn-outline-primary' %> px-3">
+                        <i class="fas fa-star me-2"></i>1 stella
+                      </a>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -61,14 +86,21 @@
                   <% }); %>
               </div>
               <% } else { %>
-                <div class="text-center py-4">
-                  <i class="fas fa-comment-slash text-white mb-3" style="font-size: 5rem;"></i>
-                  <% if(locals.query) { %>
-                    <p class="text-muted">Nessuna recensione trovata per "<%= query %>".</p>
-                    <a href="/recensioni" class="btn btn-outline-primary mt-3">Mostra tutte le recensioni</a>
-                    <% } else { %>
-                      <p class="text-muted">Nessuna recensione disponibile al momento.</p>
-                      <% } %>
+                <div class="row justify-content-center">
+                  <div class="col-md-8">
+                    <div class="no-reviews-card">
+                      <div class="no-reviews-icon">
+                        <i class="fas fa-comment-slash"></i>
+                      </div>
+                      <h4 class="no-reviews-title">
+                        <% if(locals.valutazioneSelezionata) { %>
+                          Nessuna recensione con <%= valutazioneSelezionata %> stelle
+                            <% } else { %>
+                              Nessuna recensione disponibile
+                              <% } %>
+                      </h4>
+                    </div>
+                  </div>
                 </div>
                 <% } %>
           </div>

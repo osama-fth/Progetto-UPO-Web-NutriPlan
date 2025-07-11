@@ -56,7 +56,8 @@ app.use('/auth', authRouter);
 app.use('/user', userRouter);
 app.use('/admin', adminRouter);
 
-app.use((req, res, next) => {
+// Configurazione reindirizzamneto per rotta non trovata
+app.use((req, res) => {
   req.flash('error', 'La pagina richiesta non è stata trovata.');
   res.redirect('/error');
 });

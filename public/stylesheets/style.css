@@ -10,9 +10,14 @@
   --pale-blue: #ade8f4;
   --white: #ffffff;
   --black: #000000;
+  /* Dashboard variables */
+  --sidebar-width: 250px;
+  --topbar-height: 70px;
 }
 
-/* Stili base */
+/* ==========================================================================
+   STILI BASE
+   ========================================================================== */
 html,
 body {
   height: 100%;
@@ -83,7 +88,9 @@ textArea {
   box-shadow: none !important;
 }
 
-/* Navbar */
+/* ==========================================================================
+   NAVBAR
+   ========================================================================== */
 .navbar {
   background-color: var(--deep-blue);
   position: fixed;
@@ -108,7 +115,9 @@ textArea {
   color: var(--azure-blue);
 }
 
-/* Bottoni */
+/* ==========================================================================
+   BOTTONI
+   ========================================================================== */
 .btn-primary {
   background-color: var(--bright-cyan);
   border-color: var(--bright-cyan);
@@ -169,7 +178,9 @@ textArea {
   font-size: 1.1rem;
 }
 
-/* Footer */
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
 .footer {
   background-color: var(--deep-blue);
   color: var(--pale-blue);
@@ -215,7 +226,9 @@ textArea {
   font-size: 0.9rem;
 }
 
-/* Home CSS */
+/* ==========================================================================
+   HOME PAGE
+   ========================================================================== */
 .divider {
   height: 4px;
   width: 70px;
@@ -303,7 +316,6 @@ textArea {
   padding: 4rem 0;
 }
 
-/* Sezione servizi - rimossa duplicazione */
 .services {
   border-radius: 0;
   background-color: var(--pale-blue);
@@ -431,22 +443,9 @@ textArea {
   height: 100%;
 }
 
-@media (max-width: 767px) {
-  .feature-row .order-md-1,
-  .feature-row .order-md-2 {
-    order: unset;
-  }
-
-  .feature-row div[class*='text-md-'] {
-    text-align: center !important;
-  }
-
-  .contact-wrapper {
-    padding: 1.5rem;
-  }
-}
-
-/* Auth CSS */
+/* ==========================================================================
+   AUTENTICAZIONE
+   ========================================================================== */
 .login-section,
 .register-section {
   background-color: var(--pale-blue);
@@ -480,12 +479,9 @@ textArea {
   font-weight: 500;
 }
 
-/* Dashboard CSS */
-:root {
-  --sidebar-width: 250px;
-  --topbar-height: 70px;
-}
-
+/* ==========================================================================
+   DASHBOARD
+   ========================================================================== */
 .dashboard-container {
   display: flex;
   min-height: 100vh;
@@ -604,7 +600,9 @@ textArea {
   padding: 0;
 }
 
-/* Privacy Policy CSS */
+/* ==========================================================================
+   PRIVACY POLICY
+   ========================================================================== */
 .privacy-section {
   background-color: var(--pale-blue);
   min-height: calc(100vh - 76px);
@@ -644,29 +642,9 @@ textArea {
   color: var(--deep-blue);
 }
 
-@media (max-width: 767.98px) {
-  .sidebar {
-    margin-left: calc(-1 * var(--sidebar-width));
-    box-shadow: none;
-    transition: margin-left 0.3s ease;
-  }
-
-  .sidebar-header {
-    border-bottom: var(--deep-blue);
-  }
-
-  .main-content {
-    margin-left: 0;
-    width: 100%;
-  }
-
-  .sidebar-nav {
-    height: calc(100% - 80px);
-    padding-bottom: 30px;
-  }
-}
-
-/* Recensioni CSS */
+/* ==========================================================================
+   RECENSIONI
+   ========================================================================== */
 .recensioni {
   background-color: var(--pale-blue);
   margin-top: 76px;
@@ -760,7 +738,73 @@ textArea {
   text-align: right;
 }
 
+/* Stili per il filtro per valutazione */
+.filter-container {
+  background-color: var(--white);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.filter-container h5 {
+  color: var(--deep-blue);
+  font-weight: 600;
+}
+
+.filter-status-card {
+  background-color: var(--pastel-blue);
+  border: 1px solid var(--azure-blue);
+  border-radius: 8px;
+  padding: 12px 20px;
+  color: var(--deep-blue);
+  font-size: 14px;
+  display: inline-block;
+  margin-top: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.filter-status-card i {
+  color: var(--bright-cyan);
+}
+
+/* Stili per quando non ci sono recensioni */
+.no-reviews-card {
+  background-color: var(--white);
+  border-radius: 12px;
+  padding: 3rem 2rem;
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  border-top: 4px solid var(--azure-blue);
+}
+
+.no-reviews-icon {
+  margin-bottom: 1.5rem;
+}
+
+.no-reviews-icon i {
+  font-size: 4rem;
+  color: var(--azure-blue);
+  opacity: 0.6;
+}
+
+.no-reviews-title {
+  color: var(--deep-blue);
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.no-reviews-text {
+  color: var(--medium-blue);
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* ==========================================================================
+   MEDIA QUERIES
+   ========================================================================== */
 @media (max-width: 768px) {
+  /* Recensioni */
   .recensioni {
     padding: 2rem 0;
   }
@@ -773,5 +817,59 @@ textArea {
   .recensioni-date {
     margin-top: 0.5rem;
     margin-left: 0 !important;
+  }
+
+  .filter-container {
+    padding: 1.5rem;
+  }
+
+  .filter-status-card {
+    padding: 10px 15px;
+    font-size: 13px;
+  }
+
+  .no-reviews-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .no-reviews-icon i {
+    font-size: 3rem;
+  }
+
+  /* Dashboard */
+  .sidebar {
+    margin-left: calc(-1 * var(--sidebar-width));
+    box-shadow: none;
+    transition: margin-left 0.3s ease;
+  }
+
+  .sidebar-header {
+    border-bottom: var(--deep-blue);
+  }
+
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .sidebar-nav {
+    height: calc(100% - 80px);
+    padding-bottom: 30px;
+  }
+}
+
+@media (max-width: 767px) {
+  /* Home */
+  .feature-row .order-md-1,
+  .feature-row .order-md-2 {
+    order: unset;
+  }
+
+  .feature-row div[class*='text-md-'] {
+    text-align: center !important;
+  }
+
+  .contact-wrapper {
+    padding: 1.5rem;
   }
 }

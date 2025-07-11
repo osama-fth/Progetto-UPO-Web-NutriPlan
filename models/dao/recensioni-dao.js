@@ -24,15 +24,15 @@ class RecensioniDAO {
     });
   }
 
-  async searchRecensioni(parola) {
-    const sql = `SELECT r.*, u.nome, u.cognome 
+  async filtraRecensioniPerValutazione(valutazione) {
+    const sql = `SELECT r.*, u.nome
                  FROM recensioni r
                  JOIN utenti u ON r.utente_id = u.id
-                 WHERE r.commento LIKE ?
+                 WHERE r.valutazione = ?
                  ORDER BY r.data_creazione DESC`;
 
     return new Promise((resolve, reject) => {
-      this.db.all(sql, [`%${parola}%`], (err, rows) => {
+      this.db.all(sql, [valutazione], (err, rows) => {
         if (err) {
           reject(err);
         } else {

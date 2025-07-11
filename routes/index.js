@@ -33,29 +33,27 @@ router.get('/recensioni', async (req, res) => {
   }
 });
 
-// Ricerca recensioni per query specifica
-router.get('/recensioni/search', async (req, res) => {
-  const query = req.query.q || '';
-
+// Filtra recensioni per valutazione specifica
+router.get('/recensioni/filtra', async (req, res) => {
+  const valutazione = parseInt(req.query.valutazione);
+  
   try {
     let recensioni = [];
-
-    if (query.trim() !== '') {
-      recensioni = await recensioniDAO.searchRecensioni(query);
+    if (valutazione && valutazione >= 1 && valutazione <= 5) {
+      recensioni = await recensioniDAO.filtraRecensioniPerValutazione(valutazione);
     } else {
       recensioni = await recensioniDAO.getAllRecensioni();
     }
-
     res.render('pages/recensioni', {
       title: 'NutriPlan - Recensioni',
       recensioni,
-      query,
+      valutazioneSelezionata: req.query.valutazione,
       user: req.user || null,
       isAuth: req.isAuthenticated(),
     });
   } catch (error) {
-    console.error('Errore durante la ricerca delle recensioni:', error);
-    req.flash('error', 'Errore durante la ricerca delle recensioni');
+    console.error('Errore durante il filtraggio delle recensioni:', error);
+    req.flash('error', 'Errore durante il filtraggio delle recensioni');
     res.redirect('/recensioni');
   }
 });
