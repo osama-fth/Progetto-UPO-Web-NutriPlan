@@ -18,6 +18,10 @@ const PianoPDF = require('../models/pdf-generator');
 router.use(authMiddleware.isAdmin);
 
 // Rotta di redirect alla dashboard principale
+router.get('/', (req, res) => {
+  res.redirect('/admin/dashboard/pazienti');
+});
+
 router.get('/dashboard', (req, res) => {
   res.redirect('/admin/dashboard/pazienti');
 });

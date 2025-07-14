@@ -17,6 +17,10 @@ const PianoPDF = require('../models/pdf-generator');
 router.use(authMiddleware.isPaziente);
 
 // Rotta di redirect alla dashboard principale
+router.get('/', (req, res) => {
+  res.redirect('/user/dashboard/misurazioni');
+});
+
 router.get('/dashboard', (req, res) => {
   res.redirect('/user/dashboard/misurazioni');
 });
