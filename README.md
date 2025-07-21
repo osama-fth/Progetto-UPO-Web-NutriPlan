@@ -35,6 +35,7 @@ Progetto sviluppato per il corso di **Metodologie di Programmazione Web** dell'*
 ```bash
 # Clona il repository
 git clone https://github.com/osama-fth/Progetto-UPO-Web-NutriPlan.git
+
 # Naviga nella directory
 cd NutriPlan
 
