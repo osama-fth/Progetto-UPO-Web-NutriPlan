@@ -1,4 +1,4 @@
-CREATE TABLE utenti (
+CREATE TABLE IF NOT EXISTS utenti (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   nome TEXT NOT NULL,
   cognome TEXT NOT NULL,
@@ -8,7 +8,7 @@ CREATE TABLE utenti (
   ruolo TEXT NOT NULL CHECK(ruolo IN ('admin', 'paziente'))
 );
 
-CREATE TABLE piano_alimentare (
+CREATE TABLE IF NOT EXISTS piano_alimentare (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   utente_id INTEGER NOT NULL,
   titolo TEXT NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE piano_alimentare (
   FOREIGN KEY(utente_id) REFERENCES utenti(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE misurazioni (
+CREATE TABLE IF NOT EXISTS misurazioni (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   utente_id INTEGER NOT NULL,
   misura REAL,
@@ -26,7 +26,7 @@ CREATE TABLE misurazioni (
   FOREIGN KEY(utente_id) REFERENCES utenti(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE recensioni (
+CREATE TABLE IF NOT EXISTS recensioni (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   utente_id INTEGER NOT NULL,
   commento TEXT NOT NULL,
@@ -35,7 +35,7 @@ CREATE TABLE recensioni (
   FOREIGN KEY(utente_id) REFERENCES utenti(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE richieste_contatto (
+CREATE TABLE IF NOT EXISTS richieste_contatto (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   nome TEXT NOT NULL,
   email TEXT NOT NULL,
